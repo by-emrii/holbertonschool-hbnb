@@ -19,7 +19,7 @@ HBnB is a simplified Airbnb clone that allows users to manage accounts, list pla
 
 HBnB allows users to create accounts, list properties, and make reservations. The project is divided into clear layers to separate concerns, making it modular and maintainable.
 
-## Architecture
+## High Level Architecture
 
 ### Presentation Layer
 
