@@ -1,4 +1,4 @@
-![Holberton Banner](/holbertonschool-hbnb/part1/assets/holbertonposter.jpeg)
+![Holberton Banner](assets/holbertonposter.jpeg)
 # Holberton School - HBnB Project
 
 HBnB is a simplified Airbnb clone that allows users to manage accounts, list places, and handle reservations. The project demonstrates object-oriented design, software architecture, and persistence mechanisms.
