@@ -35,8 +35,8 @@ HBnB allows users to create accounts, list properties, and make reservations. Th
 - Provides abstraction to isolate business logic from storage details
 - Ensures data consistency and integrity
 
-## Task 0: Presentation Layer
-diagram here
+## Task 0: Package Diagram
+![High Level Package Diagram
 
 ## Task 1: Business Logic
 ![Business Logic Diagram](business_class_diagram.png)
