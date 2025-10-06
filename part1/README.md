@@ -1,3 +1,4 @@
+![Holberton Banner](/holbertonschool-hbnb/part1/assets/holbertonposter.jpeg)
 # Holberton School - HBnB Project
 
 HBnB is a simplified Airbnb clone that allows users to manage accounts, list places, and handle reservations. The project demonstrates object-oriented design, software architecture, and persistence mechanisms.
@@ -79,7 +80,7 @@ Manages data storage and retrieval.
 #### `User`
 
 - Auth info, profile, and image
-- Fields: `id`, `email`, `encrypted_password`, `phone_number`, `image_url`, etc.
+- Fields: `id`, , `first_name`, `email`, `encrypted_password`, `phone_number`, `image_url`, etc.
 
 #### `Place`
 
@@ -99,7 +100,7 @@ Manages data storage and retrieval.
 #### `Review`
 
 - Feedback for a place
-- Fields: `id`, `user_id`, `place_id`, `rating`, `comment`, `created_at`, etc.
+- Fields: `id`, `user_id`, `place_id`, `rating`, `comment`, `image_url`, etc.
 
 ## Task 2: Sequence Diagrams
 
@@ -194,6 +195,6 @@ Handles retrieval of available amenities and property listings.
 
 ## Authors
 
-- Crystal Chiam
-- Grǎce Kayembe
-- Emily Chew
+- **Crystal Chiam**
+- **Grǎce Kayembe**
+- **Emily Chew**
