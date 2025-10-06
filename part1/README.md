@@ -39,7 +39,7 @@ HBnB allows users to create accounts, list properties, and make reservations. Th
 diagram here
 
 ## Task 1: Business Logic
-![Business Logic Diagram](part1/business_class_diagram.png)
+![Business Logic Diagram](business_class_diagram.png)
 <br>
 **Entities:**  
 
