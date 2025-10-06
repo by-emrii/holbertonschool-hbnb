@@ -110,7 +110,7 @@ User → API (Presentation Layer) → Business Logic (Business Layer) → Databa
 #### Description
 Handles the user account creation and authentication flow.
 
-![](https://i.postimg.cc/zfNqHZxB/mermaid-diagram-2025-10-04-000659.png)
+![](https://i.postimg.cc/grFC9Ghc/part1-sequence-diagram-user-registration.jpg)
 
 #### Flow Overview
 1. **User** sends registration or login request.  
@@ -128,7 +128,7 @@ Handles the user account creation and authentication flow.
 Allows users to create listings, browse available properties, and make bookings.  
 Only authenticated users can create and book places.
 
-![](https://i.postimg.cc/PJCHntqs/mermaid-diagram-2025-10-06-161538.png)
+![](https://i.postimg.cc/QC9DG6nJ/part1-sequence-diagram-place-creation-booking.jpg)
 
 #### Flow Overview
 **Place Creation**
@@ -152,7 +152,7 @@ Only authenticated users can create and book places.
 #### Description
 Covers the complete lifecycle of reviews — creation, update, deletion, and retrieval.
 
-![](https://i.postimg.cc/pdPtXQd4/mermaid-diagram-2025-10-06-161629.png)
+![](https://i.postimg.cc/pLNWxHvq/part1-sequence-diagram-review-submission.jpg)
 
 #### Flow Overview
 **Create Review**
@@ -179,7 +179,11 @@ Covers the complete lifecycle of reviews — creation, update, deletion, and ret
 #### Description
 Handles retrieval of available amenities and property listings.
 
-![](https://i.postimg.cc/v84Dsykc/mermaid-diagram-2025-10-06-162319.png)
+<p align="left">
+  <img src="https://i.postimg.cc/L8ZJBD9j/part1-sequence-diagram-amenities-fetch-places.jpg" 
+       alt="Amenities and Places Sequence Diagram" 
+       width="600">
+</p>
 
 #### Flow Overview
 1. User sends request to API.  
