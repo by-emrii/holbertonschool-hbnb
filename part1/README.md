@@ -103,6 +103,9 @@ Manages data storage and retrieval.
 - Fields: `id`, `user_id`, `place_id`, `rating`, `comment`, `image_url`, etc.
 
 ## Task 2: Sequence Diagrams
+The purpose of the sequence diagrams is to illustrate the interactive flow between the layers of the HBnB Evolution application for key API calls. These diagrams represent the step-by-step communication between the Presentation Layer (API/Services), the Business Logic Layer (core models and operations), and the Persistence Layer (repositories and database).
+
+The diagrams clarify how user requests are processed, how business rules are applied, and how data is stored and retrieved. They also demonstrate how the Facade pattern simplifies interactions by providing a unified interface between layers.
 
 #### Key Participants
 User → API (Presentation Layer) → Business Logic (Business Layer) → Database (Persistence Layer)
