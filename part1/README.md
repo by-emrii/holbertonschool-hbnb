@@ -1,4 +1,5 @@
 ![Holberton Banner](assets/holbertonposter.jpeg)
+
 # Holberton School - HBnB Project
 
 HBnB is a simplified Airbnb clone that allows users to manage accounts, list places, and handle reservations. The project demonstrates object-oriented design, software architecture, and persistence mechanisms.
@@ -17,7 +18,7 @@ HBnB is a simplified Airbnb clone that allows users to manage accounts, list pla
 
 ## Project Overview
 
-HBnB allows users to create accounts, list properties, and make reservations. The project is divided into clear layers to separate concerns, making it modular and maintainable. A high level overview of the application architecture is provided below, however further details can be found in the [HBnB System Architecture report](./task3-Documentation-Compilation.pdf)
+HBnB allows users to create accounts, list properties, and make reservations. The project is divided into clear layers to separate concerns, making it modular and maintainable. A high level overview of the application architecture is provided below, however further details can be found in the [HBnB System Architecture report](./HBnB-Documentation-Compilation.pdf)
 
 ## High Level Architecture
 
@@ -103,84 +104,103 @@ Manages data storage and retrieval.
 - Fields: `id`, `user_id`, `place_id`, `rating`, `comment`, `image_url`, etc.
 
 ## Task 2: Sequence Diagrams
+
 The purpose of the sequence diagrams is to illustrate the interactive flow between the layers of the HBnB Evolution application for key API calls. These diagrams represent the step-by-step communication between the Presentation Layer (API/Services), the Business Logic Layer (core models and operations), and the Persistence Layer (repositories and database).
 
 The diagrams clarify how user requests are processed, how business rules are applied, and how data is stored and retrieved. They also demonstrate how the Facade pattern simplifies interactions by providing a unified interface between layers.
 
 #### Key Participants
+
 User → API (Presentation Layer) → Business Logic (Business Layer) → Database (Persistence Layer)
 
 ### User Registration & Login
+
 #### Description
+
 Handles the user account creation and authentication flow.
 
 ![](https://i.postimg.cc/grFC9Ghc/part1-sequence-diagram-user-registration.jpg)
 
 #### Flow Overview
-1. **User** sends registration or login request.  
-2. **API** receives and forwards the request to Business Logic.  
+
+1. **User** sends registration or login request.
+2. **API** receives and forwards the request to Business Logic.
 3. **Business Logic** validates:
-   - Email uniqueness  
-   - Password rules  
-   - Credentials (for login)  
-4. **Database** persists or retrieves user data.  
+   - Email uniqueness
+   - Password rules
+   - Credentials (for login)
+4. **Database** persists or retrieves user data.
 5. **Response:** Success (registration/login) or error message.
 
-
 ### Place Creation, Browsing & Booking
+
 #### Description
+
 Allows users to create listings, browse available properties, and make bookings.  
 Only authenticated users can create and book places.
 
 ![](https://i.postimg.cc/QC9DG6nJ/part1-sequence-diagram-place-creation-booking.jpg)
 
 #### Flow Overview
+
 **Place Creation**
-1. API receives place details.  
-2. Business Logic validates ownership and data.  
-3. Repository saves the new place.  
+
+1. API receives place details.
+2. Business Logic validates ownership and data.
+3. Repository saves the new place.
 4. Database confirms creation.
 
 **Browsing/Search**
-1. API forwards query to Business Logic.  
-2. Business Logic retrieves properties.  
-3. Database returns results.  
+
+1. API forwards query to Business Logic.
+2. Business Logic retrieves properties.
+3. Database returns results.
 
 **Booking**
-1. API sends booking request.  
-2. Business Logic checks availability and payment.  
-3. Database stores booking details.  
+
+1. API sends booking request.
+2. Business Logic checks availability and payment.
+3. Database stores booking details.
 4. Confirmation returned to the user.
 
 ### Review Management
+
 #### Description
+
 Covers the complete lifecycle of reviews — creation, update, deletion, and retrieval.
 
 ![](https://i.postimg.cc/pLNWxHvq/part1-sequence-diagram-review-submission.jpg)
 
 #### Flow Overview
+
 **Create Review**
-- Validate rating and reference place.  
-- Save review in repository.  
+
+- Validate rating and reference place.
+- Save review in repository.
 - Database confirms persistence.
 
 **Update Review**
-- Validate ownership and updated data.  
-- Repository updates record.  
+
+- Validate ownership and updated data.
+- Repository updates record.
 - Database confirms.
 
 **Delete Review**
-- Validate ownership.  
-- Repository deletes record.  
+
+- Validate ownership.
+- Repository deletes record.
 - Database confirms deletion.
 
 **List Reviews**
-- API requests reviews.  
-- Business Logic queries repository.  
+
+- API requests reviews.
+- Business Logic queries repository.
 - Database returns list to user.
 
 ### Fetching Amenities
+
 #### Description
+
 Handles retrieval of available amenities and property listings.
 
 <p align="left">
@@ -190,10 +210,11 @@ Handles retrieval of available amenities and property listings.
 </p>
 
 #### Flow Overview
-1. User sends request to API.  
-2. Business Logic abstracts and processes the query.  
-3. Repository retrieves data.  
-4. Database returns amenities or places.  
+
+1. User sends request to API.
+2. Business Logic abstracts and processes the query.
+3. Repository retrieves data.
+4. Database returns amenities or places.
 5. API sends results to the user.
 
 ## Authors
