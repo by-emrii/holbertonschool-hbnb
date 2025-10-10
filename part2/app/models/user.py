@@ -2,7 +2,7 @@ from app.models.base_model import BaseModel
 import re
 
 class User(BaseModel):
-    def __init__(self, first_name, last_name, email, encrypted_password, phone_number, profile_img, is_admin=False):
+    def __init__(self, first_name, last_name, email, encrypted_password, phone_number, profile_img=None, is_admin=False):
         super().__init__()
         self.first_name = first_name
         self.last_name = last_name
@@ -59,3 +59,34 @@ class User(BaseModel):
         if not re.match(email_regex, value):
             raise ValueError("Invalid email address")
         self._email = value
+    
+    """Phone Number"""
+    @property
+    def phone_number(self):
+        return self._phone_number
+    
+    @phone_number.setter
+    def phone_number(self, value):
+        phone_regex = r'^\+?[1-9]\d{1,14}$'
+        if not isinstance(value, int):
+            raise TypeError("Phone number must be an integer")
+        value = value.strip()
+        if not re.match(phone_regex, value):
+            raise ValueError("Phone number must be 10 digits")
+        self._phone_number = value        
+
+    """Encrypted Password"""
+    @property
+    def encrypted_password(self):
+        return self.__encrypted_password
+    
+    @encrypted_password.setter
+    def encrypted_password(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Password must be a string")
+        value = value.strip()
+
+        #password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$"
+        if len(value) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        self.__encrypted_password = value        
