@@ -30,3 +30,32 @@ class User(BaseModel):
         self._first_name = value
     
     """ Last name """
+    @property
+    def last_name(self):
+        return self._last_name
+    
+    @last_name.setter
+    def last_name(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Last name must be a string")
+        value = value.strip()
+        if len(value) < 2:
+            raise ValueError("Last name must be at least 2 characters")
+        if len(value) >= 50:
+            raise ValueError("Last name cannot be more than 50 characters")
+        self._last_name = value
+    
+    """ Email """
+    @property
+    def email(self):
+        return self._email
+    
+    @email.setter
+    def email(self, value):
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not isinstance(value, str):
+            raise TypeError("Email must be a string")
+        value = value.strip().lower()
+        if not re.match(email_regex, value):
+            raise ValueError("Invalid email address")
+        self._email = value
