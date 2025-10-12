@@ -1,0 +1,124 @@
+from app.models.base_model import BaseModel
+""" Class Place represents to Place model in BL"""
+
+
+class Place(BaseModel):
+    def __init__(
+            self, user_id, title, description, price,
+            address, latitude, longitude, profile_img=None
+    ):
+        super().__init__()
+        self.user_id = user_id
+        self.title = title
+        self.description = description
+        self.price = price
+        self.address = address
+        self.latitude = latitude
+        self.longitude = longitude
+        self.profile_img = profile_img
+
+    """Getter and Setter"""
+    """ User ID """
+    @property
+    def user_id(self):
+        return self._user_id
+
+    @user_id.setter
+    def user_id(self, value):
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError("User ID must be a positive integer")
+        self._user_id = value
+
+    """ Place title """
+    @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Title must be a string")
+        value = value.strip()
+        if len(value) < 3:
+            raise ValueError("Title must be at least 3 characters long")
+        if len(value) > 100:
+            raise ValueError("Title cannot exceed 100 characters")
+        self._title = value
+
+    """ Description"""
+    @property
+    def description(self):
+        return self._description
+
+    @description.setter
+    def description(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Title must be a string")
+        value = value.strip()
+        if len(value) > 1000:
+            raise ValueError("Description cannot exceed 1000 characters")
+        self._description = value
+
+    """ Price """
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, value):
+        if not isinstance(value, (int, float)):
+            raise TypeError("Price must be a number")
+        if value < 0:
+            raise ValueError("Price must be positive integer")
+        self._price = float(value)
+
+    """ Address """
+    @property
+    def address(self):
+        return self._address
+
+    @address.setter
+    def address(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Address must be a string")
+        value = value.strip()
+        if len(value) < 5 or len(value) > 200:
+            raise ValueError("Address must be between 5 and 200 characters")
+        self._address = value
+
+    """ Latitude """
+    @property
+    def latitude(self):
+        return self._latitude
+
+    @latitude.setter
+    def latitude(self, value):
+        if not isinstance(value, (int, float)):
+            raise TypeError("Latitude must be a number")
+        if not (-90 <= value <= 90):
+            raise ValueError("Latitude must be between -90 and 90")
+        self._latitude = float(value)
+
+    """ Longitude """
+    @property
+    def longitude(self):
+        return self._longitude
+
+    @longitude.setter
+    def longitude(self, value):
+        if not isinstance(value, (int, float)):
+            raise TypeError("Longitude must be a number")
+        if not (-180 <= value <= 180):
+            raise ValueError("Longitude must be between -180 and 180")
+        self._longitude = float(value)
+
+    """ Profile Img URL """
+    @property
+    def profile_img(self):
+        return self._profile_img
+
+    @profile_img.setter
+    def profile_img(self, value):
+        if value is not None and not isinstance(value, str):
+            raise TypeError("Image URL must be a string")
+        self._profile_img = value and value.strip()
