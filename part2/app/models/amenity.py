@@ -2,9 +2,8 @@ from app.models.base_model import BaseModel
 # import re
 
 class Amenity(BaseModel):
-    def __init__(self, place_id, name, description=None):
+    def __init__(self, name, description=None):
         super().__init__()
-        self.place_id = place_id
         self.name = name
         self.description = description
 
