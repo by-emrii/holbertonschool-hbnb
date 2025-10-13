@@ -7,7 +7,7 @@ class User(BaseModel):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.__encrypted_password = encrypted_password
+        self.encrypted_password = encrypted_password
         self.phone_number = phone_number
         self.profile_img = profile_img
         self.is_admin = is_admin
@@ -68,11 +68,11 @@ class User(BaseModel):
     @phone_number.setter
     def phone_number(self, value):
         phone_regex = r'^\+?[1-9]\d{1,14}$'
-        if not isinstance(value, int):
-            raise TypeError("Phone number must be an integer")
+        if not isinstance(value, str):
+            raise TypeError("Phone number must be a string")
         value = value.strip()
         if not re.match(phone_regex, value):
-            raise ValueError("Phone number must be 10 digits")
+            raise ValueError("Invalid phone number format, and must be 10 digits")
         self._phone_number = value        
 
     """Encrypted Password"""
