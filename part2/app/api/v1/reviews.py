@@ -11,7 +11,9 @@ reviews = [
   {"upload_image": fields.List(fields.String, required=False)},
 ]
 
-"""Review list"""
+"""Create a User"""
+
+"""List all Reviews"""
 @api.get("/reviews")
 def get_review():
     return reviews
@@ -22,7 +24,7 @@ def post_review(reviews):
     reviews.append(reviews)
     return reviews, 200
 
-"""Review specific list"""
+"""Retrieve a review"""
 @api.get("/reviews")
 def get_review():
     return reviews
@@ -33,6 +35,7 @@ def post_review(reviews):
     reviews.append(reviews)
     return reviews, 200
 
+"""Update Review"""
 
 """Delete list"""
 
