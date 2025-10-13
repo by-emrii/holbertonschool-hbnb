@@ -1,5 +1,4 @@
 from app.models.base_model import BaseModel
-# import re
 
 class Amenity(BaseModel):
     def __init__(self, name, description=None):
