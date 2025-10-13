@@ -1,8 +1,10 @@
 from app.models.base_model import BaseModel
+from PIL import Image as PILImage
+
 import re
 
 class Review(BaseModel):
-    def __init__(self, userId, placeId, rating, comment, upload_image =None):
+    def __init__(self, userId, placeId, rating, comment, upload_image=None):
         super().__init__()
         self.userId = userId
         self.placeId = placeId
@@ -30,7 +32,7 @@ class Review(BaseModel):
         return self._comment
     
     @comment.setter
-    def first_name(self, value):
+    def comment(self, value):
         if not isinstance(value, str):
             raise TypeError("Comment name must be a string")
         value = value.strip()
@@ -47,10 +49,13 @@ class Review(BaseModel):
 
     @upload_image.setter
     def upload_image(self, images):
+        if images is None:
+            self._upload_image = []
+            return
         if not isinstance(images, list):
             raise TypeError("upload_image must be a list of image files.")
-        if len(images) > 3:
-            raise ValueError("You can upload up to 3 images only.")
+        if len(images) > 4:
+            raise ValueError("You can upload up to 4 images only.")
         
         validated_images = []
         for img in images:
