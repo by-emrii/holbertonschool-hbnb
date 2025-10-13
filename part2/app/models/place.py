@@ -5,7 +5,7 @@ from app.models.base_model import BaseModel
 class Place(BaseModel):
     def __init__(
             self, user_id, title, description, price,
-            address, latitude, longitude, profile_img=None
+            address, latitude, longitude, profile_img=None, amenity_ids=None
     ):
         super().__init__()
         self.user_id = user_id
@@ -16,6 +16,7 @@ class Place(BaseModel):
         self.latitude = latitude
         self.longitude = longitude
         self.profile_img = profile_img
+        self.amenity_ids = amenity_ids or []
 
     """Getter and Setter"""
     """ User ID """
@@ -122,3 +123,23 @@ class Place(BaseModel):
         if value is not None and not isinstance(value, str):
             raise TypeError("Image URL must be a string")
         self._profile_img = value and value.strip()
+
+    """ Amenity_ids (List[int])"""
+    @property
+    def amenity_ids(self):
+        return self._amenity_ids
+
+    @amenity_ids.setter
+    def amenity_ids(self, values):
+        if values is None:
+            return
+        if not isinstance(values, list):
+            raise TypeError("Amenity IDs must be a list of integers")
+        cleaned = []
+        for v in values:
+            if not isinstance(v, int) or v <= 0:
+                raise ValueError("Each Amenity Id must be a positive integer")
+            if v not in cleaned:
+                cleaned.append(v)
+
+        self._amenity_ids = cleaned
