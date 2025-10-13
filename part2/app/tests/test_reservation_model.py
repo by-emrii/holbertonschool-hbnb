@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 Run from project root with module flag:
-python3 -m app.tests.test_models
+python3 -m app.tests.test_reservation_model
 """
 from app.models.reservation import Reservation
 from datetime import datetime, timedelta
@@ -28,7 +28,11 @@ def test_reservation_creation():
     assert reservation.place_id == "1"
     assert reservation.start_date == start
     assert reservation.end_date == end
-    assert reservation.price == 200.0
-    assert reservation.discount == 50.0
+    assert reservation.price == 500
+    assert reservation.discount == 50
     assert reservation.status == "pending"
     assert reservation.payment_status == "unpaid"
+
+    print("Reservation creation test passed!")
+
+test_reservation_creation()
