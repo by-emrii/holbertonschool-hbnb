@@ -14,8 +14,9 @@ from app.models.place import Place
 
 """ Testing the Amenities Class """
 def test_amenity_creation():
-    amenity = Amenity(name="Wi-Fi")
+    amenity = Amenity(name="Wi-Fi", description="5G internet")
     assert amenity.name == "Wi-Fi"
+    assert amenity.description == "5G internet"
     print("Amenity creation test passed!")
 
 
