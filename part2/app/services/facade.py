@@ -15,7 +15,18 @@ class HBnBFacade:
     def create_user(self, user_data):
         # Logic will be implemented in later tasks
         return self.user_service.create_user(user_data)
-    
+
+    # get user
+    def get_user(self, user_id):
+        return self.user_service.get_user(user_id)
+
+    # get user by email
+    def get_user_by_email(self, email):
+        return self.user_service.get_user_by_email(email)
+
+    # update user
+    def update_user(self, user_id, user_data):
+        return self.user_service.update_user(user_id, user_data)
 
     # Placeholder method for fetching a place by ID
     def get_place(self, place_id):
