@@ -11,7 +11,18 @@ reviews = [
   {"upload_image": fields.List(fields.String, required=False)},
 ]
 
+
+
 """Create a User"""
+@api.get("/reviews")
+def get_review():
+    return reviews
+
+@api.post("/reviews")
+def post_review(reviews):
+    reviews = request.get_json()
+    reviews.append(reviews)
+    return reviews, 200
 
 """List all Reviews"""
 @api.get("/reviews")
