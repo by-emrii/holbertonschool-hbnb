@@ -86,7 +86,7 @@ def test_reservation_creation():
 
 """ Test Review Class """
 def test_review_creation():
-    Review = Review(
+    review = Review(
         user_id="user123",
         place_id="place123",
         rating=4,
@@ -98,14 +98,13 @@ def test_review_creation():
     assert review.user_id == "user123"
     assert review.place_id == "place123"
     assert review.rating == 4
-    assert comment == "Good Review"
+    assert review.comment == "Good Review"
     assert review.upload_image == []
 
 def test_review_rating_validation():
     # Rating must be between 1 and 5
     with pytest.raises(ValueError):
         Review(user_id="u1", place_id="p1", rating=0, comment="Bad")
-
     with pytest.raises(ValueError):
         Review(user_id="u1", place_id="p1", rating=6, comment="Too good")
 
@@ -119,7 +118,7 @@ def test_review_upload_image_validation(tmp_path):
     # Create a fake non-image file
     fake_file = tmp_path / "file.txt"
     fake_file.write_text("not an image")
-
+    
     with pytest.raises(ValueError):
         Review(user_id="u1", place_id="p1", rating=4, comment="Nice", upload_image=[str(fake_file)])    
 
