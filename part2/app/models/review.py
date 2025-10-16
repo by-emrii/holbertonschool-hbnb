@@ -1,13 +1,14 @@
 from app.models.base_model import BaseModel
+from datetime import datetime
 from PIL import Image as image_upload
 
 class Review(BaseModel):
     ALLOWED_FORMATS = {"JPEG", "PNG"}
 
-    def __init__(self, userId, placeId, rating, comment, upload_image=None):
+    def __init__(self, user_id, place_id, rating, comment, upload_image=None):
         super().__init__()
-        self.userId = userId
-        self.placeId = placeId
+        self.user_id = userId
+        self.place_id = placeId
         self.rating = rating
         self.comment = comment
         self.upload_image = upload_image
@@ -20,8 +21,7 @@ class Review(BaseModel):
     @rating.setter
     def rating(self, value):
         if value is None or value == "":
-            self._rating = None
-            return
+            raise ValueError("Rating is required")
         if not isinstance(value, (int, float)):
             raise TypeError("Rating must be a number (int or float)")
         if not (1 <= value <= 5):
@@ -76,8 +76,8 @@ class Review(BaseModel):
     def save(self):
         data = super().save() or {}
         data.update({
-            "userId": self.userId,
-            "placeId": self.placeId,
+            "userId": self.user_id,
+            "placeId": self.place_id,
             "rating": self.rating,
             "comment": self.comment,
             "upload_image": self.upload_image
