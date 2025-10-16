@@ -8,8 +8,8 @@ class Review(BaseModel):
 
     def __init__(self, user_id, place_id, rating, comment, upload_image=None):
         super().__init__()
-        self.user_id = userId
-        self.place_id = placeId
+        self.user_id = user_id
+        self.place_id = place_id
         self.rating = rating
         self.comment = comment
         self.upload_image = upload_image

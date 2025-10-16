@@ -78,8 +78,10 @@ class ReviewService:
         for field in allowed_fields:
             if field in review_data:
                 setattr(review, field, review_data[field])
-
-        self.review_repo.update(review)
+        #InMemoryRepository.update
+        self.review_repo.update(review.id, {
+            field: getattr(review, field) for field in allowed_fields
+        })
         return review
 
     def get_average_rating(self, place_id):
