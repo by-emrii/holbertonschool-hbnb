@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_restx import Api
 from app.api.v1.users import api as users_ns
+from app.api.v1.amenities import api as amenities_ns
+from app.api.v1.reservations import api as reservations_ns
 from app.api.v1.places import api as places_ns
 
 def create_app():
@@ -10,5 +12,14 @@ def create_app():
     # Placeholder for API namespaces (endpoints will be added later)
     api.add_namespace(users_ns, path='/api/v1/users')
     # Additional namespaces for places, reviews, and amenities will be added later
+
+    # Register amenity namespace
+     # Register the users namespace
+    api.add_namespace(amenities_ns, path='/api/v1/amenities')
+
+    # Reservation namespace
+    api.add_namespace(reservations_ns, path='/api/v1/reservations')
+
+    # Place namespace
     api.add_namespace(places_ns, path='/api/v1/places') 
     return app
