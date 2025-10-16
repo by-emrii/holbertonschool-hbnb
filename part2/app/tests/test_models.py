@@ -5,13 +5,11 @@ python3 -m app.tests.test_models
 """
 
 from app.models.user import User
-# from app.models.reviews import Review
-
-
 from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models.reservation import Reservation
 from datetime import datetime, timedelta
+from app.models.review import Review
 
 
 """ Testing the User Class """
@@ -118,7 +116,7 @@ def test_review_upload_image_validation(tmp_path):
     # Create a fake non-image file
     fake_file = tmp_path / "file.txt"
     fake_file.write_text("not an image")
-    
+
     with pytest.raises(ValueError):
         Review(user_id="u1", place_id="p1", rating=4, comment="Nice", upload_image=[str(fake_file)])    
 
