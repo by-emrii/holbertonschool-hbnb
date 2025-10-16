@@ -11,10 +11,12 @@ def create_app():
 
     # Placeholder for API namespaces (endpoints will be added later)
     api.add_namespace(users_ns, path='/api/v1/users')
+    
     # Additional namespaces for places, reviews, and amenities will be added later
 
     # Register amenity namespace
-     # Register the users namespace
+
+    # Register the users namespace
     api.add_namespace(amenities_ns, path='/api/v1/amenities')
 
     # Reservation namespace
