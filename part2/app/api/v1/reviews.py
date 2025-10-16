@@ -1,4 +1,6 @@
 from flask_restx import Namespace, Resource, fields
+from flask import send_file
+import io
 from app.services import HBnBFacade
 
 api = Namespace("reviews", description="Review operations")
