@@ -5,7 +5,7 @@ from app.models.base_model import BaseModel
 class Place(BaseModel):
     def __init__(
             self, user_id, title, description, price,
-            address, latitude, longitude, profile_img=None, amenity_ids=None
+            address, latitude, longitude, image_url=None, amenity_ids=None
     ):
         super().__init__()
         self.user_id = user_id
@@ -15,7 +15,7 @@ class Place(BaseModel):
         self.address = address
         self.latitude = latitude
         self.longitude = longitude
-        self.profile_img = profile_img
+        self.image_url = image_url
         self.amenity_ids = amenity_ids or []
 
     """Getter and Setter"""
@@ -113,16 +113,16 @@ class Place(BaseModel):
             raise ValueError("Longitude must be between -180 and 180")
         self._longitude = float(value)
 
-    """ Profile Img URL """
+    """ Image URL """
     @property
-    def profile_img(self):
-        return self._profile_img
+    def image_url(self):
+        return self._image_url
 
-    @profile_img.setter
-    def profile_img(self, value):
+    @image_url.setter
+    def image_ulr(self, value):
         if value is not None and not isinstance(value, str):
             raise TypeError("Image URL must be a string")
-        self._profile_img = value and value.strip()
+        self._image_url = value and value.strip()
 
     """ Amenity_ids (List[int])"""
     @property

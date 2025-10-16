@@ -13,7 +13,7 @@ place_create_model = api.model('PlaceCreate', {
     'address':     fields.String(required=False, description='Address'),
     'latitude':    fields.Float(required=True,   description='Latitude (-90..90)'),
     'longitude':   fields.Float(required=True,   description='Longitude (-180..180)'),
-    'profile_img':   fields.String(required=False, description='Cover image URL'),
+    'image_url':   fields.String(required=False, description='Cover image URL'),
     'amenity_ids': fields.List(fields.String, required=False, description='Amenity id list')
 })
 
@@ -24,8 +24,8 @@ place_update_model = api.model('PlaceUpdate', {
     'address':     fields.String(required=False),
     'latitude':    fields.Float(required=False),
     'longitude':   fields.Float(required=False),
-    'profile_img':   fields.String(required=False),
-    'amenity_ids': fields.List(fields.String, required=False),
+    'image_url':   fields.String(required=False),
+    'amenity_ids': fields.List(fields.Integer, required=False),
 })
 
 # Place response model
@@ -38,8 +38,8 @@ place_response = api.model('Place', {
     'address':     fields.String,
     'latitude':    fields.Float,
     'longitude':   fields.Float,
-    'profile_img':   fields.String,
-    'amenity_ids': fields.List(fields.String),
+    'image_url':   fields.String,
+    'amenity_ids': fields.List(fields.Integer),
 })
 
 # Place Endpoints 
