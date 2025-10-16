@@ -1,5 +1,6 @@
 from app.models.base_model import BaseModel
 from datetime import datetime
+import uuid
 from PIL import Image as image_upload
 
 class Review(BaseModel):
