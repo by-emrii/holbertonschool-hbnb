@@ -16,7 +16,7 @@ review_model = api.model('Review', {
 """Create a Review"""
 @api.route('/')
 class ReviewList(Resource):
-    @api.expect(review)
+    @api.expect(review_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
     def post(self):
@@ -37,8 +37,8 @@ class ReviewList(Resource):
 class ReviewDetail(Resource):
     @api.response(200, 'Success')
     @api.response(404, 'Review not found')
-    def get(self, user_id):
-        """Get review by user id"""
+    def get(self, review_id):
+        """Get review by review id"""
         review = facade.get_review_by_id(review_id)
         if not review:
             return {"error": "Review not found"}, 404
@@ -49,7 +49,7 @@ class ReviewDetail(Resource):
     @api.response(403, 'Not allowed')
     @api.response(404, 'Review not found')
     def put(self, review_id):
-        """update a review"""
+        """Update a review"""
         review_data = request.get_json()
         current_user_id = review_data.get("current_user_id")
         try:
@@ -60,16 +60,17 @@ class ReviewDetail(Resource):
             })
         except (ValueError, PermissionError) as error:
             return {"error": str(error)}, 403
-    
+
     @api.response(200, 'Review successfully deleted')
     @api.response(404, 'Review not found')
-    def get_user_review():
+    def delete(self, review_id):
         """Delete review"""
         try:
-            return facade.delete_review(review_id)
+            facade.delete_review(review_id)
+            return {"message": "Review deleted"}, 200
         except ValueError as error:
             return {"error": str(error)}, 404
-
+        
 """List reviews by place id"""
 @api.route('/place/<string:place_id>')
 class ReviewByPlace(Resource):

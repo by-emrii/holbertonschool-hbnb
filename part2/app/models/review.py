@@ -1,6 +1,7 @@
 from app.models.base_model import BaseModel
 from datetime import datetime
 import uuid
+from io import BytesIO
 from PIL import Image as image_upload
 
 class Review(BaseModel):
@@ -64,23 +65,30 @@ class Review(BaseModel):
 
         validated_images = []
         for img in images:
+            if not isinstance(img, tuple) or len(img) != 2:
+                raise TypeError("Each image must be a tuple: (filename:str, bytes)")
+            filename, img_bytes = img
             try:
-                with image_upload.open(img) as pil_img:
+                with image_upload.open(BytesIO(img_bytes)) as pil_img:
                     if pil_img.format not in self.ALLOWED_FORMATS:
                         raise ValueError(f"Image must be JPEG or PNG (got {pil_img.format})")
-                validated_images.append(img)
             except Exception:
                 raise ValueError("Each upload must be a valid image file (JPEG or PNG).")
+            validated_images.append(img)
 
         self._upload_image = validated_images
 
     def save(self):
         data = super().save() or {}
+        # Return URLs instead of raw bytes
+        image_urls = [
+            f"/reviews/{self.id}/images/{i}" for i in range(len(self.upload_image))
+        ]
         data.update({
             "userId": self.user_id,
             "placeId": self.place_id,
             "rating": self.rating,
             "comment": self.comment,
-            "upload_image": self.upload_image
+            "upload_image": image_urls  # <-- use URLs here
         })
         return data
