@@ -2,11 +2,11 @@ from app.persistence.repository import InMemoryRepository
 from app.services.user_service import UserService
 from app.services.amenity_service import AmenityService
 from app.services.reservation_service import ReservationService
-
+from app.services.place_service import PlaceService
 
 class HBnBFacade:
     def __init__(self):
-        # self.user_repo = InMemoryRepository()
+        self.user_repo = InMemoryRepository()
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
         # self.amenity_repo = InMemoryRepository()
@@ -14,6 +14,7 @@ class HBnBFacade:
         self.user_service = UserService()
         self.amenity_service = AmenityService()
         self.reservation_service = ReservationService()
+        self.place_service = PlaceService()
 
     """ User CRU """
     # Placeholder method for creating a user
@@ -34,10 +35,17 @@ class HBnBFacade:
         return self.user_service.update_user(user_id, user_data)
 
     """ Place CRU """
-    # Placeholder method for fetching a place by ID
+    # Create place
+    def create_place(self, place_data):
+        return self.place_service.create_place(place_data)
+
+    # Get Place
     def get_place(self, place_id):
-        # Logic will be implemented in later tasks
-        pass
+        return self.place_service.get_place(place_id)
+
+    # Update Place
+    def update_place(self, place_id, place_data):
+        return self.place_service.update_place(place_id, place_data)
 
     """ Amenity CRU """
     # create amenity
