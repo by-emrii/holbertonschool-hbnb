@@ -53,7 +53,7 @@ class PlaceService():
             "address",
             "latitude",
             "longitude",
-            "profile_img",
+            "image_url",
             "amenity_ids",            
         }
 
