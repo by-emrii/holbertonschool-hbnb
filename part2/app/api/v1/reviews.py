@@ -28,9 +28,9 @@ class ReviewList(Resource):
         return result, 201
 
     @api.response(200, 'Success')
-    def post(self):
+    def get(self):
         """lists all reviews"""
-        return facade.get_all_reviews()
+        return facade.review_service.review_repo.get_all()
 
 """Retrieve, update, deleted review by user id"""
 @api.route('/<string:review_id>')
@@ -39,10 +39,10 @@ class ReviewDetail(Resource):
     @api.response(404, 'Review not found')
     def get(self, user_id):
         """Get review by user id"""
-        try:
-            return facade.get_review_by_id(review_id)
-        except ValueError as error:
-            return{"error": str(error)}, 404
+        review = facade.get_review_by_id(review_id)
+        if not review:
+            return {"error": "Review not found"}, 404
+        return review.save(), 200
 
     @api.expect(review_model)
     @api.response(200, 'Review successfully updated')
