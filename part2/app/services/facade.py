@@ -3,7 +3,7 @@ from app.services.user_service import UserService
 from app.services.amenity_service import AmenityService
 from app.services.reservation_service import ReservationService
 from app.services.place_service import PlaceService
-from app.services.review_service import ReviewService
+from part2.app.services.review_service import ReviewService
 
 class HBnBFacade:
     def __init__(self):
