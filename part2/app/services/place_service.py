@@ -3,15 +3,18 @@ from app.persistence.repository import InMemoryRepository
 
 
 class PlaceService():
-    def __init__(self):
-        self.user_repo = InMemoryRepository()
-        self.place_repo = InMemoryRepository()
+    def __init__(self, place_repo, user_repo=None):
+        self.user_repo = user_repo     # validate owner_id in user_repo 
+        self.place_repo = place_repo
 
 
     # ---------- Create Place ----------
     def create_place(self, place_data: dict):
         if not isinstance(place_data, dict):
             raise ValueError("Invalid payload")
+
+        if "profile_img" in place_data and "image_url" not in place_data:
+             place_data["image_url"] = place_data.pop("profile_img")
 
         # Validate user_id and owner
         owner_id = place_data.get("user_id")

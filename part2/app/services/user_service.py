@@ -3,8 +3,8 @@ from app.persistence.repository import InMemoryRepository
 
 
 class UserService:
-    def __init__(self):
-        self.user_repo = InMemoryRepository()
+    def __init__(self, user_repo):
+        self.user_repo = user_repo
 
     # Create user
     def create_user(self, user_data):

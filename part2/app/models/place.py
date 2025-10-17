@@ -26,9 +26,13 @@ class Place(BaseModel):
 
     @user_id.setter
     def user_id(self, value):
-        if not isinstance(value, int) or value <= 0:
-            raise ValueError("User ID must be a positive integer")
-        self._user_id = value
+        if isinstance(value, int):    # in case of passed id is int
+            value = str(value)
+        if not isinstance(value, str):
+            raise TypeError("User ID must be a string")
+        if not value.strip():
+            raise ValueError("User ID cannot be empty")
+        self._user_id = value.strip()
 
     """ Place title """
     @property
@@ -116,13 +120,20 @@ class Place(BaseModel):
     """ Image URL """
     @property
     def image_url(self):
-        return self._image_url
+        return getattr(self, "_image_url", None)
 
     @image_url.setter
-    def image_ulr(self, value):
-        if value is not None and not isinstance(value, str):
-            raise TypeError("Image URL must be a string")
-        self._image_url = value and value.strip()
+    def image_url(self, value):
+        if value is None or str(value).strip() == "":
+            self._image_url = None
+            return
+        if not isinstance(value, str):
+            raise TypeError("image_url must be a string")
+        v = value.strip()
+        # 可选校验：只允许 http(s) 前缀
+        if not (v.startswith("http://") or v.startswith("https://")):
+            raise ValueError("image_url must start with http(s)://")
+        self._image_url = v
 
     """ Amenity_ids (List[int])"""
     @property
@@ -131,15 +142,16 @@ class Place(BaseModel):
 
     @amenity_ids.setter
     def amenity_ids(self, values):
-        if values is None:
-            return
         if not isinstance(values, list):
-            raise TypeError("Amenity IDs must be a list of integers")
-        cleaned = []
-        for v in values:
-            if not isinstance(v, int) or v <= 0:
-                raise ValueError("Each Amenity Id must be a positive integer")
-            if v not in cleaned:
-                cleaned.append(v)
+            raise TypeError("Amenity IDs must be a list")
 
-        self._amenity_ids = cleaned
+        ids = []
+        for v in values:
+            try:
+                v_int = int(v)
+                if v_int <= 0:
+                    raise ValueError("Each Amenity Id must be a positive integer")
+                ids.append(v_int)
+            except ValueError:
+                raise ValueError("Amenity IDs must be integers or strings of integers")
+        self._amenity_ids = ids
