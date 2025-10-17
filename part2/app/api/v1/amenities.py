@@ -28,8 +28,8 @@ class AmenityList(Resource):
             return {'id': new_amenity.id, 'name': new_amenity.name, 'description': new_amenity.description}, 201
         # if not new_amenity:
             
-        except ValueError as e:
-            return {'error': str'Invalid input data'}, 400
+        except ValueError:
+            return {'error': 'Invalid input data'}, 400
         
 
     @api.expect(amenity_model)
