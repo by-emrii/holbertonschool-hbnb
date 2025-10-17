@@ -24,7 +24,7 @@ place_update_model = api.model('PlaceUpdate', {
     'latitude':    fields.Float(required=False),
     'longitude':   fields.Float(required=False),
     'image_url':   fields.String(required=False),
-    'amenity_ids': fields.List(fields.Integer, required=False),
+    'amenity_ids': fields.List(fields.String, required=False),
 })
 
 # Place response model
@@ -38,7 +38,7 @@ place_response = api.model('Place', {
     'latitude':    fields.Float,
     'longitude':   fields.Float,
     'image_url':   fields.String,
-    'amenity_ids': fields.List(fields.Integer),
+    'amenity_ids': fields.List(fields.String),
 })
 
 # Place Endpoints 
