@@ -22,11 +22,15 @@ class AmenityList(Resource):
     def post(self):
         """ Register a new amenity """
         # retrieve input data
-        amenity_data = api.payload
-        new_amenity = facade.create_amenity(amenity_data)
-        if not new_amenity:
-            return {'error': 'Invalid input data'}, 400
-        return {'id': new_amenity.id, 'name': new_amenity.name, 'description': new_amenity.description}, 201
+        try:
+            amenity_data = api.payload
+            new_amenity = facade.create_amenity(amenity_data)
+            return {'id': new_amenity.id, 'name': new_amenity.name, 'description': new_amenity.description}, 201
+        # if not new_amenity:
+            
+        except ValueError as e:
+            return {'error': str'Invalid input data'}, 400
+        
 
     @api.expect(amenity_model)
     @api.response(200, 'List of amenities retrieved successfully')
