@@ -1,8 +1,7 @@
 from flask_restx import Namespace, Resource, fields
-from app.services import HBnBFacade
+from app.services import facade
 
 api = Namespace('places', description='Place operations')
-facade = HBnBFacade()
 
 # Create / Update 
 place_create_model = api.model('PlaceCreate', {
@@ -14,7 +13,7 @@ place_create_model = api.model('PlaceCreate', {
     'latitude':    fields.Float(required=True,   description='Latitude (-90..90)'),
     'longitude':   fields.Float(required=True,   description='Longitude (-180..180)'),
     'image_url':   fields.String(required=False, description='Cover image URL'),
-    'amenity_ids': fields.List(fields.String, required=False, description='Amenity id list')
+    'amenity_ids': fields.List(fields.Integer, required=False, description='Amenity id list(int)')
 })
 
 place_update_model = api.model('PlaceUpdate', {
@@ -49,8 +48,8 @@ class PlaceList(Resource):
     @api.marshal_with(place_response, code=201)
     def post(self):
         """ Create place """
-        data = api.payload
-        place = facade.create_place(data)
+        place_data = api.payload
+        place = facade.create_place(place_data)
         return place, 201
 
 @api.route('/<place_id>')

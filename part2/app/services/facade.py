@@ -7,15 +7,17 @@ from app.services.review_service import ReviewService
 
 class HBnBFacade:
     def __init__(self):
+        # shared repo
         self.user_repo = InMemoryRepository()
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
 
-        self.user_service = UserService()
+        # services using shared repos
+        self.user_service = UserService(self.user_repo)
         self.amenity_service = AmenityService()
         self.reservation_service = ReservationService()
-        self.place_service = PlaceService()
+        self.place_service = PlaceService(self.place_repo, self.user_repo)
         self.review_service = ReviewService()
         
     """ User CRU """
@@ -132,3 +134,5 @@ class HBnBFacade:
             return {"error": str(error)}
         except Exception as error:
             return {"error": f"Unexpected error: {str(error)}"}
+
+facade = HBnBFacade()
