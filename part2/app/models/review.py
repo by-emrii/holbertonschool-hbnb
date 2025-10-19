@@ -59,22 +59,25 @@ class Review(BaseModel):
             return
 
         if not isinstance(images, list):
-            raise TypeError("upload_image must be a list of image files.")
-        if len(images) > 4:
-            raise ValueError("You can upload up to 4 images only.")
+            raise TypeError("upload_image must be a list of image URLs or files.")
 
         validated_images = []
         for img in images:
-            if not isinstance(img, tuple) or len(img) != 2:
-                raise TypeError("Each image must be a tuple: (filename:str, bytes)")
-            filename, img_bytes = img
-            try:
-                with image_upload.open(BytesIO(img_bytes)) as pil_img:
-                    if pil_img.format not in self.ALLOWED_FORMATS:
-                        raise ValueError(f"Image must be JPEG or PNG (got {pil_img.format})")
-            except Exception:
-                raise ValueError("Each upload must be a valid image file (JPEG or PNG).")
-            validated_images.append(img)
+            if isinstance(img, str):
+                # Accept URL directly
+                validated_images.append(img)
+            elif isinstance(img, tuple) and len(img) == 2:
+                # Old behavior for filename + bytes
+                filename, img_bytes = img
+                try:
+                    with image_upload.open(BytesIO(img_bytes)) as pil_img:
+                        if pil_img.format not in self.ALLOWED_FORMATS:
+                            raise ValueError(f"Image must be JPEG or PNG (got {pil_img.format})")
+                except Exception:
+                    raise ValueError("Each upload must be a valid image file (JPEG or PNG).")
+                validated_images.append(img)
+            else:
+                raise TypeError("Each image must be a URL string or a tuple: (filename:str, bytes)")
 
         self._upload_image = validated_images
 
