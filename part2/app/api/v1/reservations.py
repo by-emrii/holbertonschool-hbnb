@@ -18,11 +18,8 @@ reservation_model = api.model('Reservation', {
 
 # Reservation model for updates (PUT)
 reservation_update_model = api.model('ReservationUpdate', {
-    "user_id": fields.String(required=False, description="ID of user making the reservation"),
-    "place_id": fields.String(required=False, description="ID of the place being reserved"),
     "start_date": fields.String(required=False, description="Start date in ISO format"),
     "end_date": fields.String(required=False, description="End date in ISO format"),
-    "price": fields.Float(required=False, description="Total price of the reservation"),
     "discount": fields.Float(required=False, description="Discount amount"),
     "status": fields.String(required=False, description="Reservation status"),
     "payment_status": fields.String(required=False, description="Payment status")
