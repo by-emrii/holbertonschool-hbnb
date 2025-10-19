@@ -43,11 +43,15 @@ class ReservationService:
         updatable_fields = {
             "start_date",
             "end_date",
-            "price",
             "discount",
             "status",
             "payment_status"
         }
+        
+        # Check for invalid fields
+        invalid_fields = [key for key in reservation_data if key not in updatable_fields]
+        if invalid_fields:
+            raise ValueError(f"The following fields cannot be updated: {', '.join(invalid_fields)}")
 
         update_dict = {}
 
