@@ -42,7 +42,7 @@ def test_place_creation():
         address="888 Main St, Melbourne",
         latitude=-24.7241,
         longitude=124.6281,
-        profile_img="https://example.com/image.jpg",
+        image_url="https://example.com/image.jpg",
         amenity_ids=[1, 2, 2, 3]  #  test for removing duplicate ids
     )
 
