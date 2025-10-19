@@ -1,5 +1,5 @@
+from flask import request, send_file
 from flask_restx import Namespace, Resource, fields
-from flask import send_file
 import io
 from app.services import HBnBFacade
 
