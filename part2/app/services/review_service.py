@@ -103,15 +103,20 @@ class ReviewService:
         return {"message": "Review deleted successfully"}
 
     def save(self):
-        """Return a JSON-serializable dictionary of the review."""
-        data = {
-            "id": self.id,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
+        # Remove super().save() call
+        data = {}  # start with empty dict
+        # Return URLs instead of raw bytes
+        image_urls = [
+            f"/reviews/{self.id}/images/{i}" for i in range(len(self.upload_image))
+        ]
+        data.update({
+            "id": self.id,  # if your BaseModel has an id
+            "created_at": getattr(self, "created_at", None),
+            "updated_at": getattr(self, "updated_at", None),
             "user_id": self.user_id,
             "place_id": self.place_id,
             "rating": self.rating,
             "comment": self.comment,
-            "upload_image": self.upload_image or []  
-        }
+            "upload_image": image_urls
+        })
         return data
