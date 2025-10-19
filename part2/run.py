@@ -1,4 +1,4 @@
-#from app import create_app
+from app import create_app
 from flask import Flask
 from flask_restx import Api
 from app.api.v1.reviews import api as reviews_api
