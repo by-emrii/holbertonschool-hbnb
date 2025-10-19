@@ -74,8 +74,9 @@ class Review(BaseModel):
         self._upload_image = validated_images
 
     def save(self):
-        """Return dictionary representation for API responses"""
+        """Return dictionary representation for API responses with JSON-serializable dates"""
         image_urls = [f"/reviews/{self.id}/images/{i}" for i in range(len(self.upload_image))]
+        
         return {
             "id": getattr(self, "id", None),
             "user_id": self.user_id,
@@ -83,6 +84,6 @@ class Review(BaseModel):
             "rating": self.rating,
             "comment": self.comment,
             "upload_image": image_urls,
-            "created_at": getattr(self, "created_at", None),
-            "updated_at": getattr(self, "updated_at", None)
+            "created_at": getattr(self, "created_at", None).isoformat() if getattr(self, "created_at", None) else None,
+            "updated_at": getattr(self, "updated_at", None).isoformat() if getattr(self, "updated_at", None) else None
         }
