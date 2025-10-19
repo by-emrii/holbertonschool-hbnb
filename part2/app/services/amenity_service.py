@@ -36,6 +36,11 @@ class AmenityService:
 
     """ Update amenities """
     def update_amenity(self, amenity_id, amenity_data):
+        # Validate input data
+        name = amenity_data.get("name")
+        if not name:
+            raise ValueError('400: Invalid Input data - name is required')
+        
         # get amenity
         existing_amenity = self.get_amenity(amenity_id)
         if existing_amenity:
