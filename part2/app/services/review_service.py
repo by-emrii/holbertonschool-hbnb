@@ -102,21 +102,4 @@ class ReviewService:
         self.review_repo.delete(review_id)
         return {"message": "Review deleted successfully"}
 
-    def save(self):
-        # Remove super().save() call
-        data = {}  # start with empty dict
-        # Return URLs instead of raw bytes
-        image_urls = [
-            f"/reviews/{self.id}/images/{i}" for i in range(len(self.upload_image))
-        ]
-        data.update({
-            "id": self.id,  # if your BaseModel has an id
-            "created_at": getattr(self, "created_at", None),
-            "updated_at": getattr(self, "updated_at", None),
-            "user_id": self.user_id,
-            "place_id": self.place_id,
-            "rating": self.rating,
-            "comment": self.comment,
-            "upload_image": image_urls
-        })
-        return data
+    
