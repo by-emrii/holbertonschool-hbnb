@@ -101,3 +101,17 @@ class ReviewService:
             raise ValueError("Review not found")
         self.review_repo.delete(review_id)
         return {"message": "Review deleted successfully"}
+
+def save(self):
+    """Return a JSON-serializable dictionary of the review."""
+    data = {
+        "id": self.id,
+        "created_at": self.created_at,
+        "updated_at": self.updated_at,
+        "user_id": self.user_id,
+        "place_id": self.place_id,
+        "rating": self.rating,
+        "comment": self.comment,
+        "upload_image": self.upload_image or []  # List of URLs or empty list
+    }
+    return data
