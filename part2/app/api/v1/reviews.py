@@ -1,5 +1,5 @@
+from flask import request, send_file
 from flask_restx import Namespace, Resource, fields
-from flask import send_file
 import io
 from app.services import HBnBFacade
 
@@ -32,7 +32,8 @@ class ReviewList(Resource):
     @api.response(200, 'Success')
     def get(self):
         """lists all reviews"""
-        return facade.review_service.review_repo.get_all()
+        reviews = facade.review_service.review_repo.get_all()
+        return [review.save() for review in reviews], 200
 
 """Retrieve, update, deleted review by user id"""
 @api.route('/<string:review_id>')
@@ -55,11 +56,12 @@ class ReviewDetail(Resource):
         review_data = request.get_json()
         current_user_id = review_data.get("current_user_id")
         try:
-            return facade.update_review({
+            updated_review = facade.update_review({
                 "review_id": review_id,
                 "review_data": review_data,
                 "current_user_id": current_user_id
             })
+            return updated_review.save(), 200
         except (ValueError, PermissionError) as error:
             return {"error": str(error)}, 403
 
@@ -79,7 +81,8 @@ class ReviewByPlace(Resource):
     @api.response(200, 'Success')
     def get(self, place_id):
         """List all reviews of a place"""
-        return facade.get_review_for_place(place_id)
+        reviews = facade.get_review_for_place(place_id)
+        return [r.save() for r in reviews], 200
 
 """List review of user"""
 @api.route('/user/<string:user_id>')
@@ -87,7 +90,8 @@ class ReviewByUser(Resource):
     @api.response(200, 'Success')
     def get(self, user_id):
         """get all of users reviews"""
-        return facade.get_reviews_by_user(user_id)
+        reviews = facade.get_reviews_by_user(user_id)
+        return [r.save() for r in reviews], 200
 
 
 

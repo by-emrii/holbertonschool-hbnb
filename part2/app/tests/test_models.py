@@ -4,6 +4,8 @@ Run from project root with module flag:
 python3 -m app.tests.test_models
 """
 
+
+import pytest
 from app.models.user import User
 from app.models.amenity import Amenity
 from app.models.place import Place
@@ -89,7 +91,7 @@ def test_review_creation():
         place_id="place123",
         rating=4,
         comment="Good Review",
-        upload_image=None
+        upload_image=["https://example.com/image.jpg"]
     )
 
     #check attributes
@@ -97,7 +99,7 @@ def test_review_creation():
     assert review.place_id == "place123"
     assert review.rating == 4
     assert review.comment == "Good Review"
-    assert review.upload_image == []
+    assert review.upload_image == ["https://example.com/image.jpg"]
 
 def test_review_rating_validation():
     # Rating must be between 1 and 5
@@ -113,12 +115,21 @@ def test_review_comment_validation():
         Review(user_id="u1", place_id="p1", rating=3, comment=long_comment)
 
 def test_review_upload_image_validation(tmp_path):
+    # Invalid type (int) should fail
+    with pytest.raises(TypeError):
+        Review(user_id="u1", place_id="p1", rating=4, comment="Nice", upload_image=[123])   
+    
     # Create a fake non-image file
-    fake_file = tmp_path / "file.txt"
-    fake_file.write_text("not an image")
-
+    fake_bytes = b"notanimage"
     with pytest.raises(ValueError):
-        Review(user_id="u1", place_id="p1", rating=4, comment="Nice", upload_image=[str(fake_file)])    
+        Review(
+            user_id="u1",
+            place_id="p1",
+            rating=4,
+            comment="Nice",
+            upload_image=[("fake.jpg", fake_bytes)]
+        )
+
 
 test_user_creation()
 test_amenity_creation()
