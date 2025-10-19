@@ -112,6 +112,6 @@ class ReviewService:
             "place_id": self.place_id,
             "rating": self.rating,
             "comment": self.comment,
-            "upload_image": self.upload_image or []  # List of URLs or empty list
+            "upload_image": self.upload_image or []  
         }
         return data
