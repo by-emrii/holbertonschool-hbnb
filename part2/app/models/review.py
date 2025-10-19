@@ -15,7 +15,6 @@ class Review(BaseModel):
         self.comment = comment
         self.upload_image = upload_image
 
-    """Rating"""
     @property
     def rating(self):
         return self._rating
@@ -25,12 +24,11 @@ class Review(BaseModel):
         if value is None or value == "":
             raise ValueError("Rating is required")
         if not isinstance(value, (int, float)):
-            raise TypeError("Rating must be a number (int or float)")
+            raise TypeError("Rating must be a number")
         if not (1 <= value <= 5):
-            raise ValueError("Rating must be between 1 and 5 stars")
+            raise ValueError("Rating must be between 1 and 5")
         self._rating = value
 
-    """Comment"""
     @property
     def comment(self):
         return self._comment
@@ -44,10 +42,9 @@ class Review(BaseModel):
             raise TypeError("Comment must be a string")
         value = value.strip()
         if len(value) > 100:
-            raise ValueError("Comment must not exceed 100 characters.")
+            raise ValueError("Comment cannot exceed 100 characters")
         self._comment = value
 
-    """Upload Image"""
     @property
     def upload_image(self):
         return self._upload_image
@@ -57,45 +54,35 @@ class Review(BaseModel):
         if images is None:
             self._upload_image = []
             return
-
         if not isinstance(images, list):
-            raise TypeError("upload_image must be a list of image URLs or files.")
-
+            raise TypeError("upload_image must be a list of image URLs or files")
         validated_images = []
         for img in images:
             if isinstance(img, str):
-                # Accept URL directly
                 validated_images.append(img)
             elif isinstance(img, tuple) and len(img) == 2:
-                # Old behavior for filename + bytes
                 filename, img_bytes = img
                 try:
                     with image_upload.open(BytesIO(img_bytes)) as pil_img:
                         if pil_img.format not in self.ALLOWED_FORMATS:
                             raise ValueError(f"Image must be JPEG or PNG (got {pil_img.format})")
                 except Exception:
-                    raise ValueError("Each upload must be a valid image file (JPEG or PNG).")
+                    raise ValueError("Each upload must be a valid image")
                 validated_images.append(img)
             else:
-                raise TypeError("Each image must be a URL string or a tuple: (filename:str, bytes)")
-
+                raise TypeError("Each image must be a URL string or a tuple (filename, bytes)")
         self._upload_image = validated_images
 
     def save(self):
-        # Remove super().save() call
-        data = {}  # start with empty dict
-        # Return URLs instead of raw bytes
-        image_urls = [
-            f"/reviews/{self.id}/images/{i}" for i in range(len(self.upload_image))
-        ]
-        data.update({
-            "id": self.id,  # if your BaseModel has an id
-            "created_at": getattr(self, "created_at", None),
-            "updated_at": getattr(self, "updated_at", None),
+        """Return dictionary representation for API responses"""
+        image_urls = [f"/reviews/{self.id}/images/{i}" for i in range(len(self.upload_image))]
+        return {
+            "id": getattr(self, "id", None),
             "user_id": self.user_id,
             "place_id": self.place_id,
             "rating": self.rating,
             "comment": self.comment,
-            "upload_image": image_urls
-        })
-        return data
+            "upload_image": image_urls,
+            "created_at": getattr(self, "created_at", None),
+            "updated_at": getattr(self, "updated_at", None)
+        }
