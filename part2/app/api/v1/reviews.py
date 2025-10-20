@@ -26,7 +26,7 @@ class ReviewList(Resource):
         result = facade.create_review(review_data)
         if isinstance(result, dict) and "error" in result:
             return result, 400
-        return result, 201
+        return result.save(), 201
 
     @api.response(200, 'Success')
     def get(self):
