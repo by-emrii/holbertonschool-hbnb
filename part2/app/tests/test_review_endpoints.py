@@ -20,7 +20,9 @@ class TestReviewModel(unittest.TestCase):
     # Review Creation
     def test_review_creation(self):
         """Test that a review can be created with valid data"""
+        print("Testing review creation...")
         review = Review(**self.review_data)
+        print(f"Created review: {review.__dict__}")
         self.assertEqual(review.user_id, "user123")
         self.assertEqual(review.place_id, "place123")
         self.assertEqual(review.rating, 4)
@@ -30,10 +32,12 @@ class TestReviewModel(unittest.TestCase):
     # Rating Validation
     def test_rating_validation(self):
         """Rating must be between 1 and 5"""
+        print("Testing rating validation...")
         with self.assertRaises(ValueError):
             Review(**{**self.review_data, "rating": 0})
         with self.assertRaises(ValueError):
             Review(**{**self.review_data, "rating": 6})
+        print("Comment validation passed")
 
     # Comment Validation
     def test_comment_validation(self):
@@ -45,6 +49,7 @@ class TestReviewModel(unittest.TestCase):
     # Upload Image Validation
     def test_upload_image_validation(self):
         """upload_image must be a list of URLs or valid file tuples"""
+        print("Testing upload_image validation...")
         # Invalid type in list
         with self.assertRaises(TypeError):
             Review(**{**self.review_data, "upload_image": [123]})
@@ -52,6 +57,7 @@ class TestReviewModel(unittest.TestCase):
         fake_bytes = b"notanimage"
         with self.assertRaises(ValueError):
             Review(**{**self.review_data, "upload_image": [("fake.jpg", fake_bytes)]})
+        print("Upload image validation passed")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
