@@ -62,10 +62,17 @@ class UserResource(Resource):
     @api.response(404, 'User not found')
     def get(self, user_id):
         """Get user details by ID"""
-        user = facade.get_user(user_id)
-        if not user:
-            return {'error': 'User not found'}, 404
-        return {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}, 200
+        try:
+            user = facade.get_user(user_id)
+            return {
+                'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+                'phone_number': user.phone_number
+            }, 200
+        except ValueError as e:
+            return {"error": str(e)}, 404
 
     @api.response(200, 'User details updated successfully!')
     @api.response(404, 'User not found')
@@ -75,7 +82,11 @@ class UserResource(Resource):
         """ Update user details """
         user_data = api.payload
 
-        updated_user = facade.update_user(user_id, user_data)
-        if not updated_user:
-            return {"error": "Update unsuccessful"}, 400
-        return {'id': updated_user.id, 'first_name': updated_user.first_name, 'last_name': updated_user.last_name, 'email': updated_user.email}, 200
+        try:
+            updated_user = facade.update_user(user_id, user_data)
+            return {'id': updated_user.id, 'first_name': updated_user.first_name, 'last_name': updated_user.last_name, 'email': updated_user.email, 'phone_number': updated_user.phone_number}, 200
+        except ValueError as e:
+            msg = str(e)
+            if 'not found' in msg.lower():
+                return {'error': msg}, 404
+            return {"error": msg}, 400
