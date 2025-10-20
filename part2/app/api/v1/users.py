@@ -3,7 +3,6 @@ from app.services import facade
 
 api = Namespace('users', description='User operations')
 
-
 # user = {
 #     "user_id": "1",
 #     "first_name": "Bob",
