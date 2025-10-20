@@ -1,6 +1,5 @@
 from flask import request, send_file
 from flask_restx import Namespace, Resource, fields
-import io
 from app.services import HBnBFacade
 
 api = Namespace("reviews", description="Review operations")
@@ -8,34 +7,45 @@ facade = HBnBFacade()
 
 # Review input/output model
 review_model = api.model('Review', {
-    "user_id": fields.String(required=True, description="ID of the user"),
-    "place_id": fields.String(required=True, description="ID of the place"),
     "rating": fields.Float(required=True, description="Rating (1-5)", min=1, max=5),
     "comment": fields.String(required=True, description="Review comment"),
     "upload_image": fields.List(fields.String, required=False, description="Optional image URLs")
 })
 
-"""Create a Review"""
+"""Create a review for a place"""
 @api.route('/')
 class ReviewList(Resource):
     @api.expect(review_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
-    def post(self):
+    def post(self, place_id):
         """Creating a review"""
-        review_data = request.get_json()
-        result = facade.create_review(review_data)
+        review_data = request.get_json() or {}
+
+        #Temporary user_id for testing (replace with JWT later)
+        current_user_id = review_data.get("user_id", "user123")
+
+        review = {
+            "user_id": current_user_id,
+            "place_id": place_id,
+            "rating": review_data.get("rating"),
+            "comment": review_data.get("comment"),
+            "upload_image": review_data.get("upload_image", [])
+        }
+        result = facade.create_review(review)
         if isinstance(result, dict) and "error" in result:
             return result, 400
-        return result, 201
-
+        return result.save(), 201
+    
     @api.response(200, 'Success')
-    def get(self):
-        """lists all reviews"""
-        reviews = facade.review_service.review_repo.get_all()
-        return [review.save() for review in reviews], 200
+    def get(self, place_id):
+        """List all reviews for a specific place"""
+        reviews = facade.get_reviews_for_place(place_id)
+        if not reviews:
+            return {"message": f"No reviews found for place_id '{place_id}'"}, 404
+        return [r.save() for r in reviews], 200
 
-"""Retrieve, update, deleted review by user id"""
+"""Get, update, deleted review by id"""
 @api.route('/<string:review_id>')
 class ReviewDetail(Resource):
     @api.response(200, 'Success')
@@ -53,7 +63,7 @@ class ReviewDetail(Resource):
     @api.response(404, 'Review not found')
     def put(self, review_id):
         """Update a review"""
-        review_data = request.get_json()
+        review_data = request.get_json() or {}
         current_user_id = review_data.get("current_user_id")
         try:
             updated_review = facade.update_review({
@@ -74,25 +84,14 @@ class ReviewDetail(Resource):
             return {"message": "Review deleted"}, 200
         except ValueError as error:
             return {"error": str(error)}, 404
-        
-"""List reviews by place id"""
-@api.route('/place/<string:place_id>')
-class ReviewByPlace(Resource):
-    @api.response(200, 'Success')
-    def get(self, place_id):
-        """List all reviews of a place"""
-        reviews = facade.get_review_for_place(place_id)
-        return [r.save() for r in reviews], 200
 
 """List review of user"""
 @api.route('/user/<string:user_id>')
 class ReviewByUser(Resource):
     @api.response(200, 'Success')
     def get(self, user_id):
-        """get all of users reviews"""
+        """List all reviews made by a specific user"""
         reviews = facade.get_reviews_by_user(user_id)
+        if not reviews:
+            return {"message": f"No reviews found for user_id '{user_id}'"}, 404
         return [r.save() for r in reviews], 200
-
-
-
-
