@@ -7,7 +7,7 @@ facade = HBnBFacade()
 
 # Define the Amenity model blueprint for validation and documentation
 amenity_model = api.model('Amenity', {
-    'id': fields.Integer(readonly=True, description='Amenity ID'),
+    'id': fields.String(readonly=True, description='Amenity ID'),
     'name': fields.String(required=True, description='Name of the amenity'),
     'description': fields.String(required=False, description='Additional details of the amenity')
     })
