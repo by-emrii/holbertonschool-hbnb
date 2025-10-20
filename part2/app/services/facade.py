@@ -4,13 +4,14 @@ from app.services.amenity_service import AmenityService
 from app.services.reservation_service import ReservationService
 from app.services.place_service import PlaceService
 from app.services.review_service import ReviewService
+from app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
         # shared repo
         self.user_repo = InMemoryRepository()
         self.place_repo = InMemoryRepository()
-        self.review_repo = InMemoryRepository()
+        self.review_repo = InMemoryRepository(Review)
         self.amenity_repo = InMemoryRepository()
         self.reservation_repo = InMemoryRepository()
 

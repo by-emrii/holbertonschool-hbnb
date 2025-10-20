@@ -1,4 +1,3 @@
-from datetime import datetime
 from app.models.reservation import Reservation
 from app.persistence.repository import InMemoryRepository
 
