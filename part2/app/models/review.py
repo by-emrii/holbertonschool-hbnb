@@ -85,6 +85,17 @@ class Review(BaseModel):
 
         self._upload_image = validated_images
 
+    #Update helper
+    def update_from_dict(self, data: dict):
+        """Update review fields with partial data."""
+        if "rating" in data:
+            self.rating = data["rating"]
+        if "comment" in data:
+            self.comment = data["comment"]
+        if "upload_image" in data:
+            self.upload_image = data["upload_image"]
+        self.updated_at = datetime.now()
+
     #Serialisation for API
     def save(self):
         """Return a JSON-serializable representation of the review."""

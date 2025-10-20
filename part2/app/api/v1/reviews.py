@@ -5,26 +5,42 @@ from app.services import HBnBFacade
 api = Namespace("reviews", description="Review operations")
 facade = HBnBFacade()
 
-# Review input/output model
-review_model = api.model('Review', {
+# Model for creating a review
+review_create_model = api.model('ReviewCreate', {
     "rating": fields.Float(required=True, description="Rating (1-5)", min=1, max=5),
     "comment": fields.String(required=True, description="Review comment"),
     "upload_image": fields.List(fields.String, required=False, description="Optional image URLs")
 })
 
+# Model for updating a review
+review_update_model = api.model('ReviewUpdate', {
+    "rating": fields.Float(required=False, description="Rating (1-5)", min=1, max=5),
+    "comment": fields.String(required=False, description="Review comment"),
+    "upload_image": fields.List(fields.String, required=False, description="Optional image URLs")
+})
+
+# Model for response
+review_response_model = api.model('Review', {
+    "id": fields.String,
+    "user_id": fields.String,
+    "place_id": fields.String,
+    "rating": fields.Float,
+    "comment": fields.String,
+    "upload_image": fields.List(fields.String)
+})
+
+
 """Create a review for a place"""
 @api.route('/')
 class ReviewList(Resource):
-    @api.expect(review_model)
+    @api.expect(review_create_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
     def post(self, place_id):
         """Creating a review"""
         review_data = request.get_json() or {}
-
         #Temporary user_id for testing (replace with JWT later)
         current_user_id = review_data.get("user_id", "user123")
-
         review = {
             "user_id": current_user_id,
             "place_id": place_id,
@@ -57,7 +73,7 @@ class ReviewDetail(Resource):
             return {"error": "Review not found"}, 404
         return review.save(), 200
 
-    @api.expect(review_model)
+    @api.expect(review_update_model)
     @api.response(200, 'Review successfully updated')
     @api.response(403, 'Not allowed')
     @api.response(404, 'Review not found')
