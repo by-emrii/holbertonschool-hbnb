@@ -24,7 +24,7 @@ class PlaceService():
 
         # Remove duplicate amenity_ids
         if "amenity_ids" in place_data and place_data["amenity_ids"] is not None:
-            place_data["amenity_ids"] = list(dict.fromkeys(place_data["amenity_ids"]))
+            place_data["amenity_ids"] = list(dict.fromkeys(str(v) for v in place_data["amenity_ids"]))
 
         place  = Place(**place_data)
         self.place_repo.add(place)
@@ -46,7 +46,7 @@ class PlaceService():
 
         # Remove duplicate amenity_ids(if there is)
         if "amenity_ids" in place_data and place_data["amenity_ids"] is not None:
-            place_data["amenity_ids"] = list(dict.fromkeys(place_data["amenity_ids"]))
+            place_data["amenity_ids"] = list(dict.fromkeys(str(v) for v in place_data["amenity_ids"]))
 
         # Update attr
         updatable = {
