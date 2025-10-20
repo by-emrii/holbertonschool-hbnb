@@ -34,19 +34,22 @@ class ReservationList(Resource):
         """ Create a new reservation """
         reservation_data = api.payload
 
-        new_reservation = facade.create_reservation(reservation_data)
-        if not new_reservation:
-            return {"error": "Invalid input data"}, 401
-        return {
-            "id": new_reservation.id,
-            "user_id": new_reservation.user_id,
-            "place_id": new_reservation.place_id,
-            "start_date": new_reservation.start_date.isoformat(),
-            "end_date": new_reservation.end_date.isoformat(),
-            "price": new_reservation.price,
-            "status": new_reservation.status,
-            "payment_status": new_reservation.payment_status
-        }, 201
+        try:
+            new_reservation = facade.create_reservation(reservation_data)
+            return {
+                "id": new_reservation.id,
+                "user_id": new_reservation.user_id,
+                "place_id": new_reservation.place_id,
+                "start_date": new_reservation.start_date.isoformat(),
+                "end_date": new_reservation.end_date.isoformat(),
+                "price": new_reservation.price,
+                "status": new_reservation.status,
+                "payment_status": new_reservation.payment_status
+            }, 201
+        except (ValueError, TypeError) as e:
+            return {"error": str(e)}, 400
+        except Exception as e:
+            return {"error": f"Unexpected error: {str(e)}"}, 500
 
     @api.response(200, "All reservations retrieved successfully!")
     def get(self):
@@ -100,17 +103,24 @@ class ReservationResource(Resource):
         """ Update an existing reservation """
         reservation_data = api.payload
 
-        updated_reservation = facade.update_reservation(reservation_id, reservation_data)
-        if not updated_reservation:
-            return {"error": "Update failed"}, 400
-        return {
-            "id": updated_reservation.id,
-            "user_id": updated_reservation.user_id,
-            "place_id": updated_reservation.place_id,
-            "start_date": updated_reservation.start_date.isoformat(),
-            "end_date": updated_reservation.end_date.isoformat(),
-            "price": updated_reservation.price,
-            "discount": updated_reservation.discount,
-            "status": updated_reservation.status,
-            "payment_status": updated_reservation.payment_status
-        }, 200
+        try:
+            updated_reservation = facade.update_reservation(reservation_id, reservation_data)
+            return {
+                "id": updated_reservation.id,
+                "user_id": updated_reservation.user_id,
+                "place_id": updated_reservation.place_id,
+                "start_date": updated_reservation.start_date.isoformat(),
+                "end_date": updated_reservation.end_date.isoformat(),
+                "price": updated_reservation.price,
+                "discount": updated_reservation.discount,
+                "status": updated_reservation.status,
+                "payment_status": updated_reservation.payment_status
+            }, 200
+        except ValueError as e:
+            # handle both not found and invalid field updates
+            message = str(e)
+            if message.startswith("404"):
+                return {"error": "Reservation not found"}, 404
+            return {"error": message}, 400
+        except Exception as e:
+            return {"error": f"Unexpected error: {str(e)}"}, 500
