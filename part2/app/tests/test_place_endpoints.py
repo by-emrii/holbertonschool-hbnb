@@ -30,7 +30,7 @@ class TestPlaceEndpoints(unittest.TestCase):
             "latitude":-24.7241,
             "longitude":124.6281,
             "image_url":"https://example.com/image.jpg",
-            "amenity_ids":[1, 2, 2, 3]  #  test for removing duplicate ids
+            "amenity_ids":["1", "2", "2", "3"]  #  test for removing duplicate ids
         })
         self.assertEqual(response.status_code, 201)
         return response
@@ -41,7 +41,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         data = response.get_json()
         self.assertEqual(data.get("title"), "Cozy Flat")
         self.assertEqual(data.get("price"), 240.0)
-        self.assertEqual(data.get("amenity_ids"), [1, 2, 3])
+        self.assertEqual(data.get("amenity_ids"), ["1", "2", "3"])
 
     def test_create_place_invalid_user(self):
         """Test for non-exist user_id and return 400"""
@@ -83,6 +83,3 @@ class TestPlaceEndpoints(unittest.TestCase):
             "title": "Fail Update"
         })
         self.assertEqual(response.status_code, 404)
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)

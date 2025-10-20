@@ -135,23 +135,16 @@ class Place(BaseModel):
             raise ValueError("image_url must start with http(s)://")
         self._image_url = v
 
-    """ Amenity_ids (List[int])"""
+    """ Amenity_ids (List[str])"""
     @property
     def amenity_ids(self):
         return self._amenity_ids
 
     @amenity_ids.setter
-    def amenity_ids(self, values):
-        if not isinstance(values, list):
+    def amenity_ids(self, value):
+        if not isinstance(value, list):
             raise TypeError("Amenity IDs must be a list")
 
-        ids = []
-        for v in values:
-            try:
-                v_int = int(v)
-                if v_int <= 0:
-                    raise ValueError("Each Amenity Id must be a positive integer")
-                ids.append(v_int)
-            except ValueError:
-                raise ValueError("Amenity IDs must be integers or strings of integers")
-        self._amenity_ids = ids
+        # keep the amenity id as string and remove duplication
+        cleaned = list(dict.fromkeys(str(v).strip() for v in value if v))
+        self._amenity_ids = cleaned
