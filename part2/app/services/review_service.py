@@ -29,10 +29,6 @@ class ReviewService:
         return review
     
     #READ
-    def get_all_reviews(self):
-        """Return all reviews."""
-        return self.review_repo.get_all()
-
     def get_review_by_id(self, review_id):
         """Fetch a single review by ID."""
         return self.review_repo.get(review_id)

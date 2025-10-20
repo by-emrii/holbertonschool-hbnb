@@ -89,17 +89,27 @@ class HBnBFacade:
     """Review CRU"""
     def create_review(self, review_data):
             """Create and save a review."""
+            user_id = review_data.get("user_id")
+            place_id = review_data.get("place_id")
+
+            #Validating user exists
+            try:
+                user = self.get_user(user_id)
+            except ValueError:
+                return {"error": f"User with id '{user_id}' not found"}
+
+            #Validating place exists
+            try:
+                place = self.get_place(place_id)
+            except ValueError:
+                return {"error": f"Place with id '{place_id}' not found"}
+            
             try:
                 return self.review_service.create_review(review_data)
-            except ValueError as error:
-                #in the case of empty comments and invalid rating
-                return {"error": str(error)}
-            except Exception as error:
-                return {"error": f"Unexpected error: {str(error)}"}
-
-    def get_all_reviews(self):
-        """Retrieve all reviews in the system."""
-        return self.review_service.get_all_reviews()
+            except ValueError as ve:
+                return {"error": str(ve)}
+            except Exception as e:
+                return {"error": f"Unexpected error: {str(e)}"}
 
     def get_review_by_id(self, review_id):
         """Retrieve a single review by ID."""
