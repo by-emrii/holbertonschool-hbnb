@@ -49,8 +49,12 @@ class PlaceList(Resource):
     def post(self):
         """ Create place """
         place_data = api.payload
-        place = facade.create_place(place_data)
-        return place, 201
+        try:
+            place = facade.create_place(place_data)
+            return place, 201
+        except ValueError as e:
+            return {"error:", str(e)}, 400
+
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
@@ -58,14 +62,21 @@ class PlaceResource(Resource):
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """ Get place by ID """
-        place = facade.get_place(place_id)
-        return place, 200
+        try:
+            place = facade.get_place(place_id)
+            return place, 200
+        except ValueError as e:
+            return {"error:", str(e)}, 404
+
 
     @api.expect(place_update_model, validate=True)
     @api.marshal_with(place_response, code=200)
     @api.response(404, 'Place not found')
     def put(self, place_id):
         """ Update place """
-        data = api.payload or {}
-        place = facade.update_place(place_id, data)
-        return place, 200
+        try:
+            data = api.payload or {}
+            place = facade.update_place(place_id, data)
+            return place, 200
+        except ValueError as e:
+            return {"error:", str(e)}, 404

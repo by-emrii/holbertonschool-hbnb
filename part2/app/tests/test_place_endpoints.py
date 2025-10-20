@@ -1,4 +1,5 @@
 import unittest
+from uuid import uuid4
 from app import create_app
 
 class TestPlaceEndpoints(unittest.TestCase):
@@ -6,22 +7,25 @@ class TestPlaceEndpoints(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
-
         # Create an User as Owner
+        unique = uuid4().hex[:6]
         user_response = self.client.post('/api/v1/users/', json={
             "first_name": "Sylvia",
             "last_name": "Xie",
-            "email": "sylvia_xie@test.com",
+            "email": f"sylvia_{unique}@test.com",   # make sure the email is unique
             "phone_number": "+61412345678",
             "encrypted_password": "password123"
         })
+        # throw err msg if failed
+        if user_response.status_code != 201:
+            print("Create user failed:", user_response.status_code, user_response.get_json())
         self.assertEqual(user_response.status_code, 201)
         self.owner_id = user_response.get_json().get("id")
 
     # ---------- Helper ---------- #
     def create_sample_place(self):
         """Create a sample place for testing"""
-        response = self.client.post('/api/v1/places', json={
+        response = self.client.post('/api/v1/places/', json={
             "user_id":self.owner_id,
             "title":"Cozy Flat",
             "description":"Nice 2-bedroom flat near city center",
