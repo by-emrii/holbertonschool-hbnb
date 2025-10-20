@@ -19,7 +19,7 @@ class HBnBFacade:
         self.amenity_service = AmenityService()
         self.reservation_service = ReservationService()
         self.place_service = PlaceService(self.place_repo, self.user_repo)
-        self.review_service = ReviewService(self.review_repo)
+        self.review_service = ReviewService()
         
     """ User CRU """
     # Placeholder method for creating a user
