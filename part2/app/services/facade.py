@@ -12,6 +12,7 @@ class HBnBFacade:
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
+        self.reservation_repo = InMemoryRepository()
 
         # services using shared repos
         self.user_service = UserService(self.user_repo)
