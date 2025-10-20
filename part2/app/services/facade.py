@@ -94,16 +94,15 @@ class HBnBFacade:
 
             #Validating user exists
             try:
-                user = self.get_user(user_id)
+                self.get_user(user_id)
             except ValueError:
                 return {"error": f"User with id '{user_id}' not found"}
 
             #Validating place exists
             try:
-                place = self.get_place(place_id)
+                self.get_place(place_id)
             except ValueError:
                 return {"error": f"Place with id '{place_id}' not found"}
-            
             try:
                 return self.review_service.create_review(review_data)
             except ValueError as ve:
