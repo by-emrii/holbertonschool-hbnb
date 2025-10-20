@@ -2,10 +2,12 @@ from datetime import datetime
 from app.models.reservation import Reservation
 from app.persistence.repository import InMemoryRepository
 
+# define one global repo instance
+reservation_repo = InMemoryRepository()
 
 class ReservationService:
     def __init__(self):
-        self.reservation_repo = InMemoryRepository()
+        self.reservation_repo = reservation_repo
 
     def create_reservation(self, reservation_data):
         """ Create a new reservation """
