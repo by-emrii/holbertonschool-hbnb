@@ -19,7 +19,7 @@ class HBnBFacade:
         self.amenity_service = AmenityService()
         self.reservation_service = ReservationService()
         self.place_service = PlaceService(self.place_repo, self.user_repo)
-        self.review_service = ReviewService()
+        self.review_service = ReviewService(self.review_repo)
         
     """ User CRU """
     # Placeholder method for creating a user
@@ -93,9 +93,17 @@ class HBnBFacade:
                 return self.review_service.create_review(review_data)
             except ValueError as error:
                 #in the case of empty comments and invalid rating
-                return {"error":str(error)}
+                return {"error": str(error)}
             except Exception as error:
                 return {"error": f"Unexpected error: {str(error)}"}
+
+    def get_all_reviews(self):
+        """Retrieve all reviews in the system."""
+        return self.review_service.get_all_reviews()
+
+    def get_review_by_id(self, review_id):
+        """Retrieve a single review by ID."""
+        return self.review_service.get_review_by_id(review_id)
 
     def get_reviews_by_user(self, user_id):
         """Fetch all reviews made by a specific user."""
@@ -106,27 +114,18 @@ class HBnBFacade:
         return self.review_service.get_reviews_for_place(place_id)
     
     def update_review(self, review_update):
-        """User updates a review of a specific place"""
+        """User updates a review of a specific place."""
+        review_id = review_update.get("review_id")
+        review_data = review_update.get("review_data")
+        current_user_id = review_update.get("current_user_id")
+
         try:
-            review_id = review_update.get("review_id")
-            review_data = review_update.get("review_data")
-            current_user_id = review_update.get("current_user_id")
             return self.review_service.update_review(review_id, review_data, current_user_id)
-        except ValueError as error:
-            return {"error": str(error)}
-        except PermissionError as error:
+        except (ValueError, PermissionError) as error:
             return {"error": str(error)}
         except Exception as error:
-            return{"error": f"Unexpected error: {str(error)}"}
+            return {"error": f"Unexpected error: {str(error)}"}
         
-    def get_average_rating(self, place_id):
-        """Calculate satistics rating"""
-        return self.review_service.get_average_rating(place_id)
-    
-    def get_recent_reviews(self, place_id, limit=5):
-        """Recent reviews displayed"""
-        return self.review_service.get_recent_reviews(place_id, limit)
-
     def delete_review(self, review_id):
         """Delete a review by ID."""
         try:
@@ -135,5 +134,13 @@ class HBnBFacade:
             return {"error": str(error)}
         except Exception as error:
             return {"error": f"Unexpected error: {str(error)}"}
+
+    def get_average_rating(self, place_id):
+        """Calculate the average rating for a place."""
+        return self.review_service.get_average_rating(place_id)
+
+    def get_recent_reviews(self, place_id, limit=5):
+        """Fetch the most recent reviews for a place."""
+        return self.review_service.get_recent_reviews(place_id, limit)
 
 facade = HBnBFacade()

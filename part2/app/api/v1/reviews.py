@@ -1,6 +1,5 @@
 from flask import request, send_file
 from flask_restx import Namespace, Resource, fields
-import io
 from app.services import HBnBFacade
 
 api = Namespace("reviews", description="Review operations")
@@ -15,7 +14,7 @@ review_model = api.model('Review', {
     "upload_image": fields.List(fields.String, required=False, description="Optional image URLs")
 })
 
-"""Create a Review"""
+"""Create and list all reviews"""
 @api.route('/')
 class ReviewList(Resource):
     @api.expect(review_model)
@@ -32,7 +31,7 @@ class ReviewList(Resource):
     @api.response(200, 'Success')
     def get(self):
         """lists all reviews"""
-        reviews = facade.review_service.review_repo.get_all()
+        reviews = facade.get_all_reviews()
         return [review.save() for review in reviews], 200
 
 """Retrieve, update, deleted review by user id"""
@@ -53,7 +52,7 @@ class ReviewDetail(Resource):
     @api.response(404, 'Review not found')
     def put(self, review_id):
         """Update a review"""
-        review_data = request.get_json()
+        review_data = request.get_json() or {}
         current_user_id = review_data.get("current_user_id")
         try:
             updated_review = facade.update_review({
@@ -81,7 +80,9 @@ class ReviewByPlace(Resource):
     @api.response(200, 'Success')
     def get(self, place_id):
         """List all reviews of a place"""
-        reviews = facade.get_review_for_place(place_id)
+        reviews = facade.get_reviews_for_place(place_id)
+        if not reviews:
+            return {"message": f"No reviews found for place_id '{place_id}'"}, 404
         return [r.save() for r in reviews], 200
 
 """List review of user"""
@@ -89,10 +90,8 @@ class ReviewByPlace(Resource):
 class ReviewByUser(Resource):
     @api.response(200, 'Success')
     def get(self, user_id):
-        """get all of users reviews"""
+        """List all reviews made by a specific user"""
         reviews = facade.get_reviews_by_user(user_id)
+        if not reviews:
+            return {"message": f"No reviews found for user_id '{user_id}'"}, 404
         return [r.save() for r in reviews], 200
-
-
-
-
