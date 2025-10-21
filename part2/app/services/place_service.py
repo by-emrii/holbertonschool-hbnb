@@ -37,6 +37,17 @@ class PlaceService():
             raise ValueError("404: Place not found")
         return place
 
+    # ---------- List All Places ----------
+    def list_places(self):
+        """
+        Return a list[Place] of all places in the repository.
+        """
+        places = self.place_repo.get_all()
+        if not places:
+            raise ValueError("404: Places not found")
+        return places
+
+
     # ---------- Update ----------
     def update_place(self, place_id, place_data:dict):
         if not isinstance(place_data, dict):
