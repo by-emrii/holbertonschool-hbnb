@@ -160,6 +160,7 @@ Each Service model encapsulates the business rules and logic for a specific enti
 Core entities representing the application’s data and simple behaviours
    | Model       | Description                       | Key Attributes                                                                 |
    |------------|-----------------------------------|-------------------------------------------------------------------------------|
+   | Base       | Foundation for all entities. | id, created_at, updated_at
    | User       | Represents a HBnB platform user.  | id, first_name, last_name, email, phone_number                                |
    | Place      | Property listed for rent.          | id, user_id, title, description, price, address, latitude, longitude, image_url, amenity_ids |
    | Amenity    | Feature or facility available at a place. | id, name, description                                                      |
@@ -216,3 +217,4 @@ python3 -m unittest app.tests.test_place_endpoints.py
 python3 -m unittest app.tests.test_review_endpoints.py
 python3 -m unittest app.tests.test_reservation_endpoints.py
 ```
+
