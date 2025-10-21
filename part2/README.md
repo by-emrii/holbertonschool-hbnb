@@ -202,7 +202,31 @@ Core entities representing the application’s data and simple behaviours
    ```
 
 ## API Endpoints
-
+   ### Users ###
+      1. POST /api/v1/users/  - Register a new user
+      2. GET /api/v1/users/{user_id}  - Get user details
+      3. PUT /api/v1/users/{user_id}  - Update user information
+   ### Places ###
+      1. POST /api/v1/places/  - Create a new place
+      2. GET /api/v1/places/   - Get all places 
+      3. GET /api/v1/places/{place_id} - Get place details
+      4. PUT /api/v1/places/{place_id}  - Update place information
+   ### Amenities ###
+      1. POST /api/v1/amenities/ - Create amenity
+      2. GET /api/v1/amenities/ - Get all amenities
+      3. GET /api/v1/amenities/{amenity_id} - Get amenity details
+      4. PUT /api/v1/amenities/{amenity_id} - Update amenity
+   ### Reviews ###
+      1. POST /api/v1/reviews/ - Create review
+      2. GET /api/v1/reviews/ - Get all reviews
+      3. GET /api/v1/reviews/{review_id} - Get review details
+      4. PUT /api/v1/reviews/{review_id} - Update review
+      5. DELETE /api/v1/reviews/{review_id} - Delete review
+   ### Reservations ###
+      1. POST /api/v1/reservations/ - Create a new reservation
+      2. GET /api/v1/reservations/   - Get all reservations
+      3. GET /api/v1/reservations/{reservation_id}  - Get reservation details
+      4. PUT /api/v1/reservations/{reservation_id}  - Update reservation
 
 ## Testing
 Run the pytests/unittests to ensure the application is running as expected:
