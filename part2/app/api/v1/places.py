@@ -55,6 +55,16 @@ class PlaceList(Resource):
         except ValueError as e:
             return {"error:", str(e)}, 400
 
+    @api.marshal_list_with(place_response, code=200)
+    @api.response(200, 'List of all places retrieved successfully')
+    def get(self):
+        """ Get all places """
+        try:
+            places = facade.list_places()   # add this method in facade/service later
+            return places, 200
+        except ValueError as e:
+            return {"error": str(e)}, 404
+
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
