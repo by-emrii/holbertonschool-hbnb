@@ -8,7 +8,6 @@ holbertonschool-hbnb/
 ├── app/                                # Main application package
 │   │
 │   ├── api/                            # API layer – handles HTTP routes and endpoints
-│   │   ├── __pycache__/
 │   │   └── v1/                         # Version 1 of the API
 │   │       ├── __init__.py             # Initializes the API and namespaces
 │   │       ├── amenities.py            # Endpoints for Amenity operations
@@ -91,5 +90,6 @@ The API will start at:
 ```bash
 http://127.0.0.1:5000/api/v1/
 ```
+
 
 
