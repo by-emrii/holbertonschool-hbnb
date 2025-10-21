@@ -13,12 +13,41 @@ class Review(BaseModel):
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
 
-
         self.user_id = user_id
         self.place_id = place_id
         self.rating = rating
         self.comment = comment
-        self.upload_image = upload_image if upload_image is not None else []
+        self.upload_image = upload_image or []
+
+    #USER ID
+    @property
+    def user_id(self):
+        return self._user_id
+
+    @user_id.setter
+    def user_id(self, value):
+        if isinstance(value, int):
+            value = str(value)
+        if not isinstance(value, str):
+            raise TypeError("User ID must be a string")
+        if not value.strip():
+            raise ValueError("User ID cannot be empty")
+        self._user_id = value.strip()
+
+    #PLACE ID
+    @property
+    def place_id(self):
+        return self._place_id
+
+    @place_id.setter
+    def place_id(self, value):
+        if isinstance(value, int):
+            value = str(value)
+        if not isinstance(value, str):
+            raise TypeError("Place ID must be a string")
+        if not value.strip():
+            raise ValueError("Place ID cannot be empty")
+        self._place_id = value.strip()
 
     #RATING
     @property
@@ -47,7 +76,6 @@ class Review(BaseModel):
             return
         if not isinstance(value, str):
             raise TypeError("Comment must be a string")
-
         value = value.strip()
         if len(value) > 300:
             raise ValueError("Comment cannot exceed 300 characters")
@@ -110,7 +138,7 @@ class Review(BaseModel):
                 image_urls.append(img)
             else:
                 image_urls.append(f"/reviews/{self.id}/images/{i}")
-        
+
         return {
             "id": getattr(self, "id", None),
             "user_id": self.user_id,

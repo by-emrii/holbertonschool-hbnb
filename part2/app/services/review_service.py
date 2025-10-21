@@ -1,3 +1,4 @@
+
 from datetime import datetime
 from app.models.review import Review
 from app.persistence.repository import InMemoryRepository
@@ -9,22 +10,31 @@ class ReviewService:
         self.review_repo = review_repo or InMemoryRepository()
     
     #CREATE
-    def create_review(self, review_data):
+    def create_review(self, review_data: dict):
         """Create a review"""   
+        if not isinstance(review_data, dict):
+            raise ValueError("Invalid payload")
+
         user_id = review_data.get("user_id")
         place_id = review_data.get("place_id")
 
-
-        # Check user exists directly in repo
-        if self.user_repo.get(user_id) is None:
-            raise ValueError("User not found")
-        # Check place exists directly in repo
-        if self.place_repo.get(place_id) is None:
-            raise ValueError("Place not found")
+        # Check user exists
+        if self.user_repo and user_id:
+            if self.user_repo.get(user_id) is None:
+                raise ValueError("User not found")
+        # Check place exists
+        if self.place_repo and place_id:
+            if self.place_repo.get(place_id) is None:
+                raise ValueError("Place not found")
+        
         # Create review instance
-        review = Review(user_id, place_id, review_data.get("rating"),
-            review_data.get("comment"),
-            review_data.get("upload_image", []))
+        review = Review(
+            user_id=user_id,
+            place_id=place_id,
+            rating=review_data.get("rating"),
+            comment=review_data.get("comment"),
+            upload_image=review_data.get("upload_image", [])
+        )
 
         # Add to repo
         self.review_repo.add(review)
@@ -33,7 +43,17 @@ class ReviewService:
     #READ
     def get_review_by_id(self, review_id):
         """Fetch a single review by ID."""
-        return self.review_repo.get(review_id)
+        review = self.review_repo.get(review_id)
+        if not review:
+            raise ValueError("404: Review not found")
+        return review
+    
+    def list_reviews(self):
+        """Return a list[Review] of all reviews in the repository."""
+        reviews = self.review_repo.get_all()
+        if not reviews:
+            raise ValueError("404: Reviews not found")
+        return reviews
 
     def get_reviews_by_user(self, user_id):
         """Fetch all reviews made by a specific user."""
@@ -44,23 +64,35 @@ class ReviewService:
         return [r for r in self.review_repo.get_all() if r.place_id == place_id]
     
     #UPDATE
-    def update_review(self, review_id, review_data, current_user_id):
+    def update_review(self, review_id, review_data: dict, current_user_id: int):
         """Update a review if the current user is the author."""
-        review = self.review_repo.get(review_id)
-        if not review:
-            raise ValueError("Review not found")
+        if not isinstance(review_data, dict):
+            raise ValueError("Invalid payload")
+
+        review = self.get_review(review_id)
 
         # Only the author can update
         if review.user_id != current_user_id:
             raise PermissionError("You are not allowed to update this review")
 
-        # Update allowed fields
-        review.update_from_dict(review_data)
-        self.review_repo.update(review.id, {
-            "rating": review.rating,
-            "comment": review.comment,
-            "upload_image": review.upload_image
-        })
+        # Define allowed fields
+        updatable = {
+            "rating",
+            "comment",
+            "upload_image",
+        }
+
+        update_data = {}
+
+        for key, value in review_data.items():
+            if key in updatable and value is not None:
+                setattr(review, key, value)
+                update_data[key] = getattr(review, key)
+
+        # Update repository
+        if update_data:
+            self.review_repo.update(review.id, update_data)
+
         return review
 
     #GETTING THE AVERAGE RATING AND RECENT REVIEWS
@@ -68,7 +100,7 @@ class ReviewService:
         """Calculate average rating for a place."""
         reviews = self.get_reviews_for_place(place_id)
         ratings = [r.rating for r in reviews if getattr(r, "rating", None) is not None]
-        return round(sum(ratings)/len(ratings), 2) if ratings else 0
+        return round(sum(ratings) / len(ratings), 2) if ratings else 0
 
     def get_recent_reviews(self, place_id, limit=5):
         """Return the most recent reviews for a place."""
@@ -81,7 +113,6 @@ class ReviewService:
         review = self.review_repo.get(review_id)
         if not review:
             raise ValueError("Review not found")
+
         self.review_repo.delete(review_id)
         return {"message": "Review deleted successfully"}
-
-    

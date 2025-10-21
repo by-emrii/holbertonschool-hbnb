@@ -91,12 +91,15 @@ class HBnBFacade:
         return self.reservation_service.update_reservation(reservation_id, reservation_data)
 
     """Review CRU"""
+    #CREATE A REVIEW
     def create_review(self, review_data):
         """Create and save a review."""
-        try:
-            return self.review_service.create_review(review_data)
-        except ValueError as ve:
-            raise ve
+        return self.review_service.create_review(review_data)
+
+    #READ REVIEWS
+    def list_reviews(self):
+        """Return a list of all reviews."""
+        return self.review_service.list_reviews()
 
     def get_review_by_id(self, review_id):
         """Retrieve a single review by ID."""
@@ -110,19 +113,11 @@ class HBnBFacade:
         """Fetch all reviews for a specific place."""
         return self.review_service.get_reviews_for_place(place_id)
     
-    def update_review(self, review_update):
+    def update_review(self, review_id, review_data, current_user_id):
         """User updates a review of a specific place."""
-        review_id = review_update.get("review_id")
-        review_data = review_update.get("review_data")
-        current_user_id = review_update.get("current_user_id")
+        return self.review_service.update_review(review_id, review_data, current_user_id)
 
-        try:
-            return self.review_service.update_review(review_id, review_data, current_user_id)
-        except (ValueError, PermissionError) as error:
-            return {"error": str(error)}
-        except Exception as error:
-            return {"error": f"Unexpected error: {str(error)}"}
-        
+    #DELETE REVIEW    
     def delete_review(self, review_id):
         """Delete a review by ID."""
         try:
@@ -132,6 +127,7 @@ class HBnBFacade:
         except Exception as error:
             return {"error": f"Unexpected error: {str(error)}"}
 
+    #RATING AVERAGE
     def get_average_rating(self, place_id):
         """Calculate the average rating for a place."""
         return self.review_service.get_average_rating(place_id)

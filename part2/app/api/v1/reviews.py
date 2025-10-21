@@ -37,56 +37,56 @@ review_response_model = api.model('Review', {
 class ReviewList(Resource):
     @api.expect(review_create_model, validate=True)
     @api.marshal_with(review_response_model, code=201)
-    @api.response(400, 'Invalid input data')
     def post(self):
         """Creating a review"""
-        review_data = api.payload
         try:
+            review_data = api.payload
             review = facade.create_review(review_data)
             return review.save(), 201
-        except ValueError as ve:
-            return {"error": str(ve)}, 400
+        except ValueError as e:
+            return {"error": str(e)}, 400
         
     @api.marshal_list_with(review_response_model, code=200)
-    @api.response(404, 'No reviews found')
     def get(self):
         """List all reviews for a specific place"""
         place_id = request.args.get("place_id")
-        reviews = facade.get_reviews_for_place(place_id) if place_id else facade.review_service.review_repo.get_all()
+        reviews = (
+            facade.get_reviews_for_place(place_id)
+            if place_id else
+            facade.review_service.review_repo.get_all()
+        )
         if not reviews:
             return {"message": "No reviews found"}, 404
         return [r.save() for r in reviews], 200
 
 """Get, update, deleted review by id"""
 @api.route('/<string:review_id>')
-class ReviewDetail(Resource):
+class ReviewResource(Resource):
     @api.marshal_with(review_response_model, code=200)
     @api.response(404, 'Review not found')
     def get(self, review_id):
-        """Get review by review id"""
-        review = facade.get_review_by_id(review_id)
-        if not review:
-            return {"error": "Review not found"}, 404
-        return review.save(), 200
+        """Get review by id"""
+        try:
+            review = facade.get_review(review_id)
+            return review, 200
+        except ValueError as e:
+            return {"error": str(e)}, 404
 
     @api.expect(review_update_model, validate=True)
+    @api.marshal_with(review_response_model, code=200)
+    @api.response(403, 'Forbidden')
+    @api.response(404, 'Review not found')
     def put(self, review_id):
         """Update a review"""
-        review_data = api.payload
-        current_user_id = review_data.get("current_user_id")
-
         try:
-            updated_review = facade.update_review({
-                "review_id": review_id,
-                "review_data": review_data,
-                "current_user_id": current_user_id
-            })
-            # Only marshal if update was successful
-            return updated_review.save(), 200
-        except ValueError as ve:
-            return {"error": str(ve)}, 404
-        except PermissionError as pe:
-            return {"error": str(pe)}, 403
+            data = api.payload or {}
+            current_user_id = data.get("current_user_id")
+            review = facade.update_review(review_id, data, current_user_id)
+            return review, 200
+        except ValueError as e:
+            return {"error": str(e)}, 404
+        except PermissionError as e:
+            return {"error": str(e)}, 403
 
     @api.response(200, 'Review successfully deleted')
     @api.response(404, 'Review not found')
@@ -94,7 +94,7 @@ class ReviewDetail(Resource):
         """Delete review"""
         result = facade.delete_review(review_id)
         if isinstance(result, dict) and "error" in result:
-             return result, 404
+            return result, 404
         return {"message": "Review deleted successfully"}, 200
     
 """List all reviews of place"""
@@ -111,7 +111,7 @@ class ReviewsByPlace(Resource):
 
 """List review of user"""
 @api.route('/user/<string:user_id>')
-class ReviewByUser(Resource):
+class ReviewsByUser(Resource):
     @api.marshal_list_with(review_response_model, code=200)
     @api.response(404, 'No reviews found for user')
     def get(self, user_id):
