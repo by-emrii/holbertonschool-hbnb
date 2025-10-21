@@ -19,7 +19,11 @@ class HBnBFacade:
         self.amenity_service = AmenityService()
         self.reservation_service = ReservationService()
         self.place_service = PlaceService(self.place_repo, self.user_repo)
-        self.review_service = ReviewService(self.place_repo, self.user_repo)
+        self.review_service = ReviewService(
+            self.place_repo,
+            self.user_repo,
+            self.review_repo 
+        )
         
     """ User CRU """
     # Placeholder method for creating a user
@@ -92,7 +96,6 @@ class HBnBFacade:
         try:
             return self.review_service.create_review(review_data)
         except ValueError as ve:
-            # bubble up the error so Flask can handle it
             raise ve
 
     def get_review_by_id(self, review_id):

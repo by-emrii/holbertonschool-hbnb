@@ -13,6 +13,7 @@ class Review(BaseModel):
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
 
+
         self.user_id = user_id
         self.place_id = place_id
         self.rating = rating
@@ -46,7 +47,7 @@ class Review(BaseModel):
             return
         if not isinstance(value, str):
             raise TypeError("Comment must be a string")
-        
+
         value = value.strip()
         if len(value) > 300:
             raise ValueError("Comment cannot exceed 300 characters")
@@ -62,16 +63,16 @@ class Review(BaseModel):
         if not images:
             self._upload_image = []
             return
-        
+
         if not isinstance(images, list):
             raise TypeError("upload_image must be a list of image URLs or files")
-        
+
         validated_images = []
-        for img in images:  # Allows URLs
+        for img in images: # Allows URLs
             if isinstance(img, str):
                 validated_images.append(img)
                 continue
-            
+
             # Allows filename, bytes
             if isinstance(img, tuple) and len(img) == 2:
                 filename, img_bytes = img
@@ -85,7 +86,7 @@ class Review(BaseModel):
                 continue
 
             raise TypeError("Each image must be a string URL or a tuple (filename, bytes)")
-
+        
         self._upload_image = validated_images
 
     #Update helper
@@ -106,7 +107,7 @@ class Review(BaseModel):
         image_urls = []
         for i, img in enumerate(self.upload_image):
             if isinstance(img, str):
-                image_urls.append(img)  # keep original URL
+                image_urls.append(img)
             else:
                 image_urls.append(f"/reviews/{self.id}/images/{i}")
         

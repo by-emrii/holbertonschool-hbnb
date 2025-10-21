@@ -3,16 +3,17 @@ from app.models.review import Review
 from app.persistence.repository import InMemoryRepository
 
 class ReviewService:
-    def __init__(self,place_repo, user_repo=None):
+    def __init__(self, place_repo, user_repo=None, review_repo=None):
         self.user_repo = user_repo
         self.place_repo = place_repo
-        self.review_repo = InMemoryRepository()
+        self.review_repo = review_repo or InMemoryRepository()
     
     #CREATE
     def create_review(self, review_data):
         """Create a review"""   
         user_id = review_data.get("user_id")
         place_id = review_data.get("place_id")
+
 
         # Check user exists directly in repo
         if self.user_repo.get(user_id) is None:
@@ -22,8 +23,8 @@ class ReviewService:
             raise ValueError("Place not found")
         # Create review instance
         review = Review(user_id, place_id, review_data.get("rating"),
-                    review_data.get("comment"),
-                    review_data.get("upload_image", []))
+            review_data.get("comment"),
+            review_data.get("upload_image", []))
 
         # Add to repo
         self.review_repo.add(review)
