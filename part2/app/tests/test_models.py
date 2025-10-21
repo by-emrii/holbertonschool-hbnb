@@ -101,6 +101,15 @@ def test_review_creation():
     assert review.comment == "Good Review"
     assert review.upload_image == ["https://example.com/image.jpg"]
 
+def test_get_reviews_for_place():
+    from app.services import facade
+    # Create multiple reviews for same place
+    facade.create_review({"user_id": "u1", "place_id": "p1", "rating": 4, "comment": "A"})
+    facade.create_review({"user_id": "u2", "place_id": "p1", "rating": 5, "comment": "B"})
+    reviews = facade.get_reviews_for_place("p1")
+    assert len(reviews) == 2
+    assert all(r.place_id == "p1" for r in reviews)
+
 def test_review_rating_validation():
     # Rating must be between 1 and 5
     with pytest.raises(ValueError):

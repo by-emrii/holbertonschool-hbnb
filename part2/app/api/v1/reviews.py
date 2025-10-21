@@ -70,20 +70,23 @@ class ReviewDetail(Resource):
         return review.save(), 200
 
     @api.expect(review_update_model, validate=True)
-    @api.marshal_with(review_response_model, code=200)
-    @api.response(403, 'Not allowed')
-    @api.response(404, 'Review not found')
     def put(self, review_id):
         """Update a review"""
         review_data = api.payload
-        updated_review = facade.update_review({
-            "review_id": review_id,
-            "review_data": review_data,
-            "current_user_id": review_data.get("current_user_id")
-        })
-        if isinstance(updated_review, dict) and "error" in updated_review:
-            return updated_review, 403
-        return updated_review.save(), 200
+        current_user_id = review_data.get("current_user_id")
+
+        try:
+            updated_review = facade.update_review({
+                "review_id": review_id,
+                "review_data": review_data,
+                "current_user_id": current_user_id
+            })
+            # Only marshal if update was successful
+            return updated_review.save(), 200
+        except ValueError as ve:
+            return {"error": str(ve)}, 404
+        except PermissionError as pe:
+            return {"error": str(pe)}, 403
 
     @api.response(200, 'Review successfully deleted')
     @api.response(404, 'Review not found')

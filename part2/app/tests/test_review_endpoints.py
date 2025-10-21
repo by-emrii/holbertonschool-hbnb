@@ -29,6 +29,18 @@ class TestReviewModel(unittest.TestCase):
         self.assertEqual(review.comment, "Good stay")
         self.assertEqual(review.upload_image, ["https://example.com/image.jpg"])
 
+    # Create reviews via facade or API
+    def test_list_reviews_by_place(self):
+        from app.services import facade
+        r1 = facade.create_review({"user_id": "user1", "place_id": "place123", "rating": 5, "comment": "Great!"})
+        r2 = facade.create_review({"user_id": "user2", "place_id": "place123", "rating": 4, "comment": "Good!"})
+
+        resp = self.client.get(f"/api/v1/reviews/place/place123")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.get_json()
+        self.assertEqual(len(data), 2)
+        self.assertTrue(all(d["place_id"] == "place123" for d in data))
+
     # Rating Validation
     def test_rating_validation(self):
         """Rating must be between 1 and 5"""
