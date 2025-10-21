@@ -94,9 +94,9 @@ http://127.0.0.1:5000/api/v1/
 ## Business Logic Layer - Architecture
 ### Architecture Overview
 1. API Layer - Presentation Layer
-2. Facade - Business Logic Layer
-3. Services - Business Logic Layer
-4. Models - Business Logic Layer
+2. **Facade - Business Logic Layer**
+3. **Services - Business Logic Layer**
+4. **Models - Business Logic Layer**
 5. Repository - Persistence Layer
 
 The Business Logic Layer is organized into three main components - each component plays a distinct role in managing and orchestrating the application’s logic.
@@ -105,7 +105,8 @@ The Business Logic Layer is organized into three main components - each componen
 #### 1. Facade
    The HBnBFacade class acts as a single entry point to all business operations within the application. It simplifies communication between the Presentation Layer (API
    endpoints) and the underlying Services, shielding the API from implementation details. It also ensures consistent data handling across services (via InMemoryRepository)
-   Example usage:
+   
+   **Example usage:**
    ```
    from app.persistence.repository import InMemoryRepository
    from app.services.user_service import UserService
@@ -135,7 +136,7 @@ Each Service model encapsulates the business rules and logic for a specific enti
    | ReviewService     | Process user reviews and ratings for places.      |
    | ReservationService| Manage booking dates and availability logic.      |
 
-   Example usage:
+   **Example usage:**
    ```
    from app.models.user import User
    from app.persistence.repository import InMemoryRepository
@@ -153,7 +154,7 @@ Each Service model encapsulates the business rules and logic for a specific enti
         self.user_repo.add(user)
         return user
    ```
-   *Note: Part 1 currently only contains logic for CREATE, RETRIEVE and UPDATE.*
+   ***Note: Part 1 currently only contains logic for CREATE, RETRIEVE and UPDATE.***
 
 #### 3. Domain Models
 Core entities representing the application’s data and simple behaviours
@@ -165,7 +166,7 @@ Core entities representing the application’s data and simple behaviours
    | Review     | User feedback for a place.         | id, user_id, place_id, rating, comment, upload_image                          |
    | Reservation| Booking details for a place.       | id, user_id, place_id, start_date, end_date, price, discount, status, payment_status |
 
-   Example usage:
+   **Example usage:**
    ```
    from app.models.base_model import BaseModel
    import re
