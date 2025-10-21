@@ -45,19 +45,6 @@ class ReviewList(Resource):
             return review.save(), 201
         except ValueError as e:
             return {"error": str(e)}, 400
-        
-    @api.marshal_list_with(review_response_model, code=200)
-    def get(self):
-        """List all reviews for a specific place"""
-        place_id = request.args.get("place_id")
-        reviews = (
-            facade.get_reviews_for_place(place_id)
-            if place_id else
-            facade.review_service.review_repo.get_all()
-        )
-        if not reviews:
-            return {"message": "No reviews found"}, 404
-        return [r.save() for r in reviews], 200
 
 """Get, update, deleted review by id"""
 @api.route('/<string:review_id>')
@@ -67,10 +54,10 @@ class ReviewResource(Resource):
     def get(self, review_id):
         """Get review by id"""
         try:
-            review = facade.get_review(review_id)
-            return review, 200
-        except ValueError as e:
-            return {"error": str(e)}, 404
+            review = facade.get_review_by_id(review_id)
+            return review.save(), 200
+        except ValueError:
+            return {"error": "Review not found"}, 404
 
     @api.expect(review_update_model, validate=True)
     @api.marshal_with(review_response_model, code=200)
@@ -82,7 +69,7 @@ class ReviewResource(Resource):
             data = api.payload or {}
             current_user_id = data.get("current_user_id")
             review = facade.update_review(review_id, data, current_user_id)
-            return review, 200
+            return review.save(), 200
         except ValueError as e:
             return {"error": str(e)}, 404
         except PermissionError as e:
@@ -95,7 +82,7 @@ class ReviewResource(Resource):
         result = facade.delete_review(review_id)
         if isinstance(result, dict) and "error" in result:
             return result, 404
-        return {"message": "Review deleted successfully"}, 200
+        return result, 200
     
 """List all reviews of place"""
 @api.route('/place/<string:place_id>')

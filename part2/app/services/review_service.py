@@ -47,13 +47,6 @@ class ReviewService:
         if not review:
             raise ValueError("404: Review not found")
         return review
-    
-    def list_reviews(self):
-        """Return a list[Review] of all reviews in the repository."""
-        reviews = self.review_repo.get_all()
-        if not reviews:
-            raise ValueError("404: Reviews not found")
-        return reviews
 
     def get_reviews_by_user(self, user_id):
         """Fetch all reviews made by a specific user."""
@@ -64,35 +57,19 @@ class ReviewService:
         return [r for r in self.review_repo.get_all() if r.place_id == place_id]
     
     #UPDATE
-    def update_review(self, review_id, review_data: dict, current_user_id: int):
+    def update_review(self, review_id, review_data: dict, current_user_id: str):
         """Update a review if the current user is the author."""
         if not isinstance(review_data, dict):
             raise ValueError("Invalid payload")
 
-        review = self.get_review(review_id)
+        review = self.get_review_by_id(review_id)
 
         # Only the author can update
         if review.user_id != current_user_id:
             raise PermissionError("You are not allowed to update this review")
 
-        # Define allowed fields
-        updatable = {
-            "rating",
-            "comment",
-            "upload_image",
-        }
-
-        update_data = {}
-
-        for key, value in review_data.items():
-            if key in updatable and value is not None:
-                setattr(review, key, value)
-                update_data[key] = getattr(review, key)
-
-        # Update repository
-        if update_data:
-            self.review_repo.update(review.id, update_data)
-
+        review.update_from_dict(review_data)
+        self.review_repo.update(review_id, review_data)
         return review
 
     #GETTING THE AVERAGE RATING AND RECENT REVIEWS
@@ -113,6 +90,5 @@ class ReviewService:
         review = self.review_repo.get(review_id)
         if not review:
             raise ValueError("Review not found")
-
         self.review_repo.delete(review_id)
         return {"message": "Review deleted successfully"}

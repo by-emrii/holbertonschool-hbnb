@@ -97,10 +97,6 @@ class HBnBFacade:
         return self.review_service.create_review(review_data)
 
     #READ REVIEWS
-    def list_reviews(self):
-        """Return a list of all reviews."""
-        return self.review_service.list_reviews()
-
     def get_review_by_id(self, review_id):
         """Retrieve a single review by ID."""
         return self.review_service.get_review_by_id(review_id)
