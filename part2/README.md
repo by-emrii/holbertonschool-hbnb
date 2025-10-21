@@ -8,7 +8,9 @@ HBnB is a simplified clone of the Airbnb platform. It’s designed to teach the 
 4. [Architecture Overview](#business-logic-layer---architecture)
 5. [API Endpoints](#-api-endpoints)
 6. [Example User Endpoints](#-user-endpoints-example-)
-7. [Testing](#testing)
+7. [Testing](#testing)  
+   - [🧪 Running Tests](#running-tests)  
+   - [🧾 Documenting the Testing Process](#documenting-the-testing-process)  
 
 ## Project Structure
 ```
@@ -54,6 +56,13 @@ holbertonschool-hbnb/
 │       ├── test_place_endpoints.py
 │       ├── test_reservation_endpoints.py
 │       └── test_user_endpoints.py
+│
+├── docs/                               # Project documentation and testing reports
+│   ├── user_tests.pdf                  # Documented test log for User endpoints
+│   ├── place_tests.pdf                 # Documented test log for Place endpoints
+│   ├── amenity_tests.pdf               # Documented test log for Amenity endpoints
+│   ├── review_tests.pdf                # Documented test log for Review endpoints
+│   └── reservation_tests.pdf           # Documented test log for Reservation endpoints
 │
 ├── .gitignore                          # Specifies which files/folders Git should ignore
 ├── config.py                           # Configuration settings (DB, environment, etc.)
@@ -299,7 +308,8 @@ Core entities representing the application’s data and simple behaviours
    }
    ```
    
-## Testing
+## 🧪 Testing
+### 🏃 Running Tests
 Run the pytests/unittests to ensure the application is running as expected:
 ```
 # Test models
@@ -312,3 +322,35 @@ python3 -m unittest app.tests.test_place_endpoints.py
 python3 -m unittest app.tests.test_review_endpoints.py
 python3 -m unittest app.tests.test_reservation_endpoints.py
 ```
+
+### 🧾 Documenting the Testing Process
+
+Each test session has been documented and saved as a PDF file for verification and presentation purposes.
+
+For every entity, the following were recorded:
+
+- ✅ **Endpoints tested**  
+- 🧩 **Input data used**  
+- 📤 **Expected output vs. actual output**  
+- ⚠️ **Result**  
+
+These files provide a detailed log of the testing process and demonstrate that the application meets all required specifications.
+
+---
+
+### 📚 Test Logs (click to view)
+
+| Test Area | Description | Link |
+|------------|-------------|------|
+| 🧍 **User Endpoints** | Create, Retrieve, Update user tests | [View PDF](./docs/user_tests.pdf) |
+| 🏠 **Place Endpoints** | Create, Retrieve, Update place tests | [View PDF](./docs/place_tests.pdf) |
+| 🪩 **Amenity Endpoints** | Create, Retrieve, Update amenity tests | [View PDF](./docs/amenity_tests.pdf) |
+| 💬 **Review Endpoints** | Create, Retrieve, Update, Delete review tests | [View PDF](./docs/review_tests.pdf) |
+| 📅 **Reservation Endpoints** | Create, Retrieve, Update reservation tests | [View PDF](./docs/reservation_tests.pdf) |
+
+<br>
+
+## 📄 License
+
+This project is licensed under the **MIT License**.  
+See the [LICENSE](./LICENSE) file for details.
