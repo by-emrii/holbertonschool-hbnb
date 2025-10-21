@@ -10,7 +10,8 @@ HBnB is a simplified clone of the Airbnb platform. It’s designed to teach the 
 6. [Example User Endpoints](#-user-endpoints-example-)
 7. [Testing](#testing)  
    - [Running Tests](#running-tests)  
-   - [Documenting the Testing Process](#documenting-the-testing-process)  
+   - [Documenting the Testing Process](#documenting-the-testing-process)
+8. [License](#-license)
 
 ## Project Structure
 ```
@@ -354,3 +355,4 @@ These files provide a detailed log of the testing process and demonstrate that t
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
