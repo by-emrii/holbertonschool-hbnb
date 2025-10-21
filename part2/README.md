@@ -227,7 +227,71 @@ Core entities representing the application’s data and simple behaviours
       2. GET /api/v1/reservations/   - Get all reservations
       3. GET /api/v1/reservations/{reservation_id}  - Get reservation details
       4. PUT /api/v1/reservations/{reservation_id}  - Update reservation
+   
+## 🌐 USER Endpoints Example 🌐 ##
 
+   ### 1. Register a New User ###
+   **Endpoint** -- _POST /api/v1/users/_
+
+   **Request Body**
+   ```json
+   {
+     "first_name": "Alice",
+     "last_name": "Smith",
+     "email": "alice@example.com",
+     "phone_number": "+61412345678",
+     "encrypted_password": "password123"
+   }
+   ```
+   **Response**
+   ```json
+   {
+     "user_id": "as235bjkfas882",
+     "first_name": "Alice",
+     "last_name": "Smith",
+     "email": "alice@example.com",
+     "phone_number": "+61412345678"
+   }
+   ```
+   ### 2. Get User Details ###
+   **Endpoint** -- _GET /api/v1/users/{user_id}_
+
+   **Example Request**
+   ```
+   GET /api/v1/users/as235bjkfas882
+   ```
+   **Response**
+   ```json
+   {
+     "user_id": "as235bjkfas882",
+     "first_name": "Alice",
+     "last_name": "Smith",
+     "email": "alice@example.com",
+     "phone_number": "+61412345678"
+   }
+   ```
+   ### 3. Update User Information ###
+   **Endpoint** -- _GET /api/v1/users/{user_id}_
+
+   **Request Body**
+   ```json
+   {
+     "first_name": "Alice",
+     "last_name": "Johnson",
+     "phone_number": "+61498765432"
+   }
+   ```
+   **Response**
+   ```json
+   {
+     "user_id": "as235bjkfas882",
+     "first_name": "Alice",
+     "last_name": "Johnson",
+     "email": "alice@example.com",
+     "phone_number": "+61412345678"
+   }
+   ```
+   
 ## Testing
 Run the pytests/unittests to ensure the application is running as expected:
 ```
@@ -241,5 +305,6 @@ python3 -m unittest app.tests.test_place_endpoints.py
 python3 -m unittest app.tests.test_review_endpoints.py
 python3 -m unittest app.tests.test_reservation_endpoints.py
 ```
+
 
 
