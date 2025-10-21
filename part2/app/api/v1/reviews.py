@@ -36,11 +36,12 @@ class ReviewList(Resource):
     @api.expect(review_create_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
-    def post(self, place_id):
+    def post(self):
         """Creating a review"""
         review_data = request.get_json() or {}
         #Temporary user_id for testing (replace with JWT later)
-        current_user_id = review_data.get("user_id", "user123")
+        current_user_id = review_data.get("user_id")
+        place_id = review_data.get("place_id")
         review = {
             "user_id": current_user_id,
             "place_id": place_id,
@@ -56,9 +57,14 @@ class ReviewList(Resource):
     @api.response(200, 'Success')
     def get(self, place_id):
         """List all reviews for a specific place"""
-        reviews = facade.get_reviews_for_place(place_id)
+        place_id = request.args.get("place_id")
+        if place_id:
+            reviews = facade.get_reviews_for_place(place_id)
+        else:
+            reviews = facade.review_service.review_repo.get_all()
+
         if not reviews:
-            return {"message": f"No reviews found for place_id '{place_id}'"}, 404
+            return {"message": "No reviews found"}, 404
         return [r.save() for r in reviews], 200
 
 """Get, update, deleted review by id"""
