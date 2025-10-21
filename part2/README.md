@@ -9,8 +9,8 @@ HBnB is a simplified clone of the Airbnb platform. It’s designed to teach the 
 5. [API Endpoints](#-api-endpoints)
 6. [Example User Endpoints](#-user-endpoints-example-)
 7. [Testing](#testing)  
-   - [🧪 Running Tests](#running-tests)  
-   - [🧾 Documenting the Testing Process](#documenting-the-testing-process)  
+   - [Running Tests](#running-tests)  
+   - [Documenting the Testing Process](#documenting-the-testing-process)  
 
 ## Project Structure
 ```
