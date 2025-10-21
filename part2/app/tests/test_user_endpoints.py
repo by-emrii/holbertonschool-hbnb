@@ -1,23 +1,10 @@
 import unittest, uuid
 from app import create_app
-# from app.services.facade import user_repo
-
 
 class TestUserEndpoints(unittest.TestCase):
     def setUp(self):
-        # run a fresh Flask app instance for testing
         self.app = create_app()
-        # create a testing client to simulate HTTP responses
-        #self.client can send GET, POST, PUT etc
-        # self.client can return response objects (with .status_code, .json)
         self.client = self.app.test_client()
-        print("Setting up")
-    
-    # def tearDown(self):
-    #     """Reset repository after each test"""
-    #     user_repo._storage.clear()
-    #     print("Repo cleared, remaining:", len(user_repo._storage))
-
 
     # ---------- Helper Method ---------- #
     def create_sample_user(self):
@@ -34,8 +21,6 @@ class TestUserEndpoints(unittest.TestCase):
            "phone_number": "+6123456789",
            "encrypted_password": "12345678"
        })
-       # print response for debugging
-       # print(response.get_data(as_text=True))
        
        # Convert JSON response to dict
        response_data = response.get_json()
@@ -54,20 +39,128 @@ class TestUserEndpoints(unittest.TestCase):
     def test_create_user(self):
        """ Test creation of user profile """
        self.create_sample_user()
-       print("Running test one")
-    
-    def test_create_user_invalid_data(self):
-        """ Test creating user with invalid data"""
-        response = self.client.post('/api/v1/users/', json={
-            "first_name": "",
-            "last_name": "",
-            "email": "invalid-email",
-            "phone_number": "0123456789",
-            "encrypted_password": "0000"
-        })
-        self.assertEqual(response.status_code, 400)
-        print("Running test two")
 
+    def test_create_user_first_name_too_short(self):
+        """Test creating a user with first name shorter than 2 characters"""
+        unique = uuid.uuid4().hex[:6]
+        email = f"user.{unique}@example.com"
+        
+        response = self.client.post('/api/v1/users/', json={
+            "first_name": "D",
+            "last_name": "Johnson",
+            "email": email,
+            "phone_number": "+6123456789",
+            "encrypted_password": "password123"
+        })
+        
+        self.assertEqual(response.status_code, 400)
+    
+    def test_create_user_first_name_not_string(self):
+        """Test creating a user where first name is not a string"""
+        unique = uuid.uuid4().hex[:6]
+        email = f"user.{unique}@example.com"
+        
+        response = self.client.post('/api/v1/users/', json={
+            "first_name": 12345,
+            "last_name": "Johnson",
+            "email": email,
+            "phone_number": "+6123456789",
+            "encrypted_password": "password123"
+        })
+    
+        self.assertEqual(response.status_code, 400)
+    
+    def test_create_user_last_name_too_short(self):
+        """ Test creating a user with last name shorter than 2 characters """
+        unique = uuid.uuid4().hex[:6]
+        email = f"user.{unique}@example.com"
+        
+        response = self.client.post('/api/v1/users/', json={
+            "first_name": "Alice",
+            "last_name": "L",
+            "email": email,
+            "phone_number": "+6123456789",
+            "encrypted_password": "password123"
+        })
+        
+        self.assertEqual(response.status_code, 400)
+    
+    def test_create_user_last_name_not_string(self):
+        """ Test creating a user where last name is not a string """
+        unique = uuid.uuid4().hex[:6]
+        email = f"user.{unique}@example.com"
+        
+        response = self.client.post('/api/v1/users/', json={
+            "first_name": "Alice",
+            "last_name": 98765,
+            "email": email,
+            "phone_number": "+6123456789",
+            "encrypted_password": "password123"
+        })
+        
+        self.assertEqual(response.status_code, 400)
+
+    def test_create_user_email_in_use(self):
+        """ Test creating a user with an email that already exists """
+        # Create the first user
+        self.create_sample_user()
+        
+        # Attempt to create another user with the same email
+        response = self.client.post('/api/v1/users/', json={
+            "first_name": "Alice",
+            "last_name": "Smith",
+            "email": self.sample_email,
+            "phone_number": "+6123456788",
+            "encrypted_password": "abcdefgh"
+        })
+        
+        self.assertEqual(response.status_code, 400)
+    
+    def test_create_user_invalid_email_format(self):
+        """ Test creating a user with an invalid email format """
+        unique = uuid.uuid4().hex[:6]
+        email = f"user.{unique}example.com"  # missing @
+        
+        response = self.client.post('/api/v1/users/', json={
+            "first_name": "Alice",
+            "last_name": "Johnson",
+            "email": email,
+            "phone_number": "+6123456789",
+            "encrypted_password": "password123"
+        })
+        
+        self.assertEqual(response.status_code, 400)
+    
+    def test_create_user_invalid_phone(self):
+        """ Test creating a user with invalid phone number format """
+        unique = uuid.uuid4().hex[:6]
+        email = f"user.{unique}@example.com"
+        
+        response = self.client.post('/api/v1/users/', json={
+            "first_name": "Bob",
+            "last_name": "Brown",
+            "email": email,
+            "phone_number": "123ABC456",  # invalid format
+            "encrypted_password": "abcdefgh"
+        })
+        
+        self.assertEqual(response.status_code, 400)
+    
+    def test_create_user_short_password(self):
+        """ Test creating a user with a password that is too short """
+        unique = uuid.uuid4().hex[:6]
+        email = f"user.{unique}@example.com"
+        
+        response = self.client.post('/api/v1/users/', json={
+            "first_name": "Charlie",
+            "last_name": "Davis",
+            "email": email,
+            "phone_number": "+6123456789",
+            "encrypted_password": "123"  # too short
+        })
+        
+        self.assertEqual(response.status_code, 400)
+    
     def test_get_user_byID(self):
         """ Test retrieving user by ID """
         # Create a user
@@ -76,9 +169,6 @@ class TestUserEndpoints(unittest.TestCase):
         # Extract user ID from response JSON
         user_data = create_response.get_json()
         user_id = user_data.get("id")
-
-        print(create_response.get_data(as_text=True))
-        print(user_id)
 
         # Get user by ID
         get_response = self.client.get(f"/api/v1/users/{user_id}")
@@ -89,7 +179,6 @@ class TestUserEndpoints(unittest.TestCase):
         self.assertEqual(response_data.get("email"), self.sample_email)
         self.assertEqual(response_data.get("phone_number"), "+6123456789")
         self.assertEqual(get_response.status_code, 200)
-        print("Running test two")
     
     def test_get_user_invalidID(self):
         """ Test get user by invalid ID """

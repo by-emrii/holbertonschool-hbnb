@@ -72,4 +72,5 @@ class TestReviewModel(unittest.TestCase):
         print("Upload image validation passed")
 
 if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    import unittest
+    unittest.main(buffer=False, verbosity=2)

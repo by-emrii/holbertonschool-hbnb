@@ -48,7 +48,11 @@ class HBnBFacade:
     def create_place(self, place_data):
         return self.place_service.create_place(place_data)
 
-    # Get Place
+    # Get all places
+    def list_places(self):
+        return self.place_service.list_places()
+
+    # Get a Place
     def get_place(self, place_id):
         return self.place_service.get_place(place_id)
 
