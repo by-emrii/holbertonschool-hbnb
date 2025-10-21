@@ -1,6 +1,14 @@
 # 🏠 Holberton School - HBnB Project Part 2
 HBnB is a simplified clone of the Airbnb platform. It’s designed to teach the fundamentals of back-end development, RESTful API design, and modular architecture using Python and Flask.
 
+## Table of Contents
+1. [Project Structure](#project-structure)
+2. [Requirements](#requirements)
+3. [Installation](#installation)
+4. [Architecture Overview](#business-logic-layer---architecture)
+5. [API Endpoints](#-api-endpoints)
+6. [Example User Endpoints](#-user-endpoints-example-)
+7. [Testing](#testing)
 
 ## Project Structure
 ```
@@ -85,11 +93,10 @@ holbertonschool-hbnb/
    ```bash
    python run.py
    ```
-
-The API will start at:
-```bash
-http://127.0.0.1:5000/api/v1/
-```
+   The API will start at:
+   ```bash
+   http://127.0.0.1:5000/api/v1/
+   ```
 
 ## Business Logic Layer - Architecture
 ### Architecture Overview
@@ -271,7 +278,7 @@ Core entities representing the application’s data and simple behaviours
    }
    ```
    ### 3. Update User Information ###
-   **Endpoint** -- _GET /api/v1/users/{user_id}_
+   **Endpoint** -- _PUT /api/v1/users/{user_id}_
 
    **Request Body**
    ```json
@@ -305,6 +312,3 @@ python3 -m unittest app.tests.test_place_endpoints.py
 python3 -m unittest app.tests.test_review_endpoints.py
 python3 -m unittest app.tests.test_reservation_endpoints.py
 ```
-
-
-
