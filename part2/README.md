@@ -347,7 +347,7 @@ These files provide a detailed log of the testing process and demonstrate that t
 | 🏠 **Place Endpoints** | Create, Retrieve, Update place tests | [View PDF](./docs/place_tests.pdf) |
 | 🪩 **Amenity Endpoints** | Create, Retrieve, Update amenity tests | [View PDF](./docs/amenity_tests.pdf) |
 | 💬 **Review Endpoints** | Create, Retrieve, Update, Delete review tests | [View PDF](./docs/review_tests.pdf) |
-| 📅 **Reservation Endpoints** | Create, Retrieve, Update reservation tests | [View PDF](./docs/reservation_tests.pdf) |
+| 📅 **Reservation Endpoints** | Create, Retrieve, Update reservation tests | [View PDF](./docs/reservations_tests.pdf) |
 
 <br>
 
@@ -355,5 +355,6 @@ These files provide a detailed log of the testing process and demonstrate that t
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
 
 
