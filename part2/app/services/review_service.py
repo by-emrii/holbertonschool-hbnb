@@ -3,28 +3,30 @@ from app.models.review import Review
 from app.persistence.repository import InMemoryRepository
 
 class ReviewService:
-    def __init__(self):
-        self.review_repo = InMemoryRepository()
+    def __init__(self, place_repo, user_repo=None, review_repo=None):
+        self.user_repo = user_repo
+        self.place_repo = place_repo
+        self.review_repo = review_repo or InMemoryRepository()
     
     #CREATE
     def create_review(self, review_data):
         """Create a review"""   
-        #validate the input
-        if not isinstance(review_data, dict):
-            raise TypeError("Review data must be provided as a dictionary")
-        
-        # Validate required fields
-        for key in ["user_id", "place_id"]:
-            if key not in review_data or not review_data[key]:
-                raise ValueError(f"Missing required field: '{key}'")
-        
-        review = Review(
-            user_id=review_data["user_id"],
-            place_id=review_data["place_id"],
-            rating=review_data.get("rating"),
-            comment=review_data.get("comment"),
-            upload_image=review_data.get("upload_image", [])  # default empty list
-        )
+        user_id = review_data.get("user_id")
+        place_id = review_data.get("place_id")
+
+
+        # Check user exists directly in repo
+        if self.user_repo.get(user_id) is None:
+            raise ValueError("User not found")
+        # Check place exists directly in repo
+        if self.place_repo.get(place_id) is None:
+            raise ValueError("Place not found")
+        # Create review instance
+        review = Review(user_id, place_id, review_data.get("rating"),
+            review_data.get("comment"),
+            review_data.get("upload_image", []))
+
+        # Add to repo
         self.review_repo.add(review)
         return review
     
@@ -35,14 +37,10 @@ class ReviewService:
 
     def get_reviews_by_user(self, user_id):
         """Fetch all reviews made by a specific user."""
-        if not user_id:
-            return []
         return [r for r in self.review_repo.get_all() if r.user_id == user_id]
 
     def get_reviews_for_place(self, place_id):
         """Fetch all reviews for a specific place."""
-        if not place_id:
-            return []
         return [r for r in self.review_repo.get_all() if r.place_id == place_id]
     
     #UPDATE
@@ -57,15 +55,12 @@ class ReviewService:
             raise PermissionError("You are not allowed to update this review")
 
         # Update allowed fields
-        for field in ["rating", "comment", "upload_image"]:
-            if field in review_data:
-                setattr(review, field, review_data[field])
-
-        self.review_repo.update(
-            review.id,
-            {field: getattr(review, field) for field in ["rating", "comment", "upload_image"]},
-        )
-
+        review.update_from_dict(review_data)
+        self.review_repo.update(review.id, {
+            "rating": review.rating,
+            "comment": review.comment,
+            "upload_image": review.upload_image
+        })
         return review
 
     #GETTING THE AVERAGE RATING AND RECENT REVIEWS
