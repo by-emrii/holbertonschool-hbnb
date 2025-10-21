@@ -19,7 +19,7 @@ class HBnBFacade:
         self.amenity_service = AmenityService()
         self.reservation_service = ReservationService()
         self.place_service = PlaceService(self.place_repo, self.user_repo)
-        self.review_service = ReviewService()
+        self.review_service = ReviewService(self.place_repo, self.user_repo)
         
     """ User CRU """
     # Placeholder method for creating a user
@@ -88,27 +88,25 @@ class HBnBFacade:
 
     """Review CRU"""
     def create_review(self, review_data):
-            """Create and save a review."""
-            user_id = review_data.get("user_id")
-            place_id = review_data.get("place_id")
+        """Create and save a review."""
+        user_id = review_data.get("user_id")
+        place_id = review_data.get("place_id")
 
-            #Validating user exists
-            try:
-                self.get_user(user_id)
-            except ValueError:
-                return {"error": f"User with id '{user_id}' not found"}
+        # Check user exists
+        if self.user_repo.get(user_id) is None:
+            raise ValueError("User not found")
 
-            #Validating place exists
-            try:
-                self.get_place(place_id)
-            except ValueError:
-                return {"error": f"Place with id '{place_id}' not found"}
-            try:
-                return self.review_service.create_review(review_data)
-            except ValueError as ve:
-                return {"error": str(ve)}
-            except Exception as e:
-                return {"error": f"Unexpected error: {str(e)}"}
+        # Check place exists
+        if self.place_repo.get(place_id) is None:
+            raise ValueError("Place not found")
+
+        # Create the review
+        try:
+            return self.review_service.create_review(review_data)
+        except ValueError as ve:
+            return {"error": str(ve)}
+        except Exception as e:
+            return {"error": f"Unexpected error: {str(e)}"}
 
     def get_review_by_id(self, review_id):
         """Retrieve a single review by ID."""

@@ -3,7 +3,9 @@ from app.models.review import Review
 from app.persistence.repository import InMemoryRepository
 
 class ReviewService:
-    def __init__(self):
+    def __init__(self,place_repo, user_repo=None):
+        self.user_repo = user_repo
+        self.place_repo = place_repo
         self.review_repo = InMemoryRepository()
     
     #CREATE

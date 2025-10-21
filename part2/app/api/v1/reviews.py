@@ -7,6 +7,8 @@ facade = HBnBFacade()
 
 # Model for creating a review
 review_create_model = api.model('ReviewCreate', {
+    "user_id": fields.String(required=True, description="User ID of the reviewer"),
+    "place_id": fields.String(required=True, description="Place ID being reviewed"),
     "rating": fields.Float(required=True, description="Rating (1-5)", min=1, max=5),
     "comment": fields.String(required=True, description="Review comment"),
     "upload_image": fields.List(fields.String, required=False, description="Optional image URLs")
@@ -39,23 +41,35 @@ class ReviewList(Resource):
     def post(self):
         """Creating a review"""
         review_data = request.get_json() or {}
-        #Temporary user_id for testing (replace with JWT later)
-        current_user_id = review_data.get("user_id")
+        user_id = review_data.get("user_id")
         place_id = review_data.get("place_id")
+
+        # Check if user exists
+        try:
+            facade.get_user(user_id)
+        except ValueError:
+            return {"error": "User not found, cannot create review"}, 404
+        # Check if place exists
+        try:
+            facade.get_place(place_id)
+        except ValueError:
+            return {"error": "Place not found, cannot create review"}, 404
+        # Create review    
         review = {
-            "user_id": current_user_id,
+            "user_id": user_id,
             "place_id": place_id,
             "rating": review_data.get("rating"),
             "comment": review_data.get("comment"),
             "upload_image": review_data.get("upload_image", [])
         }
+
         result = facade.create_review(review)
         if isinstance(result, dict) and "error" in result:
             return result, 400
         return result.save(), 201
     
     @api.response(200, 'Success')
-    def get(self, place_id):
+    def get(self):
         """List all reviews for a specific place"""
         place_id = request.args.get("place_id")
         if place_id:
@@ -87,25 +101,23 @@ class ReviewDetail(Resource):
         """Update a review"""
         review_data = request.get_json() or {}
         current_user_id = review_data.get("current_user_id")
-        try:
-            updated_review = facade.update_review({
+        updated_review = facade.update_review({
                 "review_id": review_id,
                 "review_data": review_data,
                 "current_user_id": current_user_id
-            })
-            return updated_review.save(), 200
-        except (ValueError, PermissionError) as error:
-            return {"error": str(error)}, 403
+        })
+        if isinstance(updated_review, dict) and "error" in updated_review:
+            return updated_review, 403
+        return updated_review.save(), 200
 
     @api.response(200, 'Review successfully deleted')
     @api.response(404, 'Review not found')
     def delete(self, review_id):
         """Delete review"""
-        try:
-            facade.delete_review(review_id)
-            return {"message": "Review deleted"}, 200
-        except ValueError as error:
-            return {"error": str(error)}, 404
+        result = facade.delete_review(review_id)
+        if isinstance(result, dict) and "error" in result:
+            return result, 404
+        return {"message": "Review deleted"}, 200
 
 """List review of user"""
 @api.route('/user/<string:user_id>')
