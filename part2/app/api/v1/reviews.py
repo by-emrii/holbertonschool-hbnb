@@ -35,38 +35,17 @@ review_response_model = api.model('Review', {
 """Create a review for a place"""
 @api.route('/')
 class ReviewList(Resource):
-    @api.expect(review_create_model)
+    @api.expect(review_create_model, validate=True)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
     def post(self):
         """Creating a review"""
         review_data = request.get_json() or {}
-        user_id = review_data.get("user_id")
-        place_id = review_data.get("place_id")
-
-        # Check if user exists
         try:
-            facade.get_user(user_id)
-        except ValueError:
-            return {"error": "User not found, cannot create review"}, 404
-        # Check if place exists
-        try:
-            facade.get_place(place_id)
-        except ValueError:
-            return {"error": "Place not found, cannot create review"}, 404
-        # Create review    
-        review = {
-            "user_id": user_id,
-            "place_id": place_id,
-            "rating": review_data.get("rating"),
-            "comment": review_data.get("comment"),
-            "upload_image": review_data.get("upload_image", [])
-        }
-
-        result = facade.create_review(review)
-        if isinstance(result, dict) and "error" in result:
-            return result, 400
-        return result.save(), 201
+            review = facade.create_review(review_data)
+        except ValueError as ve:
+            return {"error": str(ve)}, 400
+        return review.save(), 201
     
     @api.response(200, 'Success')
     def get(self):
@@ -101,6 +80,7 @@ class ReviewDetail(Resource):
         """Update a review"""
         review_data = request.get_json() or {}
         current_user_id = review_data.get("current_user_id")
+
         updated_review = facade.update_review({
                 "review_id": review_id,
                 "review_data": review_data,

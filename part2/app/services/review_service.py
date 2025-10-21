@@ -11,22 +11,21 @@ class ReviewService:
     #CREATE
     def create_review(self, review_data):
         """Create a review"""   
-        #validate the input
-        if not isinstance(review_data, dict):
-            raise TypeError("Review data must be provided as a dictionary")
-        
-        # Validate required fields
-        for key in ["user_id", "place_id", "rating"]:
-            if key not in review_data or review_data[key] is None:
-                raise ValueError(f"Missing required field: '{key}'")
-        
-        review = Review(
-            user_id=review_data["user_id"],
-            place_id=review_data["place_id"],
-            rating=review_data.get("rating"),
-            comment=review_data.get("comment"),
-            upload_image=review_data.get("upload_image", [])
-        )
+        user_id = review_data.get("user_id")
+        place_id = review_data.get("place_id")
+
+        # Check user exists directly in repo
+        if self.user_repo.get(user_id) is None:
+            raise ValueError("User not found")
+        # Check place exists directly in repo
+        if self.place_repo.get(place_id) is None:
+            raise ValueError("Place not found")
+        # Create review instance
+        review = Review(user_id, place_id, review_data.get("rating"),
+                    review_data.get("comment"),
+                    review_data.get("upload_image", []))
+
+        # Add to repo
         self.review_repo.add(review)
         return review
     

@@ -89,24 +89,11 @@ class HBnBFacade:
     """Review CRU"""
     def create_review(self, review_data):
         """Create and save a review."""
-        user_id = review_data.get("user_id")
-        place_id = review_data.get("place_id")
-
-        # Check user exists
-        if self.user_repo.get(user_id) is None:
-            raise ValueError("User not found")
-
-        # Check place exists
-        if self.place_repo.get(place_id) is None:
-            raise ValueError("Place not found")
-
-        # Create the review
         try:
             return self.review_service.create_review(review_data)
         except ValueError as ve:
-            return {"error": str(ve)}
-        except Exception as e:
-            return {"error": f"Unexpected error: {str(e)}"}
+            # bubble up the error so Flask can handle it
+            raise ve
 
     def get_review_by_id(self, review_id):
         """Retrieve a single review by ID."""
