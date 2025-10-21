@@ -6,12 +6,10 @@ HBnB is a simplified clone of the Airbnb platform. It’s designed to teach the 
 ```
 holbertonschool-hbnb/
 ├── app/                                # Main application package
-│   ├── __pycache__/                    # Auto-generated Python cache files
 │   │
 │   ├── api/                            # API layer – handles HTTP routes and endpoints
 │   │   ├── __pycache__/
 │   │   └── v1/                         # Version 1 of the API
-│   │       ├── __pycache__/
 │   │       ├── __init__.py             # Initializes the API and namespaces
 │   │       ├── amenities.py            # Endpoints for Amenity operations
 │   │       ├── base_model.py           # Shared structure or base for API models
@@ -21,7 +19,6 @@ holbertonschool-hbnb/
 │   │       └── users.py                # Endpoints for User operations
 │   │
 │   ├── models/                         # Data models that represent entities
-│   │   ├── __pycache__/
 │   │   ├── __init__.py                 # Initializes the models package
 │   │   ├── amenity.py                  # Amenity model definition
 │   │   ├── base_model.py               # Base class with shared attributes/methods
@@ -31,12 +28,10 @@ holbertonschool-hbnb/
 │   │   └── user.py                     # User model definition
 │   │
 │   ├── persistence/                    # Handles database logic
-│   │   ├── __pycache__/
 │   │   ├── __init__.py
 │   │   └── repository.py               # Repository layer for CRUD operations and data storage
 │   │
 │   ├── services/                       # Business logic layer
-│   │   ├── __pycache__/
 │   │   ├── __init__.py
 │   │   ├── amenity_service.py          # Logic for managing amenities
 │   │   ├── facade.py                   # Facade pattern – simplifies API-to-service interaction
@@ -96,4 +91,5 @@ The API will start at:
 ```bash
 http://127.0.0.1:5000/api/v1/
 ```
+
 
