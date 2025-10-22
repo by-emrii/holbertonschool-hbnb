@@ -1,7 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 
-
 api = Namespace('users', description='User operations')
 
 # user = {
@@ -35,8 +34,8 @@ user_response = api.model('User',{
 
 @api.route('/')
 class UserList(Resource):
-    @api.expect(user_model, validate=True)
-    @api.marshal_with(user_response, code=201)
+    @api.expect(user_model)
+    # @api.marshal_with(user_response, code=201)
     # @api.response(201, 'User successfully created')
     # @api.response(400, 'Email already registered')
     # @api.response(400, 'Invalid input data')
@@ -53,8 +52,14 @@ class UserList(Resource):
         #     return {'error': 'Email already registered'}, 400
 
             new_user = facade.create_user(user_data)
-            return {'id': new_user.id, 'first_name': new_user.first_name, 'last_name': new_user.last_name, 'email': new_user.email, 'phone_number': new_user.phone_number}, 201
-        except (ValueError, TypeError) as e:
+            return {
+                'id': new_user.id,
+                'first_name': new_user.first_name, 
+                'last_name': new_user.last_name, 
+                'email': new_user.email, 
+                'phone_number': new_user.phone_number
+                }, 201
+        except (TypeError,ValueError) as e:
             return {"error": str(e)}, 400
 
 @api.route('/<user_id>')
@@ -72,7 +77,7 @@ class UserResource(Resource):
                 'email': user.email,
                 'phone_number': user.phone_number
             }, 200
-        except ValueError as e:
+        except (TypeError, ValueError) as e:
             return {"error": str(e)}, 404
 
     @api.response(200, 'User details updated successfully!')
@@ -86,7 +91,7 @@ class UserResource(Resource):
         try:
             updated_user = facade.update_user(user_id, user_data)
             return {'id': updated_user.id, 'first_name': updated_user.first_name, 'last_name': updated_user.last_name, 'email': updated_user.email, 'phone_number': updated_user.phone_number}, 200
-        except ValueError as e:
+        except (TypeError, ValueError) as e:
             msg = str(e)
             if 'not found' in msg.lower():
                 return {'error': msg}, 404
