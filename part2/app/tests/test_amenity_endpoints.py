@@ -26,14 +26,57 @@ class TestAmenityEndpoints(unittest.TestCase):
     def test_create_amenity(self):
        self.create_sample_amenity()
     
-    def test_create_invalid_amenity(self):
-       """ Test creation of amenity with invalid data """
-       response = self.client.post('/api/v1/amenities/', json={
-           'name': '',
-           'description': ''
-       })
-       
-       self.assertEqual(response.status_code, 400)
+    def test_create_amenity_name_not_string(self):
+        """ Amenity name must be a string """
+        response = self.client.post('/api/v1/amenities/', json={
+            'name': 1234,
+            'description': 'Fast Wi-Fi'
+        })
+        data = response.get_json()
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('name must be a string', data.get('error', '').lower())
+
+    def test_create_amenity_name_empty(self):
+        """ Amenity name cannot be empty """
+        response = self.client.post('/api/v1/amenities/', json={
+            'name': '',
+            'description': 'Empty name test'
+        })
+        data = response.get_json()
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('name must not be empty', data.get('error', '').lower())
+    
+    def test_create_amenity_name_too_long(self):
+        """ Amenity name cannot exceed 50 characters """
+        long_name = 'A' * 51
+        response = self.client.post('/api/v1/amenities/', json={
+            'name': long_name,
+            'description': 'Too long name test'
+        })
+        data = response.get_json()
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('name cannot exceed 50', data.get('error', '').lower())
+    
+    def test_create_amenity_description_not_string(self):
+        """ Amenity description must be a string """
+        response = self.client.post('/api/v1/amenities/', json={
+            'name': 'Wi-Fi',
+            'description': 98765
+        })
+        data = response.get_json()
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('description must be a string', data.get('error', '').lower())
+    
+    def test_create_amenity_description_too_long(self):
+        """ Amenity description cannot exceed 100 characters """
+        long_description = 'X' * 101
+        response = self.client.post('/api/v1/amenities/', json={
+            'name': 'Wi-Fi',
+            'description': long_description
+        })
+        data = response.get_json()
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('description cannot exceed 100', data.get('error', '').lower())
     
     def test_get_amenity_byID(self):
         """ Test get amenity by ID """
