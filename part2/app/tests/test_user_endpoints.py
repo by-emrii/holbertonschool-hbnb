@@ -1,6 +1,7 @@
 import unittest, uuid
 from app import create_app
 
+
 class TestUserEndpoints(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
