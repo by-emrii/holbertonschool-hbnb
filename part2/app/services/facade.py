@@ -19,11 +19,7 @@ class HBnBFacade:
         self.amenity_service = AmenityService()
         self.reservation_service = ReservationService()
         self.place_service = PlaceService(self.place_repo, self.user_repo)
-        self.review_service = ReviewService(
-            self.place_repo,
-            self.user_repo,
-            self.review_repo 
-        )
+        self.review_service = ReviewService(self.place_repo, self.user_repo, self.review_repo)
         
     """ User CRU """
     # Placeholder method for creating a user
@@ -120,12 +116,7 @@ class HBnBFacade:
     #DELETE REVIEW    
     def delete_review(self, review_id):
         """Delete a review by ID."""
-        try:
-            return self.review_service.delete_review(review_id)
-        except ValueError as error:
-            return {"error": str(error)}
-        except Exception as error:
-            return {"error": f"Unexpected error: {str(error)}"}
+        return self.review_service.delete_review(review_id)
 
     #RATING AVERAGE
     def get_average_rating(self, place_id):

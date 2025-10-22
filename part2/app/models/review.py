@@ -8,7 +8,7 @@ class Review(BaseModel):
     """Represents a review left by a user for a place."""
     ALLOWED_FORMATS = {"JPEG", "PNG"}
 
-    def __init__(self, user_id, place_id, rating, comment=None, upload_image=None):
+    def __init__(self, user_id, place_id, rating, comment, upload_image=None):
         super().__init__()
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
