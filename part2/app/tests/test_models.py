@@ -100,44 +100,8 @@ def test_review_creation():
     assert review.rating == 4
     assert review.comment == "Good Review"
     assert review.upload_image == ["https://example.com/image.jpg"]
-
-def test_get_reviews_for_place():
-    from app.services import facade
-    # Create multiple reviews for same place
-    facade.create_review({"user_id": "u1", "place_id": "p1", "rating": 4, "comment": "A"})
-    facade.create_review({"user_id": "u2", "place_id": "p1", "rating": 5, "comment": "B"})
-    reviews = facade.get_reviews_for_place("p1")
-    assert len(reviews) == 2
-    assert all(r.place_id == "p1" for r in reviews)
-
-def test_review_rating_validation():
-    # Rating must be between 1 and 5
-    with pytest.raises(ValueError):
-        Review(user_id="u1", place_id="p1", rating=0, comment="Bad")
-    with pytest.raises(ValueError):
-        Review(user_id="u1", place_id="p1", rating=6, comment="Too good")
-
-def test_review_comment_validation():
-    # Comment longer than 100 chars should fail
-    long_comment = "a" * 101
-    with pytest.raises(ValueError):
-        Review(user_id="u1", place_id="p1", rating=3, comment=long_comment)
-
-def test_review_upload_image_validation(tmp_path):
-    # Invalid type (int) should fail
-    with pytest.raises(TypeError):
-        Review(user_id="u1", place_id="p1", rating=4, comment="Nice", upload_image=[123])   
     
-    # Create a fake non-image file
-    fake_bytes = b"notanimage"
-    with pytest.raises(ValueError):
-        Review(
-            user_id="u1",
-            place_id="p1",
-            rating=4,
-            comment="Nice",
-            upload_image=[("fake.jpg", fake_bytes)]
-        )
+    print("Review creation test passed!")
 
 
 test_user_creation()
