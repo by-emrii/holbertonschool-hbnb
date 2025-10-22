@@ -27,7 +27,7 @@ class AmenityList(Resource):
             new_amenity = facade.create_amenity(amenity_data)
             return {'id': new_amenity.id, 'name': new_amenity.name, 'description': new_amenity.description}, 201
         # if not new_amenity:
-        except ValueError as e:
+        except (TypeError, ValueError) as e:
             return {'error': str(e)}, 400
         
 
@@ -55,7 +55,7 @@ class AmenityResource(Resource):
             return {'id': amenity.id,
                     'name': amenity.name, 
                     'description': amenity.description}, 200
-        except ValueError as e:
+        except (TypeError,ValueError) as e:
             return {'error': str(e)}, 404
             
 
@@ -72,7 +72,7 @@ class AmenityResource(Resource):
                 'id': updated_amenity.id,
                 'name': updated_amenity.name,
                 'description': updated_amenity.description}, 200
-        except ValueError as e:
+        except (TypeError, ValueError) as e:
             error_message = str(e)
             if error_message.startswith('400'):
                 return {'error':error_message}, 400

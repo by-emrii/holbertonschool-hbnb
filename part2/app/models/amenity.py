@@ -20,8 +20,10 @@ class Amenity(BaseModel):
         value = value.strip()
         if len(value) > 0 and len(value)<= 50:
             self._name = value
-        else:
-            raise ValueError("Invalid amenity name length")
+        elif len(value) <= 0:
+            raise ValueError("Amenity name must not be empty")
+        elif len(value) > 50:
+            raise ValueError("Amenity name cannot exceed 50 characters")
 
     """Amenity description"""
     @property
@@ -41,4 +43,4 @@ class Amenity(BaseModel):
         if len(value) > 0 and len(value)<= 100:
             self._description = value
         else:
-            raise ValueError("Amenity description must be no more than 100 characters")
+            raise ValueError("Amenity description cannot exceed 100 characters")
