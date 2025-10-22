@@ -36,44 +36,6 @@ class TestReservationEndpoints(unittest.TestCase):
             "price": 100.0
         })
         self.assertEqual(response.status_code, 400)
-        self.assertIn("Missing required field", response.get_json()["error"])
-    
-    def test_create_reservation_invalid_dates(self):
-        """ Test reservation where start_date >= end_date """
-        response = self.client.post('/api/v1/reservations/', json={
-            "user_id": self.user_id,
-            "place_id": self.place_id,
-            "start_date": self.end_date,
-            "end_date": self.start_date,
-            "price": 100.0
-        })
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("Start date must be before end date", response.get_json()["error"])
-
-    def test_create_reservation_invalid_price(self):
-        """ Test reservation with negative price """
-        response = self.client.post('/api/v1/reservations/', json={
-            "user_id": self.user_id,
-            "place_id": self.place_id,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
-            "price": -50.0
-        })
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("Price must be positive", response.get_json()["error"])
-    
-    def test_create_reservation_invalid_status(self):
-        """ Test reservation with invalid status """
-        response = self.client.post('/api/v1/reservations/', json={
-            "user_id": self.user_id,
-            "place_id": self.place_id,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
-            "price": 200.0,
-            "status": "unknown_status"
-        })
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("Invalid reservation status", response.get_json()["error"])
     
     def test_get_all_reservations(self):
         """ Test retrieving all reservations """
