@@ -48,7 +48,7 @@ class TestUserEndpoints(unittest.TestCase):
         response = self.client.post('/api/v1/users/', json={
             "first_name": "D",
             "last_name": "Johnson",
-            "email": email,
+            "email": self.sample_email,
             "phone_number": "+6123456789",
             "encrypted_password": "password123"
         })

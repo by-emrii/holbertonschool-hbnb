@@ -53,7 +53,7 @@ class UserList(Resource):
 
             new_user = facade.create_user(user_data)
             return {'id': new_user.id, 'first_name': new_user.first_name, 'last_name': new_user.last_name, 'email': new_user.email, 'phone_number': new_user.phone_number}, 201
-        except ValueError as e:
+        except (ValueError, TypeError) as e:
             return {"error": str(e)}, 400
 
 @api.route('/<user_id>')
