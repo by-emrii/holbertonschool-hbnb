@@ -80,10 +80,12 @@ class UserResource(Resource):
         except (TypeError, ValueError) as e:
             return {"error": str(e)}, 404
 
+    @api.expect(user_model)
     @api.response(200, 'User details updated successfully!')
     @api.response(404, 'User not found')
     @api.response(404, 'Email already in use')
     @api.response(404, 'Invalid input')
+
     def put(self, user_id):
         """ Update user details """
         user_data = api.payload
