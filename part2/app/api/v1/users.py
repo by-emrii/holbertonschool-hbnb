@@ -34,7 +34,7 @@ user_response = api.model('User',{
 
 @api.route('/')
 class UserList(Resource):
-    @api.expect(user_model)
+    @api.expect(user_model, validate=True)
     # @api.marshal_with(user_response, code=201)
     # @api.response(201, 'User successfully created')
     # @api.response(400, 'Email already registered')
@@ -80,7 +80,7 @@ class UserResource(Resource):
         except (TypeError, ValueError) as e:
             return {"error": str(e)}, 404
 
-    @api.expect(user_model)
+    @api.expect(user_model, validate=True)
     @api.response(200, 'User details updated successfully!')
     @api.response(404, 'User not found')
     @api.response(404, 'Email already in use')
