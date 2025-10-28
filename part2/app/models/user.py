@@ -72,7 +72,7 @@ class User(BaseModel):
             raise TypeError("Phone number must be a string")
         value = value.strip()
         if not re.match(phone_regex, value):
-            raise ValueError("Invalid phone number format, and must be 10 digits")
+            raise ValueError("Invalid phone number format, for example: +61(CountryCode) XXXX XXXX")
         self._phone_number = value        
 
     """Encrypted Password"""
