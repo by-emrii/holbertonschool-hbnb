@@ -62,6 +62,25 @@ class UserList(Resource):
         except (TypeError,ValueError) as e:
             return {"error": str(e)}, 400
 
+    # Get all users
+    def get(self):
+        users = facade.get_all_users()
+        if not users:
+            return [], 200
+        result = [
+            {
+            'id': u.id,
+            'first_name': u.first_name,
+            'last_name': u.last_name,
+            'email': u.email,
+            'phone_number': u.phone_number,
+            'profile_img': u.profile_img,
+            'is_admin': u.is_admin
+            }
+            for u in users
+        ]
+        return result
+
 @api.route('/<user_id>')
 class UserResource(Resource):
     @api.response(200, 'User details retrieved successfully')

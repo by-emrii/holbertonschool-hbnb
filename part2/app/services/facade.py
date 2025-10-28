@@ -35,6 +35,10 @@ class HBnBFacade:
     def get_user_by_email(self, email):
         return self.user_service.get_user_by_email(email)
 
+    # gel all users
+    def get_all_users(self):
+        return self.user_service.get_all_users()
+
     # update user
     def update_user(self, user_id, user_data):
         return self.user_service.update_user(user_id, user_data)
