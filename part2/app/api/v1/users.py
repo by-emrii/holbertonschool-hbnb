@@ -18,7 +18,7 @@ user_model = api.model('User', {
     'last_name': fields.String(required=True, description='Last name of the user'),
     'email': fields.String(required=True, description='Email of the user'),
     'phone_number': fields.String(required=True, description='Phone number of the user'),
-    'encrypted_password': fields.String(required=True, description='Enter password')
+    'password': fields.String(required=True, description='Enter password')
 })
 
 # Define the response for user model without pwd
