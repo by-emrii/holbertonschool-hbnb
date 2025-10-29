@@ -8,6 +8,29 @@ class TestReviewEndpoints(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
+    # Create a real user
+        user_resp = self.client.post('/api/v1/users/', json={
+            "first_name": "Test",
+            "last_name": "User",
+            "email": "testuser@example.com",
+            "phone_number": "+6112345678",
+            "encrypted_password": "password123"
+        })
+        self.user_id = user_resp.get_json()["id"]
+
+        # Create a real place
+        place_resp = self.client.post('/api/v1/places/', json={
+            "user_id": self.user_id,
+            "title": "Test Place",
+            "description": "A place for testing",
+            "price": 100,
+            "address": "123 Test St",
+            "latitude": 0.0,
+            "longitude": 0.0,
+            "image_url": "https://example.com/place.jpg"
+        })
+        self.place_id = place_resp.get_json()["id"]
+
     # Create Sample Review 
     def create_sample_review(self):
         """ Helper method to create a sample review """
