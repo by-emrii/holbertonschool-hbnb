@@ -86,14 +86,7 @@ def test_reservation_creation():
 
 """ Test Review Class """
 def test_review_creation():
-    # Create dummy User and Place
-    user = User(
-        first_name="John",
-        last_name="Doe",
-        email="john@example.com",
-        phone_number="+6112345678",
-        encrypted_password="pass123"
-    )
+    user = User(first_name="John", last_name="Doe", email="john@example.com", phone_number="+6112345678", encrypted_password="pass123")
     place = Place(
         user_id=user.id,
         title="Test Place",

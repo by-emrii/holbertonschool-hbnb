@@ -1,6 +1,9 @@
 import unittest
 from app import create_app
+from app.models.user import User
+from app.models.place import Place
 from app.models.review import Review
+from app.services.facade import facade
 
 class TestReviewEndpoints(unittest.TestCase):
     def setUp(self):
@@ -8,40 +11,44 @@ class TestReviewEndpoints(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
-    # Create main user
-        user_resp = self.client.post('/api/v1/users/', json={
-            "first_name": "Test",
-            "last_name": "User",
-            "email": "testuser@example.com",
-            "phone_number": "+6112345678",
-            "encrypted_password": "password123"
-        })
-        self.user_id = user_resp.get_json()["id"]
+        #Create main user in repository
+        self.user = User(
+            first_name="Test",
+            last_name="User",
+            email="testuser@example.com",
+            phone_number="+6112345678",
+            encrypted_password="password123"
+        )
+        facade.user_repo.add(self.user)
+        self.user_id = self.user.id
 
-        # Create another user for forbidden tests
-        another_user_resp = self.client.post('/api/v1/users/', json={
-            "first_name": "Another",
-            "last_name": "User",
-            "email": "anotheruser@example.com",
-            "phone_number": "+6112345679",
-            "encrypted_password": "password123"
-        })
-        self.another_user_id = another_user_resp.get_json()["id"]
+        #Create another user for forbidden tests
+        self.another_user = User(
+            first_name="Another",
+            last_name="User",
+            email="anotheruser@example.com",
+            phone_number="+6112345679",
+            encrypted_password="password123"
+        )
+        facade.user_repo.add(self.another_user)
+        self.another_user_id = self.another_user.id
 
-        # Create a test place
-        place_resp = self.client.post('/api/v1/places/', json={
-            "user_id": self.user_id,
-            "title": "Test Place",
-            "description": "A place for testing",
-            "price": 100,
-            "address": "123 Test St",
-            "latitude": 0.0,
-            "longitude": 0.0,
-            "image_url": "https://example.com/place.jpg"
-        })
-        self.place_id = place_resp.get_json()["id"]
+        #Create a place in repository
+        self.place = Place(
+            user_id=self.user.id,
+            title="Test Place",
+            description="A place for testing",
+            price=100,
+            address="123 Test St",
+            latitude=0.0,
+            longitude=0.0,
+            image_url="https://example.com/place.jpg",
+            amenity_ids=[]
+        )
+        facade.place_repo.add(self.place)
+        self.place_id = self.place.id
 
-    # Helper method to create a sample review
+    #Helper method to create a sample review
     def create_sample_review(self, user_id=None):
         user_id = user_id or self.user_id
         response = self.client.post('/api/v1/reviews/', json={
