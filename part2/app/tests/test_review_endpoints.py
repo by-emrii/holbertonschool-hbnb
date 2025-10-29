@@ -35,8 +35,8 @@ class TestReviewEndpoints(unittest.TestCase):
     def create_sample_review(self):
         """ Helper method to create a sample review """
         response = self.client.post('/api/v1/reviews/', json={
-            "user_id": "user123",
-            "place_id": "place123",
+            "user_id": self.user_id,
+            "place_id": self.place_id,
             "rating": 4,
             "text": "Nice stay!",
             "upload_image": ["https://example.com/image.jpg"]
