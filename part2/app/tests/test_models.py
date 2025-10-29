@@ -90,14 +90,14 @@ def test_review_creation():
         user_id="user123",
         place_id="place123",
         rating=4,
-        comment="Great experience!",
+        text="Great experience!",
         upload_image=["https://example.com/review.jpg"]
     )
 
     assert review.user_id == "user123"
     assert review.place_id == "place123"
     assert review.rating == 4
-    assert review.comment == "Great experience!"
+    assert review.text == "Great experience!"
     assert review.upload_image == ["https://example.com/review.jpg"]
     print("Review creation test passed!")
 
