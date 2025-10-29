@@ -8,46 +8,37 @@ class Review(BaseModel):
     """Represents a review left by a user for a place."""
     ALLOWED_FORMATS = {"JPEG", "PNG"}
 
-    def __init__(self, user_id, place_id, rating, comment, upload_image=None):
+    def __init__(self, user, place, rating, text, upload_image=None):
         super().__init__()
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-
-        self.user_id = user_id
-        self.place_id = place_id
+        self.user = user
+        self.place = place
         self.rating = rating
-        self.comment = comment
+        self.text = text
         self.upload_image = upload_image or []
 
-    #USER ID
+    #USER
     @property
-    def user_id(self):
-        return self._user_id
+    def user(self):
+        return self._user
 
-    @user_id.setter
-    def user_id(self, value):
-        if isinstance(value, int):
-            value = str(value)
-        if not isinstance(value, str):
-            raise TypeError("User ID must be a string")
-        if not value.strip():
-            raise ValueError("User ID cannot be empty")
-        self._user_id = value.strip()
+    @user.setter
+    def user(self, value):
+        from app.models.user import User
+        if not isinstance(value, User):
+            raise TypeError("user must be a User instance")
+        self._user = value
 
-    #PLACE ID
+    #PLACE
     @property
-    def place_id(self):
-        return self._place_id
+    def place(self):
+        return self._place
 
-    @place_id.setter
-    def place_id(self, value):
-        if isinstance(value, int):
-            value = str(value)
-        if not isinstance(value, str):
-            raise TypeError("Place ID must be a string")
-        if not value.strip():
-            raise ValueError("Place ID cannot be empty")
-        self._place_id = value.strip()
+    @place.setter
+    def place(self, value):
+        from app.models.place import Place
+        if not isinstance(value, Place):
+            raise TypeError("place must be a Place instance")
+        self._place = value
 
     #RATING
     @property
@@ -56,30 +47,22 @@ class Review(BaseModel):
 
     @rating.setter
     def rating(self, value):
-        if value is None or value == "":
-            raise ValueError("Rating is required")
-        if not isinstance(value, (int, float)):
-            raise TypeError("Rating must be a number")
+        if not isinstance(value, int):
+            raise TypeError("Rating must be an integer")
         if not (1 <= value <= 5):
             raise ValueError("Rating must be between 1 and 5")
-        self._rating = float(value)
+        self._rating = value
 
-    #COMMENT
+    #TEXT
     @property
-    def comment(self):
-        return self._comment
+    def text(self):
+        return self._text
 
-    @comment.setter
-    def comment(self, value):
-        if value is None:
-            self._comment = None
-            return
-        if not isinstance(value, str):
-            raise TypeError("Comment must be a string")
-        value = value.strip()
-        if len(value) > 300:
-            raise ValueError("Comment cannot exceed 300 characters")
-        self._comment = value
+    @text.setter
+    def text(self, value):
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError("Text is required and cannot be empty")
+        self._text = value.strip()
     
     #UPLOAD IMAGE 
     @property
@@ -96,13 +79,10 @@ class Review(BaseModel):
             raise TypeError("upload_image must be a list of image URLs or files")
 
         validated_images = []
-        for img in images: # Allows URLs
+        for img in images:
             if isinstance(img, str):
                 validated_images.append(img)
-                continue
-
-            # Allows filename, bytes
-            if isinstance(img, tuple) and len(img) == 2:
+            elif isinstance(img, tuple) and len(img) == 2:
                 filename, img_bytes = img
                 try:
                     with PILImage.open(BytesIO(img_bytes)) as pil_img:
@@ -111,41 +91,35 @@ class Review(BaseModel):
                 except Exception:
                     raise ValueError("Invalid image data or unsupported format")
                 validated_images.append((filename, img_bytes))
-                continue
-
-            raise TypeError("Each image must be a string URL or a tuple (filename, bytes)")
-        
+            else:
+                raise TypeError("Each image must be a string URL or a tuple (filename, bytes)")
         self._upload_image = validated_images
 
     #Update helper
     def update_from_dict(self, data: dict):
-        """Update review fields with partial data."""
         if "rating" in data:
             self.rating = data["rating"]
-        if "comment" in data:
-            self.comment = data["comment"]
+        if "text" in data:
+            self.text = data["text"]
         if "upload_image" in data:
             self.upload_image = data["upload_image"]
         self.updated_at = datetime.now()
 
     #Serialisation for API
-    def save(self):
+    def to_dict(self):
         """Return a JSON-serializable representation of the review."""
         # generate virtual URLs only for stored images (tuples)
-        image_urls = []
-        for i, img in enumerate(self.upload_image):
-            if isinstance(img, str):
-                image_urls.append(img)
-            else:
-                image_urls.append(f"/reviews/{self.id}/images/{i}")
-
+        image_urls = [
+            img if isinstance(img, str) else f"/reviews/{self.id}/images/{i}"
+            for i, img in enumerate(self.upload_image)
+        ]
         return {
-            "id": getattr(self, "id", None),
-            "user_id": self.user_id,
-            "place_id": self.place_id,
+            "id": self.id,
+            "user_id": self.user.id,
+            "place_id": self.place.id,
             "rating": self.rating,
-            "comment": self.comment,
+            "text": self.text,
             "upload_image": image_urls,
-            "created_at": getattr(self, "created_at", None).isoformat() if getattr(self, "created_at", None) else None,
-            "updated_at": getattr(self, "updated_at", None).isoformat() if getattr(self, "updated_at", None) else None,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat(),
         }

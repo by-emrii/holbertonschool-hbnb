@@ -85,23 +85,24 @@ def test_reservation_creation():
     print("Reservation creation test passed!")
 
 """ Test Review Class """
-def test_review_creation():
-    review = Review(
-        user_id="user123",
-        place_id="place123",
-        rating=4,
-        comment="Good Review",
-        upload_image=["https://example.com/image.jpg"]
-    )
-
-    #check attributes
-    assert review.user_id == "user123"
-    assert review.place_id == "place123"
-    assert review.rating == 4
-    assert review.comment == "Good Review"
-    assert review.upload_image == ["https://example.com/image.jpg"]
+def test_review_creation(client):
+    """ Test creating a review via API """
+    response = client.post('/api/v1/reviews/', json={
+        "user_id": "user123",
+        "place_id": "place123",
+        "rating": 4,
+        "comment": "Good Review",
+        "upload_image": ["https://example.com/image.jpg"]
+    })
     
-    print("Review creation test passed!")
+    data = response.get_json()
+
+    assert response.status_code == 201
+    assert data["user_id"] == "user123"
+    assert data["place_id"] == "place123"
+    assert data["rating"] == 4
+    assert data["comment"] == "Good Review"
+    assert data["upload_image"] == ["https://example.com/image.jpg"]
 
 
 test_user_creation()
