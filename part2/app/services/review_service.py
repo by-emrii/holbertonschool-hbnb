@@ -49,9 +49,17 @@ class ReviewService:
         return [r for r in self.review_repo.get_all() if r.place.id == place_id]
     
     #UPDATE
-    def update_review(self, review_id, review_data):
-        """Update a review if the current user is the author."""
+    def update_review(self, review_id, review_data, current_user_id=None):
+        """
+        Update a review if the current user is the author.
+        current_user_id must be passed in the payload for authorization check.
+        """
         review = self.get_review_by_id(review_id)
+
+        # Ownership check
+        if current_user_id and review.user.id != current_user_id:
+            raise PermissionError("You are not allowed to update this review.")
+
         review.update_from_dict(review_data)
         self.review_repo.update(review_id, review)
         return review
@@ -69,8 +77,13 @@ class ReviewService:
         return sorted(reviews, key=lambda r: r.created_at, reverse=True)[:limit]
     
     #DELETE
-    def delete_review(self, review_id):
+    def delete_review(self, review_id, current_user_id=None):
         """Delete a review by ID."""
         review = self.get_review_by_id(review_id)
+
+        # Ownership check
+        if current_user_id and review.user.id != current_user_id:
+            raise PermissionError("You are not allowed to delete this review.")
+
         self.review_repo.delete(review_id)
         return {"message": "Review deleted successfully"}

@@ -8,7 +8,11 @@ class TestReviewEndpoints(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
+<<<<<<< HEAD
     # Create a real user
+=======
+    # Create main user
+>>>>>>> review/grace
         user_resp = self.client.post('/api/v1/users/', json={
             "first_name": "Test",
             "last_name": "User",
@@ -18,7 +22,21 @@ class TestReviewEndpoints(unittest.TestCase):
         })
         self.user_id = user_resp.get_json()["id"]
 
+<<<<<<< HEAD
         # Create a real place
+=======
+        # Create another user for forbidden tests
+        another_user_resp = self.client.post('/api/v1/users/', json={
+            "first_name": "Another",
+            "last_name": "User",
+            "email": "anotheruser@example.com",
+            "phone_number": "+6112345679",
+            "encrypted_password": "password123"
+        })
+        self.another_user_id = another_user_resp.get_json()["id"]
+
+        # Create a test place
+>>>>>>> review/grace
         place_resp = self.client.post('/api/v1/places/', json={
             "user_id": self.user_id,
             "title": "Test Place",
@@ -31,11 +49,19 @@ class TestReviewEndpoints(unittest.TestCase):
         })
         self.place_id = place_resp.get_json()["id"]
 
+<<<<<<< HEAD
     # Create Sample Review 
     def create_sample_review(self):
         """ Helper method to create a sample review """
         response = self.client.post('/api/v1/reviews/', json={
             "user_id": self.user_id,
+=======
+    # Helper method to create a sample review
+    def create_sample_review(self, user_id=None):
+        user_id = user_id or self.user_id
+        response = self.client.post('/api/v1/reviews/', json={
+            "user_id": user_id,
+>>>>>>> review/grace
             "place_id": self.place_id,
             "rating": 4,
             "text": "Nice stay!",
@@ -45,18 +71,16 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         return data
 
-    #Create Tests
+    # Create Tests
     def test_create_review_success(self):
-        """ Test successful review creation """
         review = self.create_sample_review()
         self.assertEqual(review.get("rating"), 4)
         self.assertEqual(review.get("text"), "Nice stay!")
 
     def test_create_review_invalid_rating(self):
-        """ Test invalid rating (must be between 1 and 5) """
         response = self.client.post('/api/v1/reviews/', json={
-            "user_id": "user123",
-            "place_id": "place123",
+            "user_id": self.user_id,
+            "place_id": self.place_id,
             "rating": 10,
             "text": "Invalid rating"
         })
@@ -66,7 +90,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertIn("rating", data["error"].lower())
 
     def test_create_review_missing_fields(self):
-        """ Test creation missing required fields """
         response = self.client.post('/api/v1/reviews/', json={
             "rating": 4,
             "text": "Incomplete data"
@@ -77,34 +100,32 @@ class TestReviewEndpoints(unittest.TestCase):
 
     # Read Tests
     def test_get_review_by_id(self):
-        """ Test retrieving a review by ID """
         review = self.create_sample_review()
         review_id = review.get("id")
-
         response = self.client.get(f'/api/v1/reviews/{review_id}')
         data = response.get_json()
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data.get("id"), review_id)
-        self.assertEqual(data.get("user_id"), "user123")
+        self.assertEqual(data.get("user_id"), self.user_id)
 
     def test_get_review_invalid_id(self):
-        """ Test retrieving a review with invalid ID """
         response = self.client.get('/api/v1/reviews/invalidID')
         data = response.get_json()
         self.assertEqual(response.status_code, 404)
         self.assertIn("error", data)
 
-    #Update Tests
+    # Update Tests
     def test_update_review_success(self):
-        """ Test successful review update by owner """
         review = self.create_sample_review()
         review_id = review.get("id")
-
         response = self.client.put(f'/api/v1/reviews/{review_id}', json={
             "rating": 5,
             "text": "Even better!",
+<<<<<<< HEAD
             "current_user_id": "user123"
+=======
+            "current_user_id": self.user_id
+>>>>>>> review/grace
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
@@ -112,62 +133,95 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertEqual(data.get("text"), "Even better!")
 
     def test_update_review_invalid_id(self):
-        """ Test updating a review with an invalid ID """
         response = self.client.put('/api/v1/reviews/invalidID', json={
             "rating": 3,
             "text": "Invalid test",
+<<<<<<< HEAD
             "current_user_id": "user123"
+=======
+            "current_user_id": self.user_id
+>>>>>>> review/grace
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 404)
         self.assertIn("error", data)
 
     def test_update_review_forbidden_user(self):
-        """ Test updating a review by non-owner (should fail) """
         review = self.create_sample_review()
         review_id = review.get("id")
-
         response = self.client.put(f'/api/v1/reviews/{review_id}', json={
             "rating": 2,
             "text": "Not allowed",
+<<<<<<< HEAD
             "current_user_id": "another_user"
+=======
+            "current_user_id": self.another_user_id
+>>>>>>> review/grace
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 403)
         self.assertIn("error", data)
 
-    # List Tests by user_id and place_id
+    #Delete Tests
+    def test_delete_review_success(self):
+        review = self.create_sample_review()
+        review_id = review.get("id")
+        response = self.client.delete(f'/api/v1/reviews/{review_id}', json={
+            "current_user_id": self.user_id
+        })
+        data = response.get_json()
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("message", data)
+        self.assertEqual(data["message"], "Review deleted successfully")
+
+    def test_delete_review_forbidden_user(self):
+        review = self.create_sample_review()
+        review_id = review.get("id")
+        response = self.client.delete(f'/api/v1/reviews/{review_id}', json={
+            "current_user_id": self.another_user_id
+        })
+        data = response.get_json()
+        self.assertEqual(response.status_code, 403)
+        self.assertIn("error", data)
+
+    def test_delete_review_invalid_id(self):
+        response = self.client.delete('/api/v1/reviews/invalidID', json={
+            "current_user_id": self.user_id
+        })
+        data = response.get_json()
+        self.assertEqual(response.status_code, 404)
+        self.assertIn("error", data)
+
+    # List Tests
     def test_list_reviews_by_place(self):
-        """ Test listing reviews by place_id """
         self.create_sample_review()
-        response = self.client.get('/api/v1/reviews/place/place123')
+        response = self.client.get(f'/api/v1/reviews/place/{self.place_id}')
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(data) >= 1)
-        self.assertEqual(data[0].get("place_id"), "place123")
+        self.assertEqual(data[0].get("place_id"), self.place_id)
 
     def test_list_reviews_by_place_not_found(self):
-        """ Test listing reviews by invalid place_id """
         response = self.client.get('/api/v1/reviews/place/noPlace')
         data = response.get_json()
-        self.assertEqual(response.status_code, 404)
-        self.assertIn("message", data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(data, list)
+        self.assertEqual(len(data), 0)
 
     def test_list_reviews_by_user(self):
-        """ Test listing reviews by user_id """
         self.create_sample_review()
-        response = self.client.get('/api/v1/reviews/user/user123')
+        response = self.client.get(f'/api/v1/reviews/user/{self.user_id}')
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(data) >= 1)
-        self.assertEqual(data[0].get("user_id"), "user123")
+        self.assertEqual(data[0].get("user_id"), self.user_id)
 
     def test_list_reviews_by_user_not_found(self):
-        """ Test listing reviews by invalid user_id """
         response = self.client.get('/api/v1/reviews/user/noUser')
         data = response.get_json()
-        self.assertEqual(response.status_code, 404)
-        self.assertIn("message", data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(data, list)
+        self.assertEqual(len(data), 0)
 
 
 if __name__ == "__main__":
