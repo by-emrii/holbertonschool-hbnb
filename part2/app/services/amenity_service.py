@@ -30,7 +30,7 @@ class AmenityService:
     """ Get all amenities """
     def get_all_amenities(self):
         if self.amenity_repo.get_all() is None:
-            raise ValueError('404: No amenities found') 
+            raise ValueError('No amenities found') 
         else:
             return self.amenity_repo.get_all()
 
