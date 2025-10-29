@@ -15,7 +15,7 @@ class TestReviewEndpoints(unittest.TestCase):
             "user_id": "user123",
             "place_id": "place123",
             "rating": 4,
-            "comment": "Nice stay!",
+            "text": "Nice stay!",
             "upload_image": ["https://example.com/image.jpg"]
         })
         data = response.get_json()
@@ -27,7 +27,7 @@ class TestReviewEndpoints(unittest.TestCase):
         """ Test successful review creation """
         review = self.create_sample_review()
         self.assertEqual(review.get("rating"), 4)
-        self.assertEqual(review.get("comment"), "Nice stay!")
+        self.assertEqual(review.get("text"), "Nice stay!")
 
     def test_create_review_invalid_rating(self):
         """ Test invalid rating (must be between 1 and 5) """
@@ -35,7 +35,7 @@ class TestReviewEndpoints(unittest.TestCase):
             "user_id": "user123",
             "place_id": "place123",
             "rating": 10,
-            "comment": "Invalid rating"
+            "text": "Invalid rating"
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 400)
@@ -46,7 +46,7 @@ class TestReviewEndpoints(unittest.TestCase):
         """ Test creation missing required fields """
         response = self.client.post('/api/v1/reviews/', json={
             "rating": 4,
-            "comment": "Incomplete data"
+            "text": "Incomplete data"
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 400)
@@ -80,19 +80,19 @@ class TestReviewEndpoints(unittest.TestCase):
 
         response = self.client.put(f'/api/v1/reviews/{review_id}', json={
             "rating": 5,
-            "comment": "Even better!",
+            "text": "Even better!",
             "current_user_id": "user123"
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data.get("rating"), 5)
-        self.assertEqual(data.get("comment"), "Even better!")
+        self.assertEqual(data.get("text"), "Even better!")
 
     def test_update_review_invalid_id(self):
         """ Test updating a review with an invalid ID """
         response = self.client.put('/api/v1/reviews/invalidID', json={
             "rating": 3,
-            "comment": "Invalid test",
+            "text": "Invalid test",
             "current_user_id": "user123"
         })
         data = response.get_json()
@@ -106,7 +106,7 @@ class TestReviewEndpoints(unittest.TestCase):
 
         response = self.client.put(f'/api/v1/reviews/{review_id}', json={
             "rating": 2,
-            "comment": "Not allowed",
+            "text": "Not allowed",
             "current_user_id": "another_user"
         })
         data = response.get_json()
