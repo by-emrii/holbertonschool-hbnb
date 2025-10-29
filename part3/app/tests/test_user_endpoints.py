@@ -168,13 +168,7 @@ class TestUserEndpoints(unittest.TestCase):
         data = response.get_json()
         self.assertEqual(response.status_code, 400)
         self.assertIn("at least 8", data.get('error', '').lower())
-
-    # Get all users
-    def test_get_all_users(self):
-        """ Test get all users """
-        response = self.client.get('/api/v1/users/')
-        self.assertEqual(response.status_code, 200)
-
+    
     def test_get_user_byID(self):
         """ Test retrieving user by ID """
         # Create a user

@@ -16,11 +16,11 @@ class PlaceService():
         if "profile_img" in place_data and "image_url" not in place_data:
              place_data["image_url"] = place_data.pop("profile_img")
 
-        # Validate owner
-        owner_id = place_data.get("owner_id")
+        # Validate user_id and owner
+        owner_id = place_data.get("user_id")
         if self.user_repo and owner_id:
             if self.user_repo.get(owner_id) is None:
-                raise ValueError("Owner (owner_id) not found")
+                raise ValueError("Owner (user_id) not found")
 
         # Remove duplicate amenity_ids
         if "amenity_ids" in place_data and place_data["amenity_ids"] is not None:

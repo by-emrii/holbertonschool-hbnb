@@ -5,7 +5,7 @@ api = Namespace('places', description='Place operations')
 
 # Create / Update 
 place_create_model = api.model('PlaceCreate', {
-    'owner_id':     fields.String(required=True,  description='Owner id'),
+    'user_id':     fields.String(required=True,  description='Owner user id'),
     'title':       fields.String(required=True,  description='Listing title'),
     'description': fields.String(required=False, description='Description'),
     'price':       fields.Float(required=True,   description='Price (e.g., per night)'),
@@ -30,7 +30,7 @@ place_update_model = api.model('PlaceUpdate', {
 # Place response model
 place_response = api.model('Place', {
     'id':          fields.String,
-    'owner_id':     fields.String,
+    'user_id':     fields.String,
     'title':       fields.String,
     'description': fields.String,
     'price':       fields.Float,

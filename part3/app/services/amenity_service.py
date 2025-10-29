@@ -25,12 +25,12 @@ class AmenityService:
         if check_amenity:
             return check_amenity
         else:
-            raise ValueError(f"Amenity id {amenity_id} does not exist")
+            raise ValueError(f"404: Amenity id {amenity_id} does not exist")
         
     """ Get all amenities """
     def get_all_amenities(self):
         if self.amenity_repo.get_all() is None:
-            raise ValueError('No amenities found') 
+            raise ValueError('404: No amenities found') 
         else:
             return self.amenity_repo.get_all()
 
@@ -39,7 +39,7 @@ class AmenityService:
         # Validate input data
         name = amenity_data.get("name")
         if not name:
-            raise ValueError('Invalid Input data - name is required')
+            raise ValueError('400: Invalid Input data - name is required')
         
         # get amenity
         existing_amenity = self.get_amenity(amenity_id)
@@ -47,4 +47,4 @@ class AmenityService:
             self.amenity_repo.update(amenity_id, amenity_data)
             return existing_amenity
         else:
-            raise ValueError('Amenity not found')
+            raise ValueError('404: Amenity not found')

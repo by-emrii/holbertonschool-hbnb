@@ -72,8 +72,19 @@ class TestPlaceEndpoints(unittest.TestCase):
 
     def test_get_all_places(self):
         """ Test get all places """
+        # create at least one place
+        created = self.create_sample_place()
+        place_id = created.get_json().get("id")
+
+        # Act: get all places
         response = self.client.get('/api/v1/places/')
         self.assertEqual(response.status_code, 200)
+
+        # Assert: check returned data is a list and contains the created place
+        data = response.get_json()
+        self.assertIsInstance(data, list)
+        ids = [p.get("id") for p in data]
+        self.assertIn(place_id, ids)
 
     def test_update_place(self):
         create_response = self.create_sample_place()

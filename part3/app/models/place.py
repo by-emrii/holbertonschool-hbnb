@@ -4,11 +4,11 @@ from app.models.base_model import BaseModel
 
 class Place(BaseModel):
     def __init__(
-            self, owner_id, title, price,
-            address, latitude, longitude, image_url=None, amenity_ids=None, description=False
+            self, user_id, title, description, price,
+            address, latitude, longitude, image_url=None, amenity_ids=None
     ):
         super().__init__()
-        self.owner_id = owner_id
+        self.user_id = user_id
         self.title = title
         self.description = description
         self.price = price
@@ -19,20 +19,20 @@ class Place(BaseModel):
         self.amenity_ids = amenity_ids or []
 
     """Getter and Setter"""
-    """ Owner ID """
+    """ User ID """
     @property
-    def owner_id(self):
-        return self._owner_id
+    def user_id(self):
+        return self._user_id
 
-    @owner_id.setter
-    def owner_id(self, value):
+    @user_id.setter
+    def user_id(self, value):
         if isinstance(value, int):    # in case of passed id is int
             value = str(value)
         if not isinstance(value, str):
-            raise TypeError("Owner ID must be a string")
+            raise TypeError("User ID must be a string")
         if not value.strip():
-            raise ValueError("Owner ID cannot be empty")
-        self._owner_id = value.strip()
+            raise ValueError("User ID cannot be empty")
+        self._user_id = value.strip()
 
     """ Place title """
     @property
@@ -71,12 +71,11 @@ class Place(BaseModel):
 
     @price.setter
     def price(self, value):
-        if not isinstance(value, (float)):
-            raise TypeError("Price must be a positive number")
+        if not isinstance(value, (int, float)):
+            raise TypeError("Price must be a number")
         if value < 0:
-            value = float(value)
-            raise ValueError("Price must be positive number")
-        self._price = value
+            raise ValueError("Price must be positive integer")
+        self._price = float(value)
 
     """ Address """
     @property
@@ -99,10 +98,10 @@ class Place(BaseModel):
 
     @latitude.setter
     def latitude(self, value):
-        if not isinstance(value, (float)):
+        if not isinstance(value, (int, float)):
             raise TypeError("Latitude must be a number")
-        if not (-90.0 <= value <= 90.0):
-            raise ValueError("Latitude must be between -90.0 and 90.0")
+        if not (-90 <= value <= 90):
+            raise ValueError("Latitude must be between -90 and 90")
         self._latitude = float(value)
 
     """ Longitude """
@@ -112,10 +111,10 @@ class Place(BaseModel):
 
     @longitude.setter
     def longitude(self, value):
-        if not isinstance(value, (float)):
+        if not isinstance(value, (int, float)):
             raise TypeError("Longitude must be a number")
-        if not (-180.0 <= value <= 180.0):
-            raise ValueError("Longitude must be between -180.0 and 180.0")
+        if not (-180 <= value <= 180):
+            raise ValueError("Longitude must be between -180 and 180")
         self._longitude = float(value)
 
     """ Image URL """

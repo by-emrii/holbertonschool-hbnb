@@ -8,15 +8,15 @@ facade = HBnBFacade()
 # Define the Amenity model blueprint for validation and documentation
 amenity_model = api.model('Amenity', {
     'id': fields.String(readonly=True, description='Amenity ID'),
-    'name': fields.String(required=True, description='Name of the amenity', min_length=1, max_length=50),
-    'description': fields.String(required=False, description='Additional details of the amenity', max_length=100)
+    'name': fields.String(required=True, description='Name of the amenity'),
+    'description': fields.String(required=False, description='Additional details of the amenity')
     })
 
 # create root endpoint using Resource
 @api.route('/')
 class AmenityList(Resource):
     """ Collection level operations """
-    @api.expect(amenity_model, validate=True)
+    @api.expect(amenity_model)
     @api.response(201, 'Amenity successfully created')
     @api.response(400, 'Invalid input data')
     def post(self):
@@ -31,6 +31,7 @@ class AmenityList(Resource):
             return {'error': str(e)}, 400
         
 
+    @api.expect(amenity_model)
     @api.response(200, 'List of amenities retrieved successfully')
     @api.response(404, 'Amenities not found')
     def get(self):
@@ -58,7 +59,7 @@ class AmenityResource(Resource):
             return {'error': str(e)}, 404
             
 
-    @api.expect(amenity_model, validate=True)
+    @api.expect(amenity_model)
     @api.response(200, 'Amenity updated successfully')
     @api.response(404, 'Amenity not found')
     @api.response(400, 'Invalid input data')
