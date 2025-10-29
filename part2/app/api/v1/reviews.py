@@ -17,7 +17,8 @@ review_create_model = api.model('ReviewCreate', {
 review_update_model = api.model('ReviewUpdate', {
     "rating": fields.Integer(required=False, min=1, max=5),
     "text": fields.String(required=False, max_length=300),
-    "upload_image": fields.List(fields.String, required=False)
+    "upload_image": fields.List(fields.String, required=False),
+    "current_user_id": fields.String(required=True)  # ownership check
 })
 
 # Model for response
@@ -49,24 +50,40 @@ class ReviewList(Resource):
 """Get, update, deleted review by id"""
 @api.route('/<string:review_id>')
 class ReviewResource(Resource):
-    @api.expect(review_update_model, validate=True)
+
     @api.marshal_with(review_response_model, code=200)
-    def put(self, review_id):
-        """Update a review"""
-        data = api.payload or {}
+    def get(self, review_id):
+        """Get a single review by ID"""
         try:
-            review = facade.update_review(review_id, data)
+            review = facade.get_review_by_id(review_id)
             return review.to_dict(), 200
         except ValueError as e:
             return {"error": str(e)}, 404
 
+    @api.expect(review_update_model, validate=True)
+    @api.marshal_with(review_response_model, code=200)
+    def put(self, review_id):
+        """Update a review (owner only)"""
+        data = api.payload or {}
+        current_user_id = data.pop("current_user_id", None)
+        try:
+            review = facade.update_review(review_id, data, current_user_id)
+            return review.to_dict(), 200
+        except PermissionError as e:
+            return {"error": str(e)}, 403
+        except ValueError as e:
+            return {"error": str(e)}, 404
+        
     @api.response(200, 'Review successfully deleted')
     @api.response(404, 'Review not found')
     def delete(self, review_id):
-        """Delete a review"""
+        """Delete a review (owner only)"""
+        current_user_id = request.args.get("current_user_id")
         try:
-            result = facade.delete_review(review_id)
+            result = facade.delete_review(review_id, current_user_id)
             return result, 200
+        except PermissionError as e:
+            return {"error": str(e)}, 403
         except ValueError as e:
             return {"error": str(e)}, 404
     
@@ -77,8 +94,7 @@ class ReviewsByPlace(Resource):
     def get(self, place_id):
         """List all reviews for a specific place"""
         reviews = facade.get_reviews_for_place(place_id)
-        if not reviews:
-            return {"message": f"No reviews found for place_id '{place_id}'"}, 404
+        # Return empty list if none
         return [r.to_dict() for r in reviews], 200
 
 """List review of user"""
@@ -88,6 +104,5 @@ class ReviewsByUser(Resource):
     def get(self, user_id):
         """List all reviews made by a specific user"""
         reviews = facade.get_reviews_by_user(user_id)
-        if not reviews:
-            return {"message": f"No reviews found for user_id '{user_id}'"}, 404
+        # Return empty list if none
         return [r.to_dict() for r in reviews], 200

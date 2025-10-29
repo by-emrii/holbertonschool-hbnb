@@ -86,19 +86,38 @@ def test_reservation_creation():
 
 """ Test Review Class """
 def test_review_creation():
+    # Create dummy User and Place
+    user = User(
+        first_name="John",
+        last_name="Doe",
+        email="john@example.com",
+        phone_number="+6112345678",
+        encrypted_password="pass123"
+    )
+    place = Place(
+        user_id=user.id,
+        title="Test Place",
+        description="Nice place",
+        price=100.0,
+        address="123 Test St",
+        latitude=0.0,
+        longitude=0.0,
+        image_url="https://example.com/place.jpg",
+        amenity_ids=[]
+    )
     review = Review(
-        user_id="user123",
-        place_id="place123",
+        user=user,
+        place=place,
         rating=4,
         text="Great experience!",
         upload_image=["https://example.com/review.jpg"]
     )
-
-    assert review.user_id == "user123"
-    assert review.place_id == "place123"
+    assert review.user == user
+    assert review.place == place
     assert review.rating == 4
     assert review.text == "Great experience!"
     assert review.upload_image == ["https://example.com/review.jpg"]
+    
     print("Review creation test passed!")
 
 
