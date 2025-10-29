@@ -6,7 +6,7 @@ api = Namespace("reviews", description="Review operations")
 
 # Model for creating a review
 review_create_model = api.model('ReviewCreate', {
-    "user_id": fields.String(required=True),
+    "owner_id": fields.String(required=True),
     "place_id": fields.String(required=True),
     "rating": fields.Integer(required=True, min=1, max=5),
     "text": fields.String(required=True),
@@ -24,7 +24,7 @@ review_update_model = api.model('ReviewUpdate', {
 # Model for response
 review_response_model = api.model('Review', {
     "id": fields.String,
-    "user_id": fields.String,
+    "owner_id": fields.String,
     "place_id": fields.String,
     "rating": fields.Integer,
     "text": fields.String,
@@ -98,11 +98,11 @@ class ReviewsByPlace(Resource):
         return [r.to_dict() for r in reviews], 200
 
 """List review of user"""
-@api.route('/user/<string:user_id>')
+@api.route('/user/<string:owner_id>')
 class ReviewsByUser(Resource):
     @api.marshal_list_with(review_response_model, code=200)
-    def get(self, user_id):
+    def get(self, owner_id):
         """List all reviews made by a specific user"""
-        reviews = facade.get_reviews_by_user(user_id)
+        reviews = facade.get_reviews_by_user(owner_id)
         # Return empty list if none
         return [r.to_dict() for r in reviews], 200

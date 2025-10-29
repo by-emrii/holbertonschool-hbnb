@@ -5,28 +5,28 @@ from io import BytesIO
 from PIL import Image as PILImage
 
 class Review(BaseModel):
-    """Represents a review left by a user for a place."""
+    """Represents a review left by a owner for a place."""
     ALLOWED_FORMATS = {"JPEG", "PNG"}
 
-    def __init__(self, user, place, rating, text, upload_image=None):
+    def __init__(self, owner, place, rating, text, upload_image=None):
         super().__init__()
-        self.user = user
+        self.owner = owner
         self.place = place
         self.rating = rating
         self.text = text
         self.upload_image = upload_image or []
 
-    #USER
+    #OWNER
     @property
-    def user(self):
-        return self._user
+    def owner(self):
+        return self._owner
 
-    @user.setter
-    def user(self, value):
+    @owner.setter
+    def owner(self, value):
         from app.models.user import User
         if not isinstance(value, User):
-            raise TypeError("user must be a User instance")
-        self._user = value
+            raise TypeError("owner must be a User instance")
+        self._owner = value
 
     #PLACE
     @property
@@ -115,7 +115,7 @@ class Review(BaseModel):
         ]
         return {
             "id": self.id,
-            "user_id": self.user.id,
+            "owner_id": self.owner.id,
             "place_id": self.place.id,
             "rating": self.rating,
             "text": self.text,

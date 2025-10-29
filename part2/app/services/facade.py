@@ -105,9 +105,9 @@ class HBnBFacade:
         """Retrieve a single review by ID."""
         return self.review_service.get_review_by_id(review_id)
 
-    def get_reviews_by_user(self, user_id):
-        """Fetch all reviews for a specific user."""
-        return self.review_service.get_reviews_by_user(user_id)
+    def get_reviews_by_owner(self, owner_id):
+        """Fetch all reviews for a specific owner."""
+        return self.review_service.get_reviews_by_owner(owner_id)
 
     def get_reviews_for_place(self, place_id):
         """Fetch all reviews for a specific place."""
