@@ -9,7 +9,7 @@ review_create_model = api.model('ReviewCreate', {
     "user_id": fields.String(required=True),
     "place_id": fields.String(required=True),
     "rating": fields.Integer(required=True, min=1, max=5),
-    "text": fields.String(required=True, max_length=300),
+    "text": fields.String(required=True),
     "upload_image": fields.List(fields.String, required=False)
 })
 

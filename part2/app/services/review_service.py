@@ -46,7 +46,7 @@ class ReviewService:
 
     def get_reviews_for_place(self, place_id):
         """Fetch all reviews for a specific place (by ID)."""
-        rreturn [r for r in self.review_repo.get_all() if r.place.id == place_id]
+        return [r for r in self.review_repo.get_all() if r.place.id == place_id]
     
     #UPDATE
     def update_review(self, review_id, review_data):

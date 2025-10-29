@@ -69,7 +69,6 @@ class TestReviewEndpoints(unittest.TestCase):
         """ Test retrieving a review with invalid ID """
         response = self.client.get('/api/v1/reviews/invalidID')
         data = response.get_json()
-
         self.assertEqual(response.status_code, 404)
         self.assertIn("error", data)
 
@@ -85,7 +84,6 @@ class TestReviewEndpoints(unittest.TestCase):
             "current_user_id": "user123"
         })
         data = response.get_json()
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data.get("rating"), 5)
         self.assertEqual(data.get("comment"), "Even better!")
@@ -98,7 +96,6 @@ class TestReviewEndpoints(unittest.TestCase):
             "current_user_id": "user123"
         })
         data = response.get_json()
-
         self.assertEqual(response.status_code, 404)
         self.assertIn("error", data)
 
@@ -113,7 +110,6 @@ class TestReviewEndpoints(unittest.TestCase):
             "current_user_id": "another_user"
         })
         data = response.get_json()
-
         self.assertEqual(response.status_code, 403)
         self.assertIn("error", data)
 
@@ -123,7 +119,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.create_sample_review()
         response = self.client.get('/api/v1/reviews/place/place123')
         data = response.get_json()
-
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(data) >= 1)
         self.assertEqual(data[0].get("place_id"), "place123")
@@ -132,7 +127,6 @@ class TestReviewEndpoints(unittest.TestCase):
         """ Test listing reviews by invalid place_id """
         response = self.client.get('/api/v1/reviews/place/noPlace')
         data = response.get_json()
-
         self.assertEqual(response.status_code, 404)
         self.assertIn("message", data)
 
@@ -141,7 +135,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.create_sample_review()
         response = self.client.get('/api/v1/reviews/user/user123')
         data = response.get_json()
-
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(data) >= 1)
         self.assertEqual(data[0].get("user_id"), "user123")
@@ -150,7 +143,6 @@ class TestReviewEndpoints(unittest.TestCase):
         """ Test listing reviews by invalid user_id """
         response = self.client.get('/api/v1/reviews/user/noUser')
         data = response.get_json()
-
         self.assertEqual(response.status_code, 404)
         self.assertIn("message", data)
 
