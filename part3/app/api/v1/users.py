@@ -54,10 +54,7 @@ class UserList(Resource):
             new_user = facade.create_user(user_data)
             return {
                 'id': new_user.id,
-                'first_name': new_user.first_name, 
-                'last_name': new_user.last_name, 
-                'email': new_user.email, 
-                'phone_number': new_user.phone_number
+                'message': "User registered sucessfully"
                 }, 201
         except (TypeError,ValueError) as e:
             return {"error": str(e)}, 400

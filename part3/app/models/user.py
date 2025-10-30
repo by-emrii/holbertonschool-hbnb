@@ -1,5 +1,8 @@
 from app.models.base_model import BaseModel
+from flask_bcrypt import Bcrypt
 import re
+
+bcrypt = Bcrypt()
 
 class User(BaseModel):
     def __init__(self, first_name, last_name, email, password, phone_number, profile_img=None, is_admin=False):
@@ -7,7 +10,7 @@ class User(BaseModel):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.password = password
+        self.hash_password(password)
         self.phone_number = phone_number
         self.profile_img = profile_img
         self.is_admin = is_admin
@@ -76,17 +79,24 @@ class User(BaseModel):
         self._phone_number = value        
 
     """Password"""
-    @property
-    def password(self):
-        return self.__password
+    # @property
+    # def password(self):
+    #     return self.__password
     
-    @password.setter
-    def password(self, value):
-        if not isinstance(value, str):
-            raise TypeError("Password must be a string")
-        value = value.strip()
+    # @password.setter
+    # def password(self, value):
+    #     if not isinstance(value, str):
+    #         raise TypeError("Password must be a string")
+    #     value = value.strip()
 
-        #password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$"
-        if len(value) < 8:
-            raise ValueError("Password must be at least 8 characters")
-        self.__password = value        
+    #     password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$"
+    #     if len(value) < 8:
+    #         raise ValueError("Password must be at least 8 characters")
+    #     self.__password = value
+
+    def hash_password(self, password): 
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def verify_password(self, password):
+        """ Verifies if the provided password matches the hashed password."""
+        return bcrypt.check_password_hash(self.password, password)
