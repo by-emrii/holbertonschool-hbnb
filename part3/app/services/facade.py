@@ -129,4 +129,11 @@ class HBnBFacade:
         """Fetch the most recent reviews for a place."""
         return self.review_service.get_recent_reviews(place_id, limit)
 
+    # Place add_amenity entry point
+    def add_amenity_to_place(self, place_id, amenity_id):
+        return self.place_service.add_amenity(place_id, amenity_id)
+    # Place add_review entry
+    def add_review_to_place(self, place_id, review_id):
+        return self.place_service.add_review(place_id, review_id)
+
 facade = HBnBFacade()

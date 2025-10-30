@@ -5,7 +5,7 @@ from app.models.base_model import BaseModel
 class Place(BaseModel):
     def __init__(
             self, owner_id, title, price,
-            address, latitude, longitude, image_url=None, amenity_ids=None, description=False
+            address, latitude, longitude, image_url=None, amenity_ids=None, description=False, review_ids=None
     ):
         super().__init__()
         self.owner_id = owner_id
@@ -17,6 +17,7 @@ class Place(BaseModel):
         self.longitude = longitude
         self.image_url = image_url
         self.amenity_ids = amenity_ids or []
+        self.review_ids = review_ids or []
 
     """Getter and Setter"""
     """ Owner ID """
@@ -145,7 +146,36 @@ class Place(BaseModel):
     def amenity_ids(self, value):
         if not isinstance(value, list):
             raise TypeError("Amenity IDs must be a list")
-
-        # keep the amenity id as string and remove duplication
         cleaned = list(dict.fromkeys(str(v).strip() for v in value if v))
         self._amenity_ids = cleaned
+
+    @property
+    def review_ids(self):
+        return getattr(self, "_review_ids", [])
+
+    @review_ids.setter
+    def review_ids(self, value):
+        if not isinstance(value, list):
+            raise TypeError("Review IDs must be a list")
+        cleaned = list(dict.fromkeys(str(v).strip() for v in value if v))
+        self._review_ids = cleaned
+
+    def add_amenity(self, amenity_id):
+        if amenity_id is None:
+            return
+        aid = str(amenity_id).strip()
+        if not aid:
+            return
+        current = list(getattr(self, "amenity_ids", []) or [])
+        current.append(aid)
+        self.amenity_ids = current
+
+    def add_review(self, review_id):
+        if review_id is None:
+            return
+        rid = str(review_id).strip()
+        if not rid:
+            return
+        current = list(getattr(self, "review_ids", []) or [])
+        current.append(rid)
+        self.review_ids = current
