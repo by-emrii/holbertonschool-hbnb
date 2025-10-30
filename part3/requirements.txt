@@ -1,3 +1,5 @@
 flask
 flask-restx
 pillow==10.4.0
+flask-bcrypt
+flask-jwt-extended

@@ -5,8 +5,11 @@ from app.api.v1.amenities import api as amenities_ns
 from app.api.v1.reservations import api as reservations_ns
 from app.api.v1.places import api as places_ns
 from app.api.v1.reviews import api as reviews_ns
+from app.api.v1.auth import api as auth_ns
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
 
+jwt = JWTManager()
 
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
@@ -15,16 +18,14 @@ def create_app(config_class="config.DevelopmentConfig"):
     bcrypt = Bcrypt()
     bcrypt.init_app(app)
 
+    jwt.init_app(app)
+
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API', doc='/api/v1/')
 
-    # Placeholder for API namespaces (endpoints will be added later)
+    # Register the user namespace
     api.add_namespace(users_ns, path='/api/v1/users')
-    
-    # Additional namespaces for places, reviews, and amenities will be added later
 
-    # Register amenity namespace
-
-    # Register the users namespace
+    # Register the amenity namespace
     api.add_namespace(amenities_ns, path='/api/v1/amenities')
 
     # Reservation namespace
@@ -35,5 +36,8 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     # Review namespace
     api.add_namespace(reviews_ns, path='/api/v1/reviews')
+
+    # Auth namespace
+    api.add_namespace(auth_ns, path="/api/v1/auth")
                       
     return app
