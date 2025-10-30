@@ -92,3 +92,52 @@ class TestPlaceEndpoints(unittest.TestCase):
             "title": "Fail Update"
         })
         self.assertEqual(response.status_code, 404)
+
+    def test_get_place_includes_amenities_details(self):
+        # create amenities
+        a1 = self.client.post('/api/v1/amenities/', json={"name": "Wifi", "description": "Fast internet"})
+        a2 = self.client.post('/api/v1/amenities/', json={"name": "Pool", "description": "Outdoor"})
+        a3 = self.client.post('/api/v1/amenities/', json={"name": "Parking", "description": "Free"})
+        self.assertEqual(a1.status_code, 201)
+        self.assertEqual(a2.status_code, 201)
+        self.assertEqual(a3.status_code, 201)
+        amenity_ids = [a1.get_json()["id"], a2.get_json()["id"], a3.get_json()["id"]]
+
+        # create place referencing amenities
+        create_resp = self.client.post('/api/v1/places/', json={
+            "user_id": self.owner_id,
+            "title": "Amenity Rich Flat",
+            "description": "Has many amenities",
+            "price": 300.0,
+            "address": "1 Test St",
+            "latitude": -24.0,
+            "longitude": 124.0,
+            "amenity_ids": amenity_ids,
+        })
+        self.assertEqual(create_resp.status_code, 201)
+        place_id = create_resp.get_json()["id"]
+
+        # get by id should include amenities array with details
+        get_resp = self.client.get(f'/api/v1/places/{place_id}')
+        self.assertEqual(get_resp.status_code, 200)
+        body = get_resp.get_json()
+        self.assertIn("amenity_ids", body)
+        self.assertIn("amenities", body)
+        self.assertEqual(sorted(body["amenity_ids"]), sorted(amenity_ids))
+        self.assertEqual(len(body["amenities"]), 3)
+        names = {a["name"] for a in body["amenities"]}
+        self.assertTrue({"Wifi", "Pool", "Parking"}.issubset(names))
+
+        # list should also include amenities details
+        list_resp = self.client.get('/api/v1/places/')
+        self.assertEqual(list_resp.status_code, 200)
+        items = list_resp.get_json()
+        self.assertIsInstance(items, list)
+        # find our place
+        found = next((p for p in items if p.get("id") == place_id), None)
+        self.assertIsNotNone(found)
+        self.assertIn("amenity_ids", found)
+        self.assertIn("amenities", found)
+        self.assertEqual(sorted(found["amenity_ids"]), sorted(amenity_ids))
+        self.assertEqual(len(found["amenities"]), 3)
+
