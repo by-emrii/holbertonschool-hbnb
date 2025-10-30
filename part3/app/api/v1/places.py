@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 api = Namespace('places', description='Place operations')
 
@@ -44,11 +45,15 @@ place_response = api.model('Place', {
 # Place Endpoints 
 @api.route('/')
 class PlaceList(Resource):
+    @jwt_required()
     @api.expect(place_create_model, validate=True)
     @api.marshal_with(place_response, code=201)
     def post(self):
         """ Create place """
         place_data = api.payload
+        current_user = get_jwt_identity()
+        if place.owner_id != current_user:
+            return {'error': 'Unauthorised action'}, 403
         try:
             place = facade.create_place(place_data)
             return place, 201
