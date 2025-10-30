@@ -2,12 +2,12 @@ from app.models.base_model import BaseModel
 import re
 
 class User(BaseModel):
-    def __init__(self, first_name, last_name, email, encrypted_password, phone_number, profile_img=None, is_admin=False):
+    def __init__(self, first_name, last_name, email, password, phone_number, profile_img=None, is_admin=False):
         super().__init__()
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.encrypted_password = encrypted_password
+        self.password = password
         self.phone_number = phone_number
         self.profile_img = profile_img
         self.is_admin = is_admin
@@ -72,16 +72,16 @@ class User(BaseModel):
             raise TypeError("Phone number must be a string")
         value = value.strip()
         if not re.match(phone_regex, value):
-            raise ValueError("Invalid phone number format, and must be 10 digits")
+            raise ValueError("Invalid phone number format, for example: +61(CountryCode) XXXX XXXX")
         self._phone_number = value        
 
-    """Encrypted Password"""
+    """Password"""
     @property
-    def encrypted_password(self):
-        return self.__encrypted_password
+    def password(self):
+        return self.__password
     
-    @encrypted_password.setter
-    def encrypted_password(self, value):
+    @password.setter
+    def password(self, value):
         if not isinstance(value, str):
             raise TypeError("Password must be a string")
         value = value.strip()
@@ -89,4 +89,4 @@ class User(BaseModel):
         #password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8}$"
         if len(value) < 8:
             raise ValueError("Password must be at least 8 characters")
-        self.__encrypted_password = value        
+        self.__password = value        

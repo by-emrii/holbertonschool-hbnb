@@ -35,6 +35,10 @@ class HBnBFacade:
     def get_user_by_email(self, email):
         return self.user_service.get_user_by_email(email)
 
+    # gel all users
+    def get_all_users(self):
+        return self.user_service.get_all_users()
+
     # update user
     def update_user(self, user_id, user_data):
         return self.user_service.update_user(user_id, user_data)
@@ -102,23 +106,21 @@ class HBnBFacade:
         return self.review_service.get_review_by_id(review_id)
 
     def get_reviews_by_user(self, user_id):
-        """Fetch all reviews made by a specific user."""
+        """Fetch all reviews for a specific user."""
         return self.review_service.get_reviews_by_user(user_id)
 
     def get_reviews_for_place(self, place_id):
         """Fetch all reviews for a specific place."""
         return self.review_service.get_reviews_for_place(place_id)
-    
-    def update_review(self, review_id, review_data, current_user_id):
-        """User updates a review of a specific place."""
-        return self.review_service.update_review(review_id, review_data, current_user_id)
 
-    #DELETE REVIEW    
+    def update_review(self, review_id, review_data):
+        """User updates a review of a specific place."""
+        return self.review_service.update_review(review_id, review_data)
+
     def delete_review(self, review_id):
-        """Delete a review by ID."""
+        """User deletes a review."""
         return self.review_service.delete_review(review_id)
 
-    #RATING AVERAGE
     def get_average_rating(self, place_id):
         """Calculate the average rating for a place."""
         return self.review_service.get_average_rating(place_id)
