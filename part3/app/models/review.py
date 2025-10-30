@@ -106,20 +106,21 @@ class Review(BaseModel):
         self.updated_at = datetime.now()
 
     #Serialisation for API
-    def to_dict(self):
-        """Return a JSON-serializable representation of the review."""
-        # generate virtual URLs only for stored images (tuples)
-        image_urls = [
-            img if isinstance(img, str) else f"/reviews/{self.id}/images/{i}"
-            for i, img in enumerate(self.upload_image)
-        ]
+    def to_dict(self): 
+        """Return a JSON-serializable representation of the review.""" 
+        # generate virtual URLs only for stored images (tuples) 
+        image_urls = [ 
+            img if isinstance(img, str) else f"/reviews/{self.id}/images/{i}" 
+            for i, img in enumerate(self.upload_image) 
+        ] 
+
         return {
             "id": self.id,
-            "user_id": self.user.id,
-            "place_id": self.place.id,
+            "user_id": self.user.id if self.user else None,
+            "place_id": self.place.id if self.place else None,
             "rating": self.rating,
             "text": self.text,
-            "upload_image": image_urls,
-            "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat(),
+            "upload_image": self.upload_image,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }

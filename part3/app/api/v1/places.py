@@ -52,8 +52,7 @@ class PlaceList(Resource):
         """ Create place """
         place_data = api.payload
         current_user = get_jwt_identity()
-        if place.owner_id != current_user:
-            return {'error': 'Unauthorised action'}, 403
+        place_data['owner_id'] = current_user
         try:
             place = facade.create_place(place_data)
             return place, 201
@@ -83,15 +82,23 @@ class PlaceResource(Resource):
         except ValueError as e:
             return {"error:", str(e)}, 404
 
-
+    @jwt_required()
     @api.expect(place_update_model, validate=True)
-    @api.marshal_with(place_response, code=200)
+    #api.marshal_with(place_response, code=200)
     @api.response(404, 'Place not found')
+    @api.response(403, 'Unauthorised action')
     def put(self, place_id):
         """ Update place """
+        data = api.payload or {}
+        current_user = get_jwt_identity()
+        # retrieve place
+        place = facade.get_place(place_id)
+        if not place:
+            return {'error': 'Place not found'}, 404
         try:
-            data = api.payload or {}
-            place = facade.update_place(place_id, data)
-            return place, 200
+            update_place = facade.update_place(place_id, data)
+            if update_place.owner_id != current_user:
+                return {'error': 'Unauthorised action'}, 403
+            return update_place, 200
         except ValueError as e:
             return {"error:", str(e)}, 404
