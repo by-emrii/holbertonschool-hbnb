@@ -65,3 +65,8 @@ class UserService:
         self.user_repo.update(user.id, user_data)
 
         return user
+
+    # Get all users
+    def get_all_users(self):
+        users = self.user_repo.get_all()
+        return users

@@ -18,7 +18,7 @@ user_model = api.model('User', {
     'last_name': fields.String(required=True, description='Last name of the user'),
     'email': fields.String(required=True, description='Email of the user'),
     'phone_number': fields.String(required=True, description='Phone number of the user'),
-    'encrypted_password': fields.String(required=True, description='Enter password')
+    'password': fields.String(required=True, description='Enter password')
 })
 
 # Define the response for user model without pwd
@@ -34,7 +34,7 @@ user_response = api.model('User',{
 
 @api.route('/')
 class UserList(Resource):
-    @api.expect(user_model)
+    @api.expect(user_model, validate=True)
     # @api.marshal_with(user_response, code=201)
     # @api.response(201, 'User successfully created')
     # @api.response(400, 'Email already registered')
@@ -62,6 +62,25 @@ class UserList(Resource):
         except (TypeError,ValueError) as e:
             return {"error": str(e)}, 400
 
+    # Get all users
+    def get(self):
+        users = facade.get_all_users()
+        if not users:
+            return [], 200
+        result = [
+            {
+            'id': u.id,
+            'first_name': u.first_name,
+            'last_name': u.last_name,
+            'email': u.email,
+            'phone_number': u.phone_number,
+            'profile_img': u.profile_img,
+            'is_admin': u.is_admin
+            }
+            for u in users
+        ]
+        return result
+
 @api.route('/<user_id>')
 class UserResource(Resource):
     @api.response(200, 'User details retrieved successfully')
@@ -80,10 +99,12 @@ class UserResource(Resource):
         except (TypeError, ValueError) as e:
             return {"error": str(e)}, 404
 
+    @api.expect(user_model, validate=True)
     @api.response(200, 'User details updated successfully!')
     @api.response(404, 'User not found')
     @api.response(404, 'Email already in use')
     @api.response(404, 'Invalid input')
+
     def put(self, user_id):
         """ Update user details """
         user_data = api.payload
