@@ -45,12 +45,6 @@ class UserList(Resource):
         """Register a new user"""
         try:
             user_data = api.payload
-
-        #  # Simulate email uniqueness check (to be replaced by real validation with persistence)
-        # existing_user = HBnBFacade.get_user_by_email(user_data['email'])
-        # if existing_user:
-        #     return {'error': 'Email already registered'}, 400
-
             new_user = facade.create_user(user_data)
             return {
                 'id': new_user.id,
