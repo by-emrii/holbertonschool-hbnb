@@ -8,7 +8,11 @@ class TestReviewEndpoints(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
+<<<<<<< HEAD
+    # Create a real user
+=======
     # Create main user
+>>>>>>> review/grace
         user_resp = self.client.post('/api/v1/users/', json={
             "first_name": "Test",
             "last_name": "User",
@@ -18,6 +22,9 @@ class TestReviewEndpoints(unittest.TestCase):
         })
         self.user_id = user_resp.get_json()["id"]
 
+<<<<<<< HEAD
+        # Create a real place
+=======
         # Create another user for forbidden tests
         another_user_resp = self.client.post('/api/v1/users/', json={
             "first_name": "Another",
@@ -29,6 +36,7 @@ class TestReviewEndpoints(unittest.TestCase):
         self.another_user_id = another_user_resp.get_json()["id"]
 
         # Create a test place
+>>>>>>> review/grace
         place_resp = self.client.post('/api/v1/places/', json={
             "user_id": self.user_id,
             "title": "Test Place",
@@ -41,11 +49,19 @@ class TestReviewEndpoints(unittest.TestCase):
         })
         self.place_id = place_resp.get_json()["id"]
 
+<<<<<<< HEAD
+    # Create Sample Review 
+    def create_sample_review(self):
+        """ Helper method to create a sample review """
+        response = self.client.post('/api/v1/reviews/', json={
+            "user_id": self.user_id,
+=======
     # Helper method to create a sample review
     def create_sample_review(self, user_id=None):
         user_id = user_id or self.user_id
         response = self.client.post('/api/v1/reviews/', json={
             "user_id": user_id,
+>>>>>>> review/grace
             "place_id": self.place_id,
             "rating": 4,
             "text": "Nice stay!",
@@ -105,7 +121,11 @@ class TestReviewEndpoints(unittest.TestCase):
         response = self.client.put(f'/api/v1/reviews/{review_id}', json={
             "rating": 5,
             "text": "Even better!",
+<<<<<<< HEAD
+            "current_user_id": "user123"
+=======
             "current_user_id": self.user_id
+>>>>>>> review/grace
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
@@ -116,7 +136,11 @@ class TestReviewEndpoints(unittest.TestCase):
         response = self.client.put('/api/v1/reviews/invalidID', json={
             "rating": 3,
             "text": "Invalid test",
+<<<<<<< HEAD
+            "current_user_id": "user123"
+=======
             "current_user_id": self.user_id
+>>>>>>> review/grace
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 404)
@@ -128,7 +152,11 @@ class TestReviewEndpoints(unittest.TestCase):
         response = self.client.put(f'/api/v1/reviews/{review_id}', json={
             "rating": 2,
             "text": "Not allowed",
+<<<<<<< HEAD
+            "current_user_id": "another_user"
+=======
             "current_user_id": self.another_user_id
+>>>>>>> review/grace
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 403)
