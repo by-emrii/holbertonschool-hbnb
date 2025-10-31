@@ -5,7 +5,7 @@ import re
 bcrypt = Bcrypt()
 
 class User(BaseModel):
-    def __init__(self, first_name, last_name, email, password, phone_number, profile_img=None, is_admin=False):
+    def __init__(self, first_name, last_name, email, password, phone_number=None, profile_img=None, is_admin=False):
         super().__init__()
         self.first_name = first_name
         self.last_name = last_name
@@ -70,6 +70,10 @@ class User(BaseModel):
     
     @phone_number.setter
     def phone_number(self, value):
+        if value is None:
+            self._phone_number = None
+            return
+            
         phone_regex = r'^\+?[1-9]\d{1,14}$'
         if not isinstance(value, str):
             raise TypeError("Phone number must be a string")
