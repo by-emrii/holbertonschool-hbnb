@@ -1,9 +1,11 @@
 from flask_restx import Namespace, Resource, fields
-from app.services.facade import HBnBFacade
+# from app.services.facade import HBnBFacade
+from app.services import facade # shared singleton
 
 # Define Namepsace for amenities operations
 api = Namespace('amenities', description='Amenity operations')
-facade = HBnBFacade()
+
+# facade = HBnBFacade()
 
 # Define the Amenity model blueprint for validation and documentation
 amenity_model = api.model('Amenity', {

@@ -81,3 +81,19 @@ class PlaceService():
         # update repo（update(obj_id, data)）
         self.place_repo.update(place.id, update_data)
         return place
+
+    # ---------- Relationship Method: Amenity ----------
+    def add_amenity(self, place_id, amenity_id):
+        place = self.get_place(place_id)
+        # validate Amenity exists（if Amenity repo/facade is injected/passed/called）
+        # here only implement without actual lookup（caller ensures）
+        place.add_amenity(amenity_id)
+        self.place_repo.update(place_id, {'amenity_ids': place.amenity_ids})
+        return place
+
+    # ---------- Relationship Method: Review ----------
+    def add_review(self, place_id, review_id):
+        place = self.get_place(place_id)
+        place.add_review(review_id)
+        self.place_repo.update(place_id, {'review_ids': place.review_ids})
+        return place
