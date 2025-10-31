@@ -12,19 +12,18 @@ class ReviewService:
     #CREATE
     def create_review(self, review_data):
         """Create a review"""
-        user = self.user_repo.get(review_data.get("user_id"))
-        if not user:
-            raise ValueError("User not found")
-        place = self.place_repo.get(review_data.get("place_id"))
-        if not place:
-            raise ValueError("Place not found")
+        user = review_data.get("user")
+        place = review_data.get("place")
+
+        if not user or not place:
+            raise ValueError("User and Place objects are required")
         
         # Create review instance
         review = Review(
             user=user,
             place=place,
-            rating=review_data.get("rating"),
-            text=review_data.get("text"),
+            rating=review_data["rating"],
+            text=review_data["text"],
             upload_image=review_data.get("upload_image", [])
         )
 
@@ -49,19 +48,21 @@ class ReviewService:
         return [r for r in self.review_repo.get_all() if r.place.id == place_id]
     
     #UPDATE
-    def update_review(self, review_id, review_data, current_user_id=None):
+    def update_review(self, review_id, review_data, current_user):
         """
         Update a review if the current user is the author.
-        current_user_id must be passed in the payload for authorization check.
         """
         review = self.get_review_by_id(review_id)
 
         # Ownership check
-        if current_user_id and review.user.id != current_user_id:
-            raise PermissionError("You are not allowed to update this review.")
+        user_id = getattr(review.user, "id", review.user)
+        if str(user_id) != str(current_user):
+            raise PermissionError("Unauthorised action")
 
+        # Update the model using Review's own method
         review.update_from_dict(review_data)
-        self.review_repo.update(review_id, review)
+        # Pass the updated object back to repo
+        self.review_repo.update(review_id, review_data)
         return review
 
     #GETTING THE AVERAGE RATING AND RECENT REVIEWS
@@ -77,13 +78,14 @@ class ReviewService:
         return sorted(reviews, key=lambda r: r.created_at, reverse=True)[:limit]
     
     #DELETE
-    def delete_review(self, review_id, current_user_id=None):
+    def delete_review(self, review_id, current_user):
         """Delete a review by ID."""
         review = self.get_review_by_id(review_id)
 
         # Ownership check
-        if current_user_id and review.user.id != current_user_id:
+        user_id = getattr(review.user, "id", review.user)
+        if str(user_id) != str(current_user):
             raise PermissionError("You are not allowed to delete this review.")
 
         self.review_repo.delete(review_id)
-        return {"message": "Review deleted successfully"}
+        return True

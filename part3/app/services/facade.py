@@ -113,13 +113,13 @@ class HBnBFacade:
         """Fetch all reviews for a specific place."""
         return self.review_service.get_reviews_for_place(place_id)
 
-    def update_review(self, review_id, review_data):
+    def update_review(self, review_id, review_data, current_user):
         """User updates a review of a specific place."""
-        return self.review_service.update_review(review_id, review_data)
+        return self.review_service.update_review(review_id, review_data, current_user)
 
-    def delete_review(self, review_id):
+    def delete_review(self, review_id, current_user):
         """User deletes a review."""
-        return self.review_service.delete_review(review_id)
+        return self.review_service.delete_review(review_id, current_user)
 
     def get_average_rating(self, place_id):
         """Calculate the average rating for a place."""
