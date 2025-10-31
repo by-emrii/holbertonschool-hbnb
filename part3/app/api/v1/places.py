@@ -92,11 +92,11 @@ class PlaceList(Resource):
     @api.response(403, 'Unauthorised action')
     @jwt_required()
     def post(self):
-        place_data = api.payload
         current_user = get_jwt_identity()
-        if 'owner_id' in place_data and place_data['owner_id'] != current_user:
-            return {'error': 'Unauthorised action'}, 403
+        # place_data["owner_id"] = current_user
         try:
+            place_data = api.payload
+            place_data["owner_id"] = current_user
             place = facade.create_place(place_data)
             return {
                 'result': _enrich_place_with_amenities(place),
@@ -138,12 +138,17 @@ class PlaceResource(Resource):
     @api.response(404, 'Place not found')
     @jwt_required()
     def put(self, place_id):
+        """ Update place """
+        data = api.payload or {}
+        current_user = get_jwt_identity()
+        # retrieve place
+        place = facade.get_place(place_id)
+        if not place:
+            return {'error': 'Place not found'}, 404
         try:
-            data = api.payload or {}
-            place = facade.update_place(place_id, data)
-            return {
-                'result': _enrich_place_with_amenities(place),
-                'message': 'Place updated successfully.'
-            }, 200
+            update_place = facade.update_place(place_id, data)
+            if update_place.owner_id != current_user:
+                return {'error': 'Unauthorised action'}, 403
+            return update_place, 200
         except ValueError as e:
-            return {'error': str(e)}, 404
+            return {"error:", str(e)}, 404
