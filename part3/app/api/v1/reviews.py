@@ -51,7 +51,11 @@ class ReviewList(Resource):
 
             # Owners cannot review their own place (optional)
             if place.owner_id == current_user:
-                return {'error': 'Owners cannot review their own place'}, 403
+                return {'error': "You cannot review your own place."}, 400
+            
+            # User can only review a place once
+            if facade.user_already_reviewed(place.id, current_user):
+                return {'error': "You have already reviewed this place."}, 400
 
             # Fetch user object (depends on how your facade works)
             user = facade.get_user(current_user)
@@ -114,14 +118,23 @@ class ReviewResource(Resource):
     def delete(self, review_id):
         """Delete a review (owner only)"""
         current_user = get_jwt_identity()
+
         try:
-            facade.delete_review(review_id, current_user)  
+            # check there a review 
+            review = facade.get_review_by_id(review_id)
+            if review is None:
+                return {"error": "Review not found"}, 404
+            # Ownership check
+            user_id = getattr(review.user, "id", review.user)
+            if str(user_id) != str(current_user):
+                return {"error": "Unauthorized action."}, 403
+            
+            # Delete the review
+            facade.delete_review(review_id)  
             return {"message": "Review deleted successfully"}, 200
 
-        except PermissionError as e:
-            return {"error": str(e)}, 403
-        except ValueError as e:
-            return {"error": str(e)}, 404
+        except Exception as e:
+            return {"error": str(e)}, 500
     
 """List all reviews of place"""
 @api.route('/place/<string:place_id>')

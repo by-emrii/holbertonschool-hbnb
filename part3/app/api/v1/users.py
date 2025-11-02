@@ -111,6 +111,10 @@ class UserResource(Resource):
         # Ownership check
         if str(user.id) != str(current_user):
             return {'error': 'Unauthorised action'}, 403
+        
+        # Prevent the user from modifying their email and password in this endpoint
+        if 'email' in user_data or 'password' in user_data:
+            return {"error": "You cannot modify email or password."}
     
         try:
             updated_user = facade.update_user(user_id, user_data)

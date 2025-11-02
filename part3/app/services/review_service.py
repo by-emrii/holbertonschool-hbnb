@@ -78,14 +78,11 @@ class ReviewService:
         return sorted(reviews, key=lambda r: r.created_at, reverse=True)[:limit]
     
     #DELETE
-    def delete_review(self, review_id, current_user):
+    def delete_review(self, review_id):
         """Delete a review by ID."""
         review = self.get_review_by_id(review_id)
-
-        # Ownership check
-        user_id = getattr(review.user, "id", review.user)
-        if str(user_id) != str(current_user):
-            raise PermissionError("You are not allowed to delete this review.")
+        if review is None:
+             raise ValueError("Review not found")
 
         self.review_repo.delete(review_id)
         return True
