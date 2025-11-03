@@ -1,7 +1,7 @@
 from app import db
+from sqlalchemy.orm import validates
 from app.models.base_model import BaseModel
 from datetime import datetime
-import uuid
 from io import BytesIO
 from PIL import Image as PILImage
 
@@ -14,15 +14,10 @@ class Review(BaseModel):
     place_id = db.Column(db.String(50), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     text = db.Column(db.String(300), nullable=False)
-    upload_image = db.Column(db.PickleType, default=list) # store image URLs or tuples
+    upload_image = db.Column(db.JSON, default=list)
 
-    def __init__(self, user, place, rating, text, upload_image=None):
-        super().__init__()
-        self.user = user
-        self.place = place
-        self.rating = rating
-        self.text = text
-        self.upload_image = upload_image or []
+    user_id = db.Column(db.String(50), db.ForeignKey('users.id'), nullable=False)
+    place_id = db.Column(db.String(50), db.ForeignKey('places.id'), nullable=False)
 
     #USER
     @property
@@ -49,36 +44,24 @@ class Review(BaseModel):
         self._place = value
 
     #RATING
-    @property
-    def rating(self):
-        return self._rating
-
-    @rating.setter
-    def rating(self, value):
+    @validates('rating')
+    def validate_rating(self, key, value):
         if not isinstance(value, int):
             raise TypeError("Rating must be an integer")
         if not (1 <= value <= 5):
             raise ValueError("Rating must be between 1 and 5")
-        self._rating = value
+        return value
 
     #TEXT
-    @property
-    def text(self):
-        return self._text
-
-    @text.setter
-    def text(self, value):
+    @validates('text')
+    def validate_text(self, key, value):
         if not isinstance(value, str) or not value.strip():
             raise ValueError("Text is required and cannot be empty")
-        self._text = value.strip()
+        return value.strip()
     
     #UPLOAD IMAGE 
-    @property
-    def upload_image(self):
-        return self._upload_image
-
-    @upload_image.setter
-    def upload_image(self, images):
+    @validates('upload_image')
+    def validate_upload_image(self, key, images):
         if not images:
             self._upload_image = []
             return
@@ -101,26 +84,27 @@ class Review(BaseModel):
                 validated_images.append((filename, img_bytes))
             else:
                 raise TypeError("Each image must be a string URL or a tuple (filename, bytes)")
-        self._upload_image = validated_images
+        return validated_images
 
     #Update helper
     def update_from_dict(self, data: dict):
-        if "rating" in data:
-            self.rating = data["rating"]
-        if "text" in data:
-            self.text = data["text"]
-        if "upload_image" in data:
-            self.upload_image = data["upload_image"]
-        self.updated_at = datetime.now()
+        """Safely update fields from a dictionary input."""
+        for field in ("rating", "text", "upload_image"):
+            if field in data:
+                setattr(self, field, data[field])
 
     #Serialisation for API
     def to_dict(self): 
         """Return a JSON-serializable representation of the review.""" 
         # generate virtual URLs only for stored images (tuples) 
-        image_urls = [ 
-            img if isinstance(img, str) else f"/reviews/{self.id}/images/{i}" 
-            for i, img in enumerate(self.upload_image) 
-        ] 
+        image_urls = []
+        for i, img in enumerate(self.upload_image or []):
+            if isinstance(img, str):
+                image_urls.append(img)
+            elif isinstance(img, dict) and "filename" in img:
+                image_urls.append(f"/reviews/{self.id}/images/{i}")
+            else:
+                image_urls.append(None)
 
         return {
             "id": self.id,
