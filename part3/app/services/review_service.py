@@ -1,13 +1,12 @@
 
 from datetime import datetime
 from app.models.review import Review
-from app.persistence.repository import InMemoryRepository
 
 class ReviewService:
     def __init__(self, place_repo, user_repo, review_repo):
         self.user_repo = user_repo
         self.place_repo = place_repo
-        self.review_repo = review_repo or InMemoryRepository()
+        self.review_repo = review_repo
     
     #CREATE
     def create_review(self, review_data):
@@ -31,14 +30,6 @@ class ReviewService:
         self.review_repo.add(review)
         return review
     
-    #IF USER ALREADY HAS A REVIEW
-    def user_already_reviewed(self, place_id, user_id):
-        """Check if a user has already reviewed a given place."""
-        for review in self.review_repo.get_all():
-            if review.place.id == place_id and review.user.id == user_id:
-                return True
-        return False
-        
     #READ
     def get_review_by_id(self, review_id):
         """Fetch a single review by ID."""
@@ -86,11 +77,14 @@ class ReviewService:
         return sorted(reviews, key=lambda r: r.created_at, reverse=True)[:limit]
     
     #DELETE
-    def delete_review(self, review_id):
+    def delete_review(self, review_id, current_user):
         """Delete a review by ID."""
         review = self.get_review_by_id(review_id)
-        if review is None:
-             raise ValueError("Review not found")
+
+        # Ownership check
+        user_id = getattr(review.user, "id", review.user)
+        if str(user_id) != str(current_user):
+            raise PermissionError("You are not allowed to delete this review.")
 
         self.review_repo.delete(review_id)
         return True
