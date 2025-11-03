@@ -1,4 +1,5 @@
 from app.persistence.repository import SQLAlchemyRepository
+from app.persistence.repository import AmenityRepository
 from app.services.user_service import UserService
 from app.services.amenity_service import AmenityService
 from app.services.reservation_service import ReservationService
@@ -16,7 +17,7 @@ class HBnBFacade:
         self.user_repo = SQLAlchemyRepository(User)
         self.place_repo = SQLAlchemyRepository(Place)
         self.review_repo = SQLAlchemyRepository(Review)
-        self.amenity_repo = SQLAlchemyRepository(Amenity)
+        self.amenity_repo = AmenityRepository()
         self.reservation_repo = SQLAlchemyRepository(Reservation)
 
         # services using shared repos

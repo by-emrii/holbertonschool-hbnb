@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from app.models.amenity import Amenity
 from app import db
 
 class Repository(ABC):
@@ -56,3 +57,7 @@ class SQLAlchemyRepository(Repository):
 
     def get_by_attribute(self, attr_name, attr_value):
         return self.model.query.filter_by(**{attr_name: attr_value}).first()
+
+class AmenityRepository(SQLAlchemyRepository):
+    def __init__(self):
+        super().__init__(Amenity)
