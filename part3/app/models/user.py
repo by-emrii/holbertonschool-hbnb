@@ -42,7 +42,7 @@ class User(BaseModel):
     
 
     @validates('email')
-    def email(self, key, value):
+    def validate_email(self, key, value):
         """ Email validation with email format using regex """
         if not isinstance(value, str):
             raise TypeError("Email must be a string")
@@ -53,7 +53,7 @@ class User(BaseModel):
         return value
     
     @validates('phone_number')
-    def phone_number(self, key, value):
+    def validate_phone_number(self, key, value):
         if value is None:
             return None
         if not isinstance(value, str):
