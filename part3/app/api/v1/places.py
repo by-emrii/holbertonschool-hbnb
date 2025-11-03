@@ -141,14 +141,16 @@ class PlaceResource(Resource):
         """ Update place """
         data = api.payload or {}
         current_user = get_jwt_identity()
-        # retrieve place
-        place = facade.get_place(place_id)
-        if not place:
-            return {'error': 'Place not found'}, 404
         try:
-            update_place = facade.update_place(place_id, data)
-            if update_place.owner_id != current_user:
+            # retrieve place and check ownership before update
+            place = facade.get_place(place_id)
+            if str(place.owner_id) != str(current_user):
                 return {'error': 'Unauthorised action'}, 403
-            return update_place, 200
+            # perform update
+            updated_place = facade.update_place(place_id, data)
+            return {
+                'result': _enrich_place_with_amenities(updated_place),
+                'message': 'Place updated successfully.'
+            }, 200
         except ValueError as e:
-            return {"error:", str(e)}, 404
+            return {'error': str(e)}, 404

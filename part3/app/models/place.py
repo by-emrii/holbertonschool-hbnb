@@ -5,7 +5,7 @@ from app.models.base_model import BaseModel
 class Place(BaseModel):
     def __init__(
             self, owner_id, title, price,
-            address, latitude, longitude, image_url=None, amenity_ids=None, description=False, review_ids=None
+            address, latitude, longitude, image_url=None, amenity_ids=None, description="", review_ids=None
     ):
         super().__init__()
         self.owner_id = owner_id
@@ -59,7 +59,7 @@ class Place(BaseModel):
     @description.setter
     def description(self, value):
         if not isinstance(value, str):
-            raise TypeError("Title must be a string")
+            raise TypeError("Description must be a string")
         value = value.strip()
         if len(value) > 1000:
             raise ValueError("Description cannot exceed 1000 characters")
