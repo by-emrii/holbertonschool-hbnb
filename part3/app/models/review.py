@@ -1,7 +1,7 @@
+from sqlalchemy import Table, Column, Integer, ForeignKey
 from app import db
 from sqlalchemy.orm import validates
 from app.models.base_model import BaseModel
-from datetime import datetime
 from io import BytesIO
 from PIL import Image as PILImage
 
@@ -10,38 +10,17 @@ class Review(BaseModel):
     __tablename__ = 'reviews'
     ALLOWED_FORMATS = {"JPEG", "PNG"}
 
-    user_id = db.Column(db.String(50), nullable=False)
-    place_id = db.Column(db.String(50), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     text = db.Column(db.String(300), nullable=False)
     upload_image = db.Column(db.JSON, default=list)
 
+    #foreign keys
     user_id = db.Column(db.String(50), db.ForeignKey('users.id'), nullable=False)
     place_id = db.Column(db.String(50), db.ForeignKey('places.id'), nullable=False)
 
-    #USER
-    @property
-    def user(self):
-        return self._user
-
-    @user.setter
-    def user(self, value):
-        from app.models.user import User
-        if not isinstance(value, User):
-            raise TypeError("user must be a User instance")
-        self._user = value
-
-    #PLACE
-    @property
-    def place(self):
-        return self._place
-
-    @place.setter
-    def place(self, value):
-        from app.models.place import Place
-        if not isinstance(value, Place):
-            raise TypeError("place must be a Place instance")
-        self._place = value
+    # Relationships
+    user = relationship("User", backref="reviews", lazy=True)
+    place = relationship("Place", backref="reviews", lazy=True)
 
     #RATING
     @validates('rating')
