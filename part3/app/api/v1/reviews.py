@@ -76,7 +76,6 @@ class ReviewList(Resource):
         except ValueError as e:
             return {"error": str(e)}, 400  
             
-
 """Get, update, deleted review by id"""
 @api.route('/<string:review_id>')
 class ReviewResource(Resource):
@@ -130,7 +129,7 @@ class ReviewResource(Resource):
                 return {"error": "Unauthorized action."}, 403
             
             # Delete the review
-            facade.delete_review(review_id)  
+            facade.delete_review(review_id, current_user)
             return {"message": "Review deleted successfully"}, 200
 
         except Exception as e:

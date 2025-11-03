@@ -31,6 +31,14 @@ class ReviewService:
         self.review_repo.add(review)
         return review
     
+    #IF USER ALREADY HAS A REVIEW
+    def user_already_reviewed(self, place_id, user_id):
+        """Check if a user has already reviewed a given place."""
+        for review in self.review_repo.get_all():
+            if review.place.id == place_id and review.user.id == user_id:
+                return True
+        return False
+        
     #READ
     def get_review_by_id(self, review_id):
         """Fetch a single review by ID."""
