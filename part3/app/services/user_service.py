@@ -1,5 +1,4 @@
 from app.models.user import User
-from app.persistence.repository import InMemoryRepository
 
 class UserService:
     def __init__(self, user_repo):

@@ -1,6 +1,4 @@
 from app.models.place import Place
-from app.persistence.repository import InMemoryRepository
-
 
 class PlaceService():
     def __init__(self, place_repo, user_repo=None):

@@ -1,24 +1,29 @@
-from app.persistence.repository import InMemoryRepository
+from app.persistence.repository import SQLAlchemyRepository
 from app.services.user_service import UserService
 from app.services.amenity_service import AmenityService
 from app.services.reservation_service import ReservationService
 from app.services.place_service import PlaceService
 from app.services.review_service import ReviewService
+from app.models.user import User
+from app.models.place import Place
+from app.models.review import Review
+from app.models.amenity import Amenity
+from app.models.reservation import Reservation
 
 class HBnBFacade:
     def __init__(self):
         # shared repo
-        self.user_repo = InMemoryRepository()
-        self.place_repo = InMemoryRepository()
-        self.review_repo = InMemoryRepository()
-        self.amenity_repo = InMemoryRepository()
-        self.reservation_repo = InMemoryRepository()
+        self.user_repo = SQLAlchemyRepository(User)
+        self.place_repo = SQLAlchemyRepository(Place)
+        self.review_repo = SQLAlchemyRepository(Review)
+        self.amenity_repo = SQLAlchemyRepository(Amenity)
+        self.reservation_repo = SQLAlchemyRepository(Reservation)
 
         # services using shared repos
         self.user_service = UserService(self.user_repo)
-        self.amenity_service = AmenityService()
-        self.reservation_service = ReservationService()
-        self.place_service = PlaceService(self.place_repo, self.user_repo)
+        self.amenity_service = AmenityService(self.amenity_repo)
+        self.reservation_service = ReservationService(self.reservation_repo)
+        self.place_service = PlaceService(self.place_repo, self.user_repo, self.amenity_repo)
         self.review_service = ReviewService(self.place_repo, self.user_repo, self.review_repo)
         
     """ User CRU """

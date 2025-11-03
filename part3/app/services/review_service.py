@@ -1,13 +1,12 @@
 
 from datetime import datetime
 from app.models.review import Review
-from app.persistence.repository import InMemoryRepository
 
 class ReviewService:
     def __init__(self, place_repo, user_repo, review_repo):
         self.user_repo = user_repo
         self.place_repo = place_repo
-        self.review_repo = review_repo or InMemoryRepository()
+        self.review_repo = review_repo
     
     #CREATE
     def create_review(self, review_data):
