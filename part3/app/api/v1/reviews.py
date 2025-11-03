@@ -50,7 +50,7 @@ class ReviewList(Resource):
                 return {'error': 'Place not found'}, 404
 
             # Owners cannot review their own place (optional)
-            if place.owner_id == current_user:
+            if str(place.owner_id) == str(current_user):
                 return {'error': "You cannot review your own place."}, 400
             
             # User can only review a place once
@@ -74,7 +74,9 @@ class ReviewList(Resource):
             return review.to_dict(), 201
 
         except ValueError as e:
-            return {"error": str(e)}, 400  
+            return {"error": str(e)}, 400
+        except PermissionError as e:
+            return {"error": str(e)}, 403  
             
 """Get, update, deleted review by id"""
 @api.route('/<string:review_id>')
@@ -119,20 +121,27 @@ class ReviewResource(Resource):
         current_user = get_jwt_identity()
 
         try:
-            # check there a review 
+            # Fetch the review
             review = facade.get_review_by_id(review_id)
-            if review is None:
+            if not review:
                 return {"error": "Review not found"}, 404
+            
             # Ownership check
-            user_id = getattr(review.user, "id", review.user)
-            if str(user_id) != str(current_user):
+            if str(review.user.id) != str(current_user):
                 return {"error": "Unauthorized action."}, 403
             
             # Delete the review
             facade.delete_review(review_id, current_user)
             return {"message": "Review deleted successfully"}, 200
 
+        except PermissionError as e:
+            # In case the service layer also raises a permission error
+            return {"error": str(e)}, 403
+        except ValueError as e:
+            # In case the review is not found
+            return {"error": str(e)}, 404
         except Exception as e:
+            # Catch any unexpected errors
             return {"error": str(e)}, 500
     
 """List all reviews of place"""
