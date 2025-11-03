@@ -1,6 +1,6 @@
 from app import db
 from app.models.base_model import BaseModel
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import validates, relationship
 
 class Amenity(BaseModel):
     __tablename__ = 'amenities'
@@ -12,6 +12,8 @@ class Amenity(BaseModel):
 
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(50), nullable=True)
+
+    # places = relationship('Place', backref='amenity', lazy=True)
     
     def __init__(self, name, description=None):
         super().__init__()
