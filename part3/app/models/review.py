@@ -1,4 +1,4 @@
-#from app import db
+from app import db
 from app.models.base_model import BaseModel
 from datetime import datetime
 import uuid
@@ -7,14 +7,14 @@ from PIL import Image as PILImage
 
 class Review(BaseModel):
     """Represents a review left by a user for a place."""
-   # __tablename__ = 'reviews'
+    __tablename__ = 'reviews'
     ALLOWED_FORMATS = {"JPEG", "PNG"}
 
-    #user_id = db.Column(db.String(50), nullable=False)
-    #place_id = db.Column(db.String(50), nullable=False)
-    #rating = db.Column(db.Integer, nullable=False)
-    #text = db.Column(db.String(300), nullable=False)
-    #upload_image = db.Column(db.PickleType, default=list) # store image URLs or tuples
+    user_id = db.Column(db.String(50), nullable=False)
+    place_id = db.Column(db.String(50), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    text = db.Column(db.String(300), nullable=False)
+    upload_image = db.Column(db.PickleType, default=list) # store image URLs or tuples
 
     def __init__(self, user, place, rating, text, upload_image=None):
         super().__init__()
