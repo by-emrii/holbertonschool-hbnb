@@ -10,12 +10,13 @@ from app.models.review import Review
 from app.models.amenity import Amenity
 from app.models.reservation import Reservation
 from app.persistence.user_repository import UserRepository
+from app.persistence.place_repository import PlaceRepository
 
 class HBnBFacade:
     def __init__(self):
         # shared repo
         self.user_repo = UserRepository()
-        self.place_repo = SQLAlchemyRepository(Place)
+        self.place_repo = PlaceRepository()
         self.review_repo = SQLAlchemyRepository(Review)
         self.amenity_repo = SQLAlchemyRepository(Amenity)
         self.reservation_repo = SQLAlchemyRepository(Reservation)
@@ -24,7 +25,7 @@ class HBnBFacade:
         self.user_service = UserService(self.user_repo)
         self.amenity_service = AmenityService(self.amenity_repo)
         self.reservation_service = ReservationService(self.reservation_repo)
-        self.place_service = PlaceService(self.place_repo, self.user_repo, self.amenity_repo)
+        self.place_service = PlaceService(self.place_repo)
         self.review_service = ReviewService(self.place_repo, self.user_repo, self.review_repo)
         
     """ User CRU """
