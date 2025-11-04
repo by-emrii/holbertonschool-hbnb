@@ -3,7 +3,6 @@
 --Define SQL scripts for each of the following tables:
 
 --User Table
-
 CREATE TABLE IF NOT EXISTS "users" (
     id CHAR(36) PRIMARY KEY,
     first_name VARCHAR(255),
@@ -14,7 +13,6 @@ CREATE TABLE IF NOT EXISTS "users" (
 );
 
 --Place Table:
-
 CREATE TABLE IF NOT EXISTS "places" (
     id CHAR(36) PRIMARY KEY,
     title VARCHAR(255),
@@ -28,7 +26,6 @@ CREATE TABLE IF NOT EXISTS "places" (
 );
 
 --Review Table:
-
 CREATE TABLE IF NOT EXISTS "reviews" (
     id CHAR(36) PRIMARY KEY,
     text TEXT,
@@ -58,77 +55,6 @@ CREATE TABLE IF NOT EXISTS "place_amenity" (
     CONSTRAINT place_fk FOREIGN KEY (place_id), REFERENCES place(id) ON DELETE CASCADE,
     --if amenity is deleted, all data belonging to the amenity will be deleted
     CONSTRAINT amenity_fk FOREIGN KEY (amenity_id) REFERENCES amenity(id) ON DELETE CASCADE
-);
-
-
-
---Insert Initial Data
-
---Insert initial data into the database using SQL INSERT statements:
-
---User:
-import uuid
-
---Generate SQL Scripts for Table Creation
-
---Define SQL scripts for each of the following tables:
-
---User Table
-
-CREATE TABLE IF NOT EXISTS "users" (
-    id CHAR(36) PRIMARY KEY,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
-    password VARCHAR(255),
-    is_admin BOOLEAN DEFAULT FALSE
-);
-
---Place Table:
-
-CREATE TABLE IF NOT EXISTS "places" (
-    id CHAR(36) PRIMARY KEY,
-    title VARCHAR(255),
-    description TEXT,
-    price DECIMAL(10, 2),
-    latitude FLOAT,
-    longitude FLOAT,
-    owner_id CHAR(36),
-    --if user is deleted, owner_id will be NUU
-    CONSTRAINT 'places_fk' FOREIGN KEY ('owner_id') REFERENCES 'users'('id')
-);
-
---Review Table:
-
-CREATE TABLE IF NOT EXISTS "reviews" (
-    id CHAR(36) PRIMARY KEY,
-    text TEXT,
-    rating INT CHECK (rating >= 1 AND rating <= 5),
-    user_id CHAR(36),
-    place_id CHAR(36),
-    --if author is deleted, their comments will also be deleted? 
-    CONSTRAINT 'reviews_user_fk' FOREIGN KEY ('user_id'), REFERENCES 'users'('id') ON DELETE CASCADE,
-    --if place is deleted, all reviews of the place will be deleted also
-    CONSTRAINT 'reviews_place_fk' FOREIGN KEY ('place_id'), REFERENCES 'place'('id') ON DELETE CASCADE,
-    --user can only leave one review per place
-    CONSTRAINT 'one_review_per_user_fk' UNIQUE ('user_id', 'place_id') 
-);
-
--- Amenity Table:
-CREATE TABLE IF NOT EXISTS "amenity" (
-    id CHAR(36) PRIMARY KEY,
-    name VARCHAR(255) UNIQUE
-);
-      
---Place_Amenity Table (Many-to-Many relationship):
-CREATE TABLE IF NOT EXISTS "place_amenity" (
-    place_id CHAR(36),
-    amenity_id CHAR(36),
-    PRIMARY KEY (place_id, amenity_id),
-    --if place is deleted, all data belonging to the place will be deleted
-    CONSTRAINT 'place_fk' FOREIGN KEY ('place_id'), REFERENCES 'place'('id') ON DELETE CASCADE,
-    --if amenity is deleted, all data belonging to the amenity will be deleted
-    CONSTRAINT 'amenity_fk' FOREIGN KEY ('amenity_id') REFERENCES 'amenity'('id') ON DELETE CASCADE
 );
 
 
