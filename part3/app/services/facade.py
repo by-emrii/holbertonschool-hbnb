@@ -10,12 +10,13 @@ from app.models.review import Review
 from app.models.amenity import Amenity
 from app.models.reservation import Reservation
 from app.persistence.user_repository import UserRepository
+from app.persistence.place_repository import PlaceRepository
 
 class HBnBFacade:
     def __init__(self):
         # shared repo
         self.user_repo = UserRepository()
-        self.place_repo = SQLAlchemyRepository(Place)
+        self.place_repo = PlaceRepository()
         self.review_repo = SQLAlchemyRepository(Review)
         self.amenity_repo = SQLAlchemyRepository(Amenity)
         self.reservation_repo = SQLAlchemyRepository(Reservation)
