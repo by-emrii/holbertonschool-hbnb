@@ -107,6 +107,10 @@ class HBnBFacade:
         """Create and save a review."""
         return self.review_service.create_review(review_data)
 
+    def user_already_reviewed(self, place_id, user_id):
+        """Check if a user has already reviewed a given place."""
+        return self.review_service.user_already_reviewed(place_id, user_id)
+
     #READ REVIEWS
     def get_review_by_id(self, review_id):
         """Retrieve a single review by ID."""

@@ -30,6 +30,16 @@ class ReviewService:
         self.review_repo.add(review)
         return review
     
+    def user_already_reviewed(self, place_id, user_id):
+        """
+        Check if a user has already reviewed a specific place.
+        Returns True if a review exists, False otherwise.
+        """
+        for review in self.review_repo.get_all():
+            if str(review.place.id) == str(place_id) and str(review.user.id) == str(user_id):
+                return True
+        return False
+
     #READ
     def get_review_by_id(self, review_id):
         """Fetch a single review by ID."""
@@ -84,7 +94,8 @@ class ReviewService:
         # Ownership check
         user_id = getattr(review.user, "id", review.user)
         if str(user_id) != str(current_user):
-            raise PermissionError("You are not allowed to delete this review.")
+            raise PermissionError("Unauthorized action.")
 
+        # Delete the review
         self.review_repo.delete(review_id)
         return True
