@@ -42,7 +42,7 @@ place_response = api.model('Place', {
     'amenity_ids': fields.List(fields.String),
 })
 
-# ============== Response enrichment helper function（same as part2, manually serialize） ==============
+# ============== Response enrichment helper function（manually serialize） ==============
 def _enrich_place_with_amenities(place, facade=facade):
     amenities = []
     for amenity_id in getattr(place, 'amenity_ids', []) or []:

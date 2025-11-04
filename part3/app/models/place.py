@@ -17,7 +17,7 @@ class Place(BaseModel):
     longitude = db.Column(db.Float, nullable=False)
     
     # Additional attributes from business logic (not mapped as relationships yet)
-    owner_id = db.Column(db.String(36), nullable=False)  # Will be foreign key in later task
+    owner_id = db.Column(db.String(36), nullable=False)
     address = db.Column(db.String(200), nullable=True)
     image_url = db.Column(db.String, nullable=True)
 
@@ -122,7 +122,6 @@ class Place(BaseModel):
     # UTILITY METHODS
     # =====================
     # These methods handle amenity_ids and review_ids temporarily
-    # They will be replaced with proper relationships in later tasks
     
     @property
     def amenity_ids(self):
