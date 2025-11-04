@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from app import db
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import relationship, validates
 from app.models.base_model import BaseModel
 from io import BytesIO
 from PIL import Image as PILImage
