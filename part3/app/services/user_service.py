@@ -10,6 +10,7 @@ class UserService:
         if existing:
             raise ValueError('Email already used - choose another email')
         user = User(**user_data)
+        user.hash_password(user_data['password']) # hash pwd before saving
         self.user_repo.add(user)
         return user
 

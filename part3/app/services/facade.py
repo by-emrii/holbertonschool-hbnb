@@ -9,12 +9,14 @@ from app.models.place import Place
 from app.models.review import Review
 from app.models.amenity import Amenity
 from app.models.reservation import Reservation
+from app.persistence.user_repository import UserRepository
+from app.persistence.place_repository import PlaceRepository
 
 class HBnBFacade:
     def __init__(self):
         # shared repo
-        self.user_repo = SQLAlchemyRepository(User)
-        self.place_repo = SQLAlchemyRepository(Place)
+        self.user_repo = UserRepository()
+        self.place_repo = PlaceRepository()
         self.review_repo = SQLAlchemyRepository(Review)
         self.amenity_repo = SQLAlchemyRepository(Amenity)
         self.reservation_repo = SQLAlchemyRepository(Reservation)
@@ -23,7 +25,7 @@ class HBnBFacade:
         self.user_service = UserService(self.user_repo)
         self.amenity_service = AmenityService(self.amenity_repo)
         self.reservation_service = ReservationService(self.reservation_repo)
-        self.place_service = PlaceService(self.place_repo, self.user_repo, self.amenity_repo)
+        self.place_service = PlaceService(self.place_repo)
         self.review_service = ReviewService(self.place_repo, self.user_repo, self.review_repo)
         
     """ User CRU """
@@ -104,6 +106,10 @@ class HBnBFacade:
     def create_review(self, review_data):
         """Create and save a review."""
         return self.review_service.create_review(review_data)
+
+    def user_already_reviewed(self, place_id, user_id):
+        """Check if a user has already reviewed a given place."""
+        return self.review_service.user_already_reviewed(place_id, user_id)
 
     #READ REVIEWS
     def get_review_by_id(self, review_id):

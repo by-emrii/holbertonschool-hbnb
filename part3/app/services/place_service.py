@@ -1,8 +1,9 @@
 from app.models.place import Place
 
 class PlaceService():
-    def __init__(self, place_repo, user_repo=None):
+    def __init__(self, place_repo, user_repo=None, amenity_repo=None):
         self.user_repo = user_repo     # validate owner_id in user_repo 
+        self.amenity_repo = amenity_repo  # validate amenity_id in amenity_repo
         self.place_repo = place_repo
 
 
@@ -83,8 +84,11 @@ class PlaceService():
     # ---------- Relationship Method: Amenity ----------
     def add_amenity(self, place_id, amenity_id):
         place = self.get_place(place_id)
-        # validate Amenity exists（if Amenity repo/facade is injected/passed/called）
-        # here only implement without actual lookup（caller ensures）
+        # Validate amenity exists if amenity_repo is provided
+        if self.amenity_repo and amenity_id:
+            amenity = self.amenity_repo.get(amenity_id)
+            if not amenity:
+                raise ValueError(f"Amenity with id {amenity_id} not found")
         place.add_amenity(amenity_id)
         self.place_repo.update(place_id, {'amenity_ids': place.amenity_ids})
         return place
