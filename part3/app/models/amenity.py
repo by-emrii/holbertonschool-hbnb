@@ -1,7 +1,13 @@
-from app.models.base_model import BaseModel, validates
 from app import db
+from app.models.base_model import BaseModel
+from sqlalchemy.orm import validates
 
 class Amenity(BaseModel):
+    __tablename__ = 'amenities'
+
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(50), nullable=True)
+    
     __tablename__ = 'amenities'
 
     name = db.Column(db.String(50), nullable=False)
@@ -36,10 +42,8 @@ class Amenity(BaseModel):
             raise TypeError("Amenity description must be a string")
         
         value = value.strip()
-        if len(value) <= 0:
-            raise ValueError("Amenity description must not be empty")
-        elif len(value) > 50:
-            raise ValueError("Amenity description cannot exceed 50 characters")
+        if len(value) > 100:
+            raise ValueError("Amenity description cannot exceed 100 characters")
         
         return value
 
