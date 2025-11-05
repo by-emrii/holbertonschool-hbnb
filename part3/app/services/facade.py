@@ -1,5 +1,4 @@
 from app.persistence.repository import SQLAlchemyRepository
-from app.persistence.repository import AmenityRepository
 from app.services.user_service import UserService
 from app.services.amenity_service import AmenityService
 from app.services.reservation_service import ReservationService
@@ -12,6 +11,7 @@ from app.models.amenity import Amenity
 from app.models.reservation import Reservation
 from app.persistence.user_repository import UserRepository
 from app.persistence.place_repository import PlaceRepository
+from app.persistence.amenity_repository import AmenityRepository
 
 class HBnBFacade:
     def __init__(self):
