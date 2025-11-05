@@ -102,7 +102,7 @@ class HBnBFacade:
 
     def user_already_reviewed(self, place_id, user_id):
         """Check if a user has already reviewed a given place."""
-        return self.review_service.user_already_reviewed(place_id, user_id)
+        return self.review_repo.user_already_reviewed(place_id, user_id)
 
     #READ REVIEWS
     def get_review_by_id(self, review_id):
