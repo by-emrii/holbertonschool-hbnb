@@ -1,8 +1,8 @@
-
+import unittest
 from datetime import datetime
 from app.models.review import Review
 
-class ReviewService:
+class ReviewService():
     def __init__(self, place_repo, user_repo, review_repo):
         self.user_repo = user_repo
         self.place_repo = place_repo
