@@ -50,8 +50,12 @@ class ReviewList(Resource):
                 return {'error': 'Place not found'}, 404
 
             # Owners cannot review their own place (optional)
-            if place.owner_id == current_user:
-                return {'error': 'Owners cannot review their own place'}, 403
+            if str(place.owner_id) == str(current_user):
+                return {'error': "You cannot review your own place."}, 400
+            
+            # User can only review a place once
+            if facade.user_already_reviewed(place.id, current_user):
+                return {'error': "You have already reviewed this place."}, 400
 
             # Fetch user object (depends on how your facade works)
             user = facade.get_user(current_user)
@@ -70,9 +74,10 @@ class ReviewList(Resource):
             return review.to_dict(), 201
 
         except ValueError as e:
-            return {"error": str(e)}, 400  
+            return {"error": str(e)}, 400
+        except PermissionError as e:
+            return {"error": str(e)}, 403  
             
-
 """Get, update, deleted review by id"""
 @api.route('/<string:review_id>')
 class ReviewResource(Resource):
@@ -114,14 +119,30 @@ class ReviewResource(Resource):
     def delete(self, review_id):
         """Delete a review (owner only)"""
         current_user = get_jwt_identity()
+
         try:
-            facade.delete_review(review_id, current_user)  
+            # Fetch the review
+            review = facade.get_review_by_id(review_id)
+            if not review:
+                return {"error": "Review not found"}, 404
+            
+            # Ownership check
+            if str(review.user.id) != str(current_user):
+                return {"error": "Unauthorized action."}, 403
+            
+            # Delete the review
+            facade.delete_review(review_id, current_user)
             return {"message": "Review deleted successfully"}, 200
 
         except PermissionError as e:
+            # In case the service layer also raises a permission error
             return {"error": str(e)}, 403
         except ValueError as e:
+            # In case the review is not found
             return {"error": str(e)}, 404
+        except Exception as e:
+            # Catch any unexpected errors
+            return {"error": str(e)}, 500
     
 """List all reviews of place"""
 @api.route('/place/<string:place_id>')
