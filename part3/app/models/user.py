@@ -21,7 +21,7 @@ class User(BaseModel):
     # RELATIONSHIPS
     # =====================
     places = relationship('Place', backref='owner', lazy=True)
-    reviews = relationship('Review', backref='author', lazy=True)
+    reviews = relationship('Review', backref='user', lazy=True)
 
     # =====================
     # VALIDATORS
