@@ -17,11 +17,11 @@ class User(BaseModel):
     phone_number = db.Column(db.String, nullable=True)
     profile_img = db.Column(db.String, nullable=True)
 
-    # # =====================
-    # # RELATIONSHIPS
-    # # =====================
-    # places = relationship('Place', backref='owner', lazy=True)
-    # reviews = relationship('Review', backref='author', lazy=True)
+    # =====================
+    # RELATIONSHIPS
+    # =====================
+    places = relationship('Place', backref='owner', lazy=True)
+    reviews = relationship('Review', backref='user', lazy=True)
 
     # =====================
     # VALIDATORS
