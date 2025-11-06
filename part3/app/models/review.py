@@ -18,13 +18,6 @@ class Review(BaseModel):
     # user_id = db.Column(db.String(50), db.ForeignKey('users.id'), nullable=False)
     # place_id = db.Column(db.String(50), db.ForeignKey('places.id'), nullable=False)
 
-<<<<<<< HEAD
-    # # Relationships
-    # user = relationship("User", backref="reviews", lazy=True)
-    # place = relationship("Place", backref="reviews", lazy=True)
-
-=======
->>>>>>> part3/grace
     #RATING
     @validates('rating')
     def validate_rating(self, key, value):
