@@ -95,27 +95,18 @@ class UserResource(Resource):
     #     """ Update user details """
     #     user_data = api.payload
     #     current_user = get_jwt_identity()
-
-    #     # retrieve the user
-    #     user = facade.get_user(user_id)
-    #     if not user:
-    #         return {'error': 'User not found'}, 404
+    
+        # user = facade.get_user(user_id)
+        # if not user:
+        #     return {'error': 'User not found'}, 404
         
-    #     # Ownership check
-    #     if str(user.id) != str(current_user):
-    #         return {'error': 'Unauthorised action'}, 403
-        # Check user exists
-        user = facade.get_user(user_id)
-        if not user:
-            return {'error': 'User not found'}, 404
+        # # Ownership check
+        # if str(user.id) != str(current_user):
+        #     return {'error': 'Unauthorized action.'}, 403
         
-        # Ownership check
-        if str(user.id) != str(current_user):
-            return {'error': 'Unauthorized action.'}, 403
-        
-        # Prevent the user from modifying their email and password
-        if 'email' in user_data or 'password' in user_data:
-            return {"error": "You cannot modify email or password."}, 400
+        # # Prevent the user from modifying their email and password
+        # if 'email' in user_data or 'password' in user_data:
+        #     return {"error": "You cannot modify email or password."}, 400
     
     #     try:
     #         updated_user = facade.update_user(user_id, user_data)
