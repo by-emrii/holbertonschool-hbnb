@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from app import db
+from app.models.amenity import Amenity
 
 class Repository(ABC):
     @abstractmethod
