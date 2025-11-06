@@ -1,7 +1,7 @@
 from flask import request
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace("reviews", description="Review operations")
 
@@ -97,15 +97,18 @@ class ReviewResource(Resource):
     def put(self, review_id):
         """Update a review (owner only)"""
         data = api.payload or {}
-        current_user = get_jwt_identity()
-        
+        # current_user = get_jwt_identity()
+        current_user = get_jwt()
+        is_admin = current_user.get('is_admin', False)
+        jwt_user_id = get_jwt_identity()
+
         try:
             review = facade.get_review_by_id(review_id)
-            if review.user.id != current_user:
+            if not is_admin and str(review.user.id) != str(jwt_user_id):
                 return {"error": 'Unauthorised action'}, 403
             
             #update the review
-            update = facade.update_review(review_id, data, current_user)
+            update = facade.update_review(review_id, data, jwt_user_id)
             return update.to_dict(), 200
         
         except PermissionError as e:
