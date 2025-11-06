@@ -27,25 +27,24 @@ user_response = api.model('User',{
 
 @api.route('/')
 class UserList(Resource):
-    # @api.expect(user_model, validate=True)
-    # @api.marshal_with(user_response, code=201)
-    # @api.response(201, 'User successfully created')
-    # @api.response(400, 'Email already registered')
-    # @api.response(400, 'Invalid input data')
-    # @api.response(400, 'Invalid phone number')
-    # @api.response(400, 'Invalid password')
+    @api.expect(user_model, validate=True)
+    @api.response(201, 'User successfully created')
+    @api.response(400, 'Email already registered')
+    @api.response(400, 'Invalid input data')
+    @api.response(400, 'Invalid phone number')
+    @api.response(400, 'Invalid password')
 
-    # def post(self):
-    #     """Register a new user"""
-    #     try:
-    #         user_data = api.payload
-    #         new_user = facade.create_user(user_data)
-    #         return {
-    #             'id': new_user.id,
-    #             'message': "User registered sucessfully"
-    #             }, 201
-    #     except (TypeError,ValueError) as e:
-    #         return {"error": str(e)}, 400
+    def post(self):
+        """Register a new user"""
+        try:
+            user_data = api.payload
+            new_user = facade.create_user(user_data)
+            return {
+                'id': new_user.id,
+                'message': "User registered sucessfully"
+                }, 201
+        except (TypeError,ValueError) as e:
+            return {"error": str(e)}, 400
 
     # Get all users
     def get(self):
