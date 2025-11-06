@@ -1,8 +1,7 @@
-
 from datetime import datetime
 from app.models.review import Review
 
-class ReviewService:
+class ReviewService():
     def __init__(self, place_repo, user_repo, review_repo):
         self.user_repo = user_repo
         self.place_repo = place_repo
@@ -35,10 +34,7 @@ class ReviewService:
         Check if a user has already reviewed a specific place.
         Returns True if a review exists, False otherwise.
         """
-        for review in self.review_repo.get_all():
-            if str(review.place.id) == str(place_id) and str(review.user.id) == str(user_id):
-                return True
-        return False
+        return self.review_repo.user_already_reviewed(place_id, user_id)
 
     #READ
     def get_review_by_id(self, review_id):
@@ -50,11 +46,11 @@ class ReviewService:
 
     def get_reviews_by_user(self, user_id):
         """Fetch all reviews made by a specific user (by ID)."""
-        return [r for r in self.review_repo.get_all() if r.user.id == user_id]
+        return self.review_repo.get_reviews_by_user(user_id)
 
     def get_reviews_for_place(self, place_id):
         """Fetch all reviews for a specific place (by ID)."""
-        return [r for r in self.review_repo.get_all() if r.place.id == place_id]
+        return self.review_repo.get_reviews_for_place(place_id)
     
     #UPDATE
     def update_review(self, review_id, review_data, current_user):
@@ -69,23 +65,11 @@ class ReviewService:
             raise PermissionError("Unauthorised action")
 
         # Update the model using Review's own method
-        review.update_from_dict(review_data)
+        #review.update_from_dict(review_data)
         # Pass the updated object back to repo
         self.review_repo.update(review_id, review_data)
         return review
 
-    #GETTING THE AVERAGE RATING AND RECENT REVIEWS
-    def get_average_rating(self, place_id):
-        """Calculate average rating for a place."""
-        reviews = self.get_reviews_for_place(place_id)
-        ratings = [r.rating for r in reviews if r.rating is not None]
-        return round(sum(ratings)/len(ratings), 2) if ratings else 0
-
-    def get_recent_reviews(self, place_id, limit=5):
-        """Return the most recent reviews for a place."""
-        reviews = self.get_reviews_for_place(place_id)
-        return sorted(reviews, key=lambda r: r.created_at, reverse=True)[:limit]
-    
     #DELETE
     def delete_review(self, review_id, current_user):
         """Delete a review by ID."""
@@ -99,3 +83,17 @@ class ReviewService:
         # Delete the review
         self.review_repo.delete(review_id)
         return True
+
+    #GETTING THE AVERAGE RATING AND RECENT REVIEWS
+    def get_average_rating(self, place_id):
+        """Calculate average rating for a place."""
+        avg = self.review_repo.get_average_rating_for_place(place_id)
+        return round(avg, 2) if avg else 0
+
+    def get_recent_reviews(self, place_id, limit=5):
+        """Return the most recent reviews for a place."""
+        reviews = self.review_repo.get_reviews_for_place(place_id)
+        return sorted(reviews, key=lambda r: r.created_at, reverse=True)[:limit]
+    
+    
+    
