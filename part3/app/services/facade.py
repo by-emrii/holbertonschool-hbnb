@@ -27,7 +27,7 @@ class HBnBFacade:
         self.user_service = UserService(self.user_repo)
         self.amenity_service = AmenityService(self.amenity_repo)
         self.reservation_service = ReservationService(self.reservation_repo)
-        self.place_service = PlaceService(self.place_repo, self.amenity_repo, self.review_repo)
+        self.place_service = PlaceService(self.place_repo, self.user_repo, self.amenity_repo, self.review_repo)
         self.review_service = ReviewService(self.place_repo, self.user_repo, self.review_repo)
         
     """ User CRU """
