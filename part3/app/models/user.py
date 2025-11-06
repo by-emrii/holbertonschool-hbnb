@@ -2,7 +2,7 @@ from app import db
 from app.models.base_model import BaseModel
 from flask_bcrypt import Bcrypt
 import re
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import validates, relationship
 
 bcrypt = Bcrypt()
 
@@ -17,15 +17,11 @@ class User(BaseModel):
     phone_number = db.Column(db.String, nullable=True)
     profile_img = db.Column(db.String, nullable=True)
 
-    # def __init__(self, first_name, last_name, email, password, phone_number=None, profile_img=None, is_admin=False):
-    #     super().__init__()
-    #     self.first_name = first_name
-    #     self.last_name = last_name
-    #     self.email = email
-    #     self.hash_password(password)
-    #     self.phone_number = phone_number
-    #     self.profile_img = profile_img
-    #     self.is_admin = is_admin
+    # =====================
+    # RELATIONSHIPS
+    # =====================
+    places = relationship('Place', backref='owner', lazy=True)
+    reviews = relationship('Review', backref='author', lazy=True)
 
     # =====================
     # VALIDATORS
