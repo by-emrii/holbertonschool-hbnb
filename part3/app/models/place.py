@@ -1,6 +1,7 @@
 from app import db
 from app.models.base_model import BaseModel
 from sqlalchemy.orm import validates
+from sqlalchemy.orm import relationship, validates
 import re
 
 """ Class Place represents to Place model in BL"""
@@ -24,6 +25,13 @@ class Place(BaseModel):
     # amenity_ids and review_ids will be handled via relationships in later tasks
     # For now, we won't persist them as they represent relationships
 
+    # =====================
+    # RELATIONASHIPS
+    # =====================
+    amenities = relationship('Amenity', backref='place', lazy=True)
+    reviews = relationship('Review', backref='place', lazy=True)
+    owners = relationship('User', backref='', lazy=True)
+    
     # =====================
     # VALIDATORS
     # =====================
