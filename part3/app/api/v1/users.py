@@ -34,17 +34,17 @@ class UserList(Resource):
     @api.response(400, 'Invalid phone number')
     @api.response(400, 'Invalid password')
 
-    def post(self):
-        """Register a new user"""
-        try:
-            user_data = api.payload
-            new_user = facade.create_user(user_data)
-            return {
-                'id': new_user.id,
-                'message': "User registered sucessfully"
-                }, 201
-        except (TypeError,ValueError) as e:
-            return {"error": str(e)}, 400
+    # def post(self):
+    #     """Register a new user"""
+    #     try:
+    #         user_data = api.payload
+    #         new_user = facade.create_user(user_data)
+    #         return {
+    #             'id': new_user.id,
+    #             'message': "User registered sucessfully"
+    #             }, 201
+    #     except (TypeError,ValueError) as e:
+    #         return {"error": str(e)}, 400
 
     # Get all users
     def get(self):
