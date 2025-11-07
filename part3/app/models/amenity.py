@@ -1,4 +1,5 @@
-from app.models.base_model import BaseModel, validates, relationship
+from app.models.base_model import BaseModel
+from sqlalchemy.orm import relationship, validates
 from app import db
 
 class Amenity(BaseModel):

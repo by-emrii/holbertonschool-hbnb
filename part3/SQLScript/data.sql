@@ -78,13 +78,45 @@ CREATE TABLE IF NOT EXISTS "place_amenity" (
 -- ==========================
 -- Administrator User: 
 -- ==========================
-INSERT INTO "users" (id, first_name, last_name, email, password, is_admin) VALUES (
+INSERT OR IGNORE INTO "users" (id, first_name, last_name, email, password, is_admin) VALUES (
     '36c9050e-ddd3-4c3b-9731-9f487208bbc1',
     'Admin',
     'HBnB',
     'admin@hbnb.io',
-    'admin1234',  -- hashed password
+    '$2a$12$moBmzGGpareXoBAzBkLj5enYx6gjUtyJnDlCIwGQBakWzA8xVgDby',  -- hashed password
     TRUE
+);
+
+-- ==========================
+-- Create a User: 
+-- ==========================
+
+INSERT INTO "users" (id, first_name, last_name, email, password, is_admin) VALUES (
+    '36c9050e-ddd3-4c3b-9731-9f487208bbc2',
+    'Jane',
+    'Doe',
+    'jane.doe@hbnb.com',
+    '$2a$12$QNVEPHOCaFE.gEPmQi7GTueaSlgs8PZ.blOVyjNen7ogEh3ZatMmq',  -- hashed password
+    FALSE
+);
+
+INSERT INTO "users" (id, first_name, last_name, email, password, is_admin) VALUES (
+    '36c9050e-ddd3-4c3b-9731-9f487208bbc4',
+    'Jack',
+    'Doe',
+    'jack.doe@hbnb.com',
+    '$2a$12$kqGA2Gc1Dj1H.qHG7yZXR.f7yhk3tDiDkt05WuEs7LC4JSM0qAzfW',  -- hashed password
+    FALSE
+);
+
+-- User to be deleted by adminn
+INSERT INTO "users" (id, first_name, last_name, email, password, is_admin) VALUES (
+    '36c9050e-ddd3-4c3b-9731-9f487208bbc3',
+    'John',
+    'Doe',
+    'john.doe@hbnb.com',
+    '$2a$12$DOWRDth4snKhdEzEXXIMN..2vNVwEERZjifDk5kRTvEjUJ4VxtFfO',  -- hashed password
+    FALSE
 );
 
 -- Verify admin
@@ -94,16 +126,16 @@ SELECT * FROM users WHERE is_admin = TRUE;
 SELECT * FROM users;
 
 -- Admin updates user's (jane Doe) details
-UPDATE users SET first_name = 'Lily', last_name = 'Grey' WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc2'
+UPDATE users SET first_name = 'Lily', last_name = 'Grey' WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc2';
 
 -- Admin deletes user
-DELETE FROM users WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc2';
+DELETE FROM users WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc3';
 
 
 -- ==========================
 -- Place: create a place
 -- ==========================
-INSERT INTO "places" (id, owner_id, title, address, price, latitude, longitude, description) VALUES (
+INSERT OR IGNORE INTO "places" (id, owner_id, title, address, price, latitude, longitude, description) VALUES (
     'a35837b8-25a2-49be-855d-84c1d0e8fe7b', --id
     '36c9050e-ddd3-4c3b-9731-9f487208bbc1', --owner_id
     'Cozy Loft',
@@ -123,10 +155,10 @@ UPDATE places Set title = 'Man Cave' WHERE id = 'a35837b8-25a2-49be-855d-84c1d0e
 -- ==========================
 -- Amenity: 
 -- ==========================
-INSERT INTO "amenities" (id, name) VALUES
-('54f0f63a-8c08-45e0-88c8-1824760af8a1', 'WiFi'),
-('54f0f63a-8c08-45e0-88c8-1824760af8a2', 'Swimming Pool'),
-('54f0f63a-8c08-45e0-88c8-1824760af8a3', 'Air Conditioning');
+INSERT OR IGNORE INTO "amenities" (id, name) VALUES
+('54f0f63a-8c08-45e0-88c5-1824760af8a1', 'WiFi'),
+('54f0f63a-8c08-45e0-88c6-1824760af8a1', 'Swimming Pool'),
+('54f0f63a-8c08-45e0-88c7-1824760af8a1', 'Air Conditioning');
 
 -- Read 
 SELECT * FROM amenities;
@@ -138,10 +170,19 @@ UPDATE amenities Set name = 'Great Wifi' WHERE name = 'WiFi';
 -- Review: create a review
 -- ==========================
 INSERT INTO "reviews" (id, text, rating, user_id, place_id) VALUES (
-    '36c9050e-ddd3-4c3b-9731-9f487208bbc1', -- id
+    '36c9050e-ddd3-4c3b-9731-9f487208bbc9', -- id
     'Amazing Stay!',
     5,
-    '36c9050e-ddd3-4c3b-9731-9f487208bbc1', -- user_id
+    '36c9050e-ddd3-4c3b-9731-9f487208bbc2', -- user_id
+    'a35837b8-25a2-49be-855d-84c1d0e8fe7b' -- place_id
+);
+
+-- Review to be deleted
+INSERT INTO "reviews" (id, text, rating, user_id, place_id) VALUES (
+    '36c9050e-ddd3-4c3b-9731-9f487208bbc8', -- id
+    'Sucks',
+    1,
+    '36c9050e-ddd3-4c3b-9731-9f487208bbc4', -- user_id
     'a35837b8-25a2-49be-855d-84c1d0e8fe7b' -- place_id
 );
 
@@ -149,30 +190,27 @@ INSERT INTO "reviews" (id, text, rating, user_id, place_id) VALUES (
 SELECT * FROM reviews;
 
 -- Update: 
-UPDATE reviews Set text = 'Wonderful!' WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc1';
+UPDATE reviews Set text = 'Wonderful!' WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc9';
 
 -- Delete: 
-DELETE FROM reviews WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc1',
+DELETE FROM reviews WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc8';
 
 -- ==========================
 --Link amenity to a place
 -- ==========================
-INSERT INTO "place_amenity" (place_id, amenity_id) VALUES
-('54f0f63a-8c08-45e0-88c8-1824760af8a1', '54f0f63a-8c08-45e0-88c8-1824760af8a1'), --WiFi
-('54f0f63a-8c08-45e0-88c8-1824760af8a2', '54f0f63a-8c08-45e0-88c8-1824760af8a1'), --Swimming Pool
-('54f0f63a-8c08-45e0-88c8-1824760af8a3', '54f0f63a-8c08-45e0-88c8-1824760af8a1'); --Air Conditioning
+INSERT OR IGNORE INTO "place_amenity" (place_id, amenity_id) VALUES
+('a35837b8-25a2-49be-855d-84c1d0e8fe7b', '54f0f63a-8c08-45e0-88c5-1824760af8a1'), --WiFi
+('54f0f63a-8c08-45e0-88c8-1824760af8a2', '54f0f63a-8c08-45e0-88c6-1824760af8a1'), --Swimming Pool
+('54f0f63a-8c08-45e0-88c8-1824760af8a3', '54f0f63a-8c08-45e0-88c7-1824760af8a1'); --Air Conditioning
 
 -- Get amenity for place
 SELECT pa.place_id, a.name
 FROM place_amenity pa
 JOIN amenities a ON pa.amenity_id = a.id
-WHERE pa.place_id = '54f0f63a-8c08-45e0-88c8-1824760af8a3'; 
+WHERE pa.place_id = 'a35837b8-25a2-49be-855d-84c1d0e8fe7b'; 
 
 -- Adding amenity to place
-INSERT INTO "place_amenity" (place_id, amenity_id) VALUES ('54f0f63a-8c08-45e0-88c8-1824760af8a3', '54f0f63a-8c08-45e0-88c8-1824760af8a1');
-
--- change air conditioning to ac
-UPDATE place_amenity SET amenity_id = 'acuuid' WHERE place_id '54f0f63a-8c08-45e0-88c8-1824760af8a3' AND amenity_id '54f0f63a-8c08-45e0-88c8-1824760af8a1';
+INSERT OR IGNORE INTO "place_amenity" (place_id, amenity_id) VALUES ('a35837b8-25a2-49be-855d-84c1d0e8fe7b', '54f0f63a-8c08-45e0-88c6-1824760af8a1');
 
 -- delete AC amenity from place
-DELETE FROM place_amenity WHERE place_id = '54f0f63a-8c08-45e0-88c8-1824760af8a3' AND amenity_id '54f0f63a-8c08-45e0-88c8-1824760af8a1';
+DELETE FROM place_amenity WHERE place_id = ('54f0f63a-8c08-45e0-88c8-1824760af8a3') AND amenity_id = ('54f0f63a-8c08-45e0-88c7-1824760af8a1');

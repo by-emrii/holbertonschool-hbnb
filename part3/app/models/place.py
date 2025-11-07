@@ -6,8 +6,8 @@ from sqlalchemy.orm import relationship, validates
 # one Place can have many Amenitys + one Amenity can belong to many Places
 # so we need an association table
 
-place_amenities = db.Table(
-    'place_amenities',
+place_amenity = db.Table(
+    'place_amenity',
     db.Column('place_id', db.String(36), db.ForeignKey('places.id'), primary_key=True),
     db.Column('amenity_id', db.String(36), db.ForeignKey('amenities.id'), primary_key=True),
 )
@@ -43,7 +43,7 @@ class Place(BaseModel):
     # many-to-many Place <-> Amenity
     amenities = relationship(
         'Amenity',
-        secondary=place_amenities,
+        secondary=place_amenity,
         backref=db.backref('places', lazy=True),
         lazy='subquery'
     )
