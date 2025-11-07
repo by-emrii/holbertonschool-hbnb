@@ -32,7 +32,7 @@ def create_app(config_class="config.DevelopmentConfig"):
     # =======================
 
     # Admin namespace
-    api.add_namespace(admin_ns, path="/api/v1/")
+    api.add_namespace(admin_ns, path="/api/v1")
 
     # Register the user namespace
     api.add_namespace(users_ns, path='/api/v1/users')
