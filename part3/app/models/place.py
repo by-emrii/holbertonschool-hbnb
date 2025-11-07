@@ -38,7 +38,7 @@ class Place(BaseModel):
     owner = relationship('User', back_populates='places')
 
     # one Place -> many Reviews
-    reviews = relationship('Review', back_populates='place', lazy=True)
+    reviews = relationship('Review', backref='place', lazy=True)
 
     # many-to-many Place <-> Amenity
     amenities = relationship(
