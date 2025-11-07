@@ -15,7 +15,7 @@ amenity_model = api.model('Amenity', {
     })
 
 # create root endpoint using Resource
-# @api.route('/')
+@api.route('/')
 class AmenityList(Resource):
     """ Collection level operations """
     # @api.expect(amenity_model, validate=True)
