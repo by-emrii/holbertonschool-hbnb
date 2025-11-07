@@ -7,11 +7,11 @@
 -- ==========================
 CREATE TABLE IF NOT EXISTS "users" (
     id CHAR(36) PRIMARY KEY, -- uuid
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
-    password VARCHAR(255),
-    is_admin BOOLEAN DEFAULT FALSE
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- ==========================
@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS "users" (
 CREATE TABLE IF NOT EXISTS "places" (
     id CHAR(36) PRIMARY KEY, -- uuid
     title VARCHAR(255) NOT NULL,
-    description TEXT,
+    description TEXT NOT NULL,
+    address VARCHAR(200) NULL,
     price DECIMAL(10, 2) NOT NULL,
     latitude FLOAT NOT NULL,
     longitude FLOAT  NOT NULL,
@@ -102,10 +103,11 @@ DELETE FROM users WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc2';
 -- ==========================
 -- Place: create a place
 -- ==========================
-INSERT INTO "places" (id, owner_id, title, price, latitude, longitude, description) VALUES (
+INSERT INTO "places" (id, owner_id, title, address, price, latitude, longitude, description) VALUES (
     'a35837b8-25a2-49be-855d-84c1d0e8fe7b', --id
     '36c9050e-ddd3-4c3b-9731-9f487208bbc1', --owner_id
     'Cozy Loft',
+    '14 Holberton St, Melbourne',
     120.0,
     -37.81,
     144.96,
