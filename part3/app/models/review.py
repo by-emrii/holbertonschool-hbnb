@@ -11,7 +11,7 @@ class Review(BaseModel):
     ALLOWED_FORMATS = {"JPEG", "PNG"}
 
     rating = db.Column(db.Integer, nullable=False)
-    text = db.Column(db.String(300), nullable=False)
+    text = db.Column(db.Text, nullable=False)
     upload_image = db.Column(db.JSON, default=list)
 
     # foreign keys
