@@ -1,11 +1,11 @@
-from app.models.base_model import BaseModel, validates
+from app.models.base_model import BaseModel, validates, relationship
 from app import db
 
 class Amenity(BaseModel):
     __tablename__ = 'amenities'
 
     name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(50), nullable=True
+    description = db.Column(db.String(50), nullable=True)
 
     places = relationship('Place', backref='amenity', lazy=True)
     
