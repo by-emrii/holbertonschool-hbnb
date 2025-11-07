@@ -18,7 +18,7 @@ class Place(BaseModel):
     __tablename__ = 'places'
 
     # Core attributes as required by task_08, except amenity_ids and review_ids
-    title = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(1000), nullable=True)
     price = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=False)
