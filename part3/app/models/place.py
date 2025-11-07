@@ -44,7 +44,7 @@ class Place(BaseModel):
     amenities = relationship(
         'Amenity',
         secondary=place_amenity,
-        backref=db.backref('places', lazy=True),
+        back_populates='places',
         lazy='subquery'
     )
     
