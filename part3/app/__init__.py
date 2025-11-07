@@ -31,9 +31,6 @@ def create_app(config_class="config.DevelopmentConfig"):
     # REGISTER NAMESPACES
     # =======================
 
-    # Admin namespace
-    api.add_namespace(admin_ns, path="/api/v1")
-
     # Register the user namespace
     api.add_namespace(users_ns, path='/api/v1/users')
 
@@ -51,6 +48,9 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     # Auth namespace
     api.add_namespace(auth_ns, path="/api/v1/auth")
+
+    # Admin namespace
+    api.add_namespace(admin_ns, path="/api/v1")
 
                       
     return app
