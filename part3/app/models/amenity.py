@@ -1,12 +1,18 @@
+from app.models.base_model import BaseModel, validates
 from app import db
-from app.models.base_model import BaseModel
-from sqlalchemy.orm import validates
 
 class Amenity(BaseModel):
     __tablename__ = 'amenities'
 
     name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(50), nullable=True)
+    description = db.Column(db.String(50), nullable=True
+
+    places = relationship('Place', backref='amenity', lazy=True)
+    
+    def __init__(self, name, description=None):
+        super().__init__()
+        self.name = name
+        self.description = description
 
     @validates("name")
     def validate_name(self, key, value):

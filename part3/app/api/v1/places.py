@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace('places', description='Place operations')
 
@@ -42,43 +42,41 @@ place_response = api.model('Place', {
     'amenity_ids': fields.List(fields.String),
 })
 
-# ============== Response enrichment helper function（manually serialize） ==============
+# ============== Response enrichment helper function（using SQLAlchemy relationships） ==============
 def _enrich_place_with_amenities(place, facade=facade):
+    # Use relationship to get amenities directly
     amenities = []
-    for amenity_id in getattr(place, 'amenity_ids', []) or []:
-        try:
-            amenity = facade.get_amenity(amenity_id)
-            amenities.append({
-                'id': amenity.id,
-                'name': getattr(amenity, 'name', None),
-                'description': getattr(amenity, 'description', None),
-            })
-        except Exception:
-            continue
+    for amenity in place.amenities:
+        amenities.append({
+            'id': amenity.id,
+            'name': amenity.name,
+            'description': amenity.description,
+        })
+
+    # Use relationship to get owner directly
     owner = None
-    owner_id = getattr(place, 'owner_id', None)
-    if owner_id:
-        try:
-            user = facade.get_user(owner_id)
-            owner = {
-                'id': user.id,
-                'first_name': getattr(user, 'first_name', None),
-                'last_name': getattr(user, 'last_name', None),
-                'email': getattr(user, 'email', None),
-            }
-        except Exception:
-            owner = None
+    if place.owner:
+        owner = {
+            'id': place.owner.id,
+            'first_name': place.owner.first_name,
+            'last_name': place.owner.last_name,
+            'email': place.owner.email,
+        }
+    
+    # Generate amenity_ids list for backward compatibility
+    amenity_ids = [amenity.id for amenity in place.amenities]
+
     return {
         'id': place.id,
-        'owner_id': getattr(place, 'owner_id', None),
+        'owner_id': place.owner.id,
         'title': place.title,
-        'description': getattr(place, 'description', None),
+        'description': place.description or '',
         'price': place.price,
-        'address': getattr(place, 'address', None),
+        'address': place.address,
         'latitude': place.latitude,
         'longitude': place.longitude,
-        'image_url': getattr(place, 'image_url', None),
-        'amenity_ids': list(getattr(place, 'amenity_ids', []) or []),
+        'image_url': place.image_url,
+        'amenity_ids': amenity_ids,
         'amenities': amenities,
         'owner': owner,
     }
@@ -140,12 +138,25 @@ class PlaceResource(Resource):
     def put(self, place_id):
         """ Update place """
         data = api.payload or {}
-        current_user = get_jwt_identity()
+        current_user = get_jwt()
+        jwt_user_id = get_jwt_identity()
+
+        # Set is_admin default to False if not exists
+        is_admin = current_user.get('is_admin', False)
+        # user_id = current_user.get('id')
+
         try:
             # retrieve place and check ownership before update
             place = facade.get_place(place_id)
-            if str(place.owner_id) != str(current_user):
-                return {'error': 'Unauthorised action'}, 403
+            if not place:
+                return {'error': 'Place not found'}, 404
+            
+            if not is_admin and str(place.owner_id) != str(jwt_user_id):
+                return {'error': 'Unauthorized action'}, 403
+            
+            # if str(place.owner_id) != str(current_user):
+            #     return {'error': 'Unauthorised action'}, 403
+            
             # perform update
             updated_place = facade.update_place(place_id, data)
             return {

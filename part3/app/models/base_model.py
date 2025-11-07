@@ -1,7 +1,7 @@
 from app import db
 import uuid
 from datetime import datetime
-
+from sqlalchemy.orm import validates
 
 class BaseModel(db.Model):
     """

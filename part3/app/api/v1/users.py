@@ -4,14 +4,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 api = Namespace('users', description='User operations')
 
-# user = {
-#     "user_id": "1",
-#     "first_name": "Bob",
-#     "last_name": "smith",
-#     "email": "bobsmith@gmail.com",
-#     "phone_number": "+61477448735",
-#     "encrypted_password": "password"
-# }
 
 # Define the user model for input validation and documentation
 user_model = api.model('User', {
@@ -36,12 +28,12 @@ user_response = api.model('User',{
 @api.route('/')
 class UserList(Resource):
     @api.expect(user_model, validate=True)
-    # @api.marshal_with(user_response, code=201)
-    # @api.response(201, 'User successfully created')
-    # @api.response(400, 'Email already registered')
-    # @api.response(400, 'Invalid input data')
-    # @api.response(400, 'Invalid phone number')
-    # @api.response(400, 'Invalid password')
+    @api.response(201, 'User successfully created')
+    @api.response(400, 'Email already registered')
+    @api.response(400, 'Invalid input data')
+    @api.response(400, 'Invalid phone number')
+    @api.response(400, 'Invalid password')
+
     def post(self):
         """Register a new user"""
         try:
@@ -91,36 +83,35 @@ class UserResource(Resource):
         except (TypeError, ValueError) as e:
             return {"error": str(e)}, 404
 
-    @jwt_required() 
-    @api.expect(user_model, validate=True)
-    @api.response(200, 'User details updated successfully!')
-    @api.response(404, 'User not found')
-    @api.response(404, 'Email already in use')
-    @api.response(404, 'Invalid input')
+    # @jwt_required() 
+    # @api.expect(user_model, validate=True)
+    # @api.response(200, 'User details updated successfully!')
+    # @api.response(404, 'User not found')
+    # @api.response(404, 'Email already in use')
+    # @api.response(404, 'Invalid input')
 
-    def put(self, user_id):
-        """ Update user details """
-        user_data = api.payload
-        current_user = get_jwt_identity()
-
-        # Check user exists
-        user = facade.get_user(user_id)
-        if not user:
-            return {'error': 'User not found'}, 404
-        
-        # Ownership check
-        if str(user.id) != str(current_user):
-            return {'error': 'Unauthorized action.'}, 403
-        
-        # Prevent the user from modifying their email and password
-        if 'email' in user_data or 'password' in user_data:
-            return {"error": "You cannot modify email or password."}, 400
+    # def put(self, user_id):
+    #     """ Update user details """
+    #     user_data = api.payload
+    #     current_user = get_jwt_identity()
     
-        try:
-            updated_user = facade.update_user(user_id, user_data)
-            return {'id': updated_user.id, 'first_name': updated_user.first_name, 'last_name': updated_user.last_name, 'email': updated_user.email, 'phone_number': updated_user.phone_number}, 200
-        except (TypeError, ValueError) as e:
-            msg = str(e)
-            if 'not found' in msg.lower():
-                return {'error': msg}, 404
-            return {"error": msg}, 400
+        # user = facade.get_user(user_id)
+        # if not user:
+        #     return {'error': 'User not found'}, 404
+        
+        # # Ownership check
+        # if str(user.id) != str(current_user):
+        #     return {'error': 'Unauthorized action.'}, 403
+        
+        # # Prevent the user from modifying their email and password
+        # if 'email' in user_data or 'password' in user_data:
+        #     return {"error": "You cannot modify email or password."}, 400
+    
+    #     try:
+    #         updated_user = facade.update_user(user_id, user_data)
+    #         return {'id': updated_user.id, 'first_name': updated_user.first_name, 'last_name': updated_user.last_name, 'email': updated_user.email, 'phone_number': updated_user.phone_number}, 200
+    #     except (TypeError, ValueError) as e:
+    #         msg = str(e)
+    #         if 'not found' in msg.lower():
+    #             return {'error': msg}, 404
+    #         return {"error": msg}, 400

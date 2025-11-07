@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
-from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
-from json import request
+from flask_jwt_extended import jwt_required, get_jwt
+from flask import request
 from app.services import facade
 
 api = Namespace('admin', description='Admin operations')
@@ -23,12 +23,17 @@ user_create_model = api.model('CreateUser', {
     'password': fields.String(required=True, description='Enter password')
 })
 
-amenity_model = api.model('Amenity', {
+create_amenity_model = api.model('Amenity', {
     'id': fields.String(readonly=True, description='Amenity ID'),
     'name': fields.String(required=True, description='Name of the amenity', min_length=1, max_length=50),
     'description': fields.String(required=False, description='Additional details of the amenity', max_length=100)
     })
 
+update_amenity_model = api.model('Amenity', {
+    'id': fields.String(description='Amenity ID'),
+    'name': fields.String(description='Name of the amenity', min_length=1, max_length=50),
+    'description': fields.String(description='Additional details of the amenity', max_length=100)
+    })
 
 place_update_model = api.model('PlaceUpdate', {
     'title':       fields.String(required=False),
@@ -45,14 +50,20 @@ place_update_model = api.model('PlaceUpdate', {
 # Administrators can create new users. The email must be unique.
 @api.route('/users/')
 class AdminUserCreate(Resource):
-    # @api.expect(user_create_model, validate=True)
+    @api.expect(user_create_model, validate=True)
+    @api.response(201, 'Admin successfully created')
+    @api.response(400, 'Email already registered')
+    @api.response(400, 'Invalid input data')
+    @api.response(400, 'Invalid phone number')
+    @api.response(400, 'Invalid password')
     @jwt_required()
     def post(self):
-        current_user = get_jwt_identity()
-        if not current_user.get('is_admin'):
+        # current_user = get_jwt()
+        claims = get_jwt()
+        if not claims.get('is_admin'):
             return {'error': 'Admin privileges required'}, 403
 
-        user_data = request.json
+        user_data = api.payload
         email = user_data.get('email')
 
         # Check if email is already in use
@@ -61,7 +72,7 @@ class AdminUserCreate(Resource):
 
         # Logic to create a new user
         try:
-            user_data = api.payload
+            # user_data = api.payload
             new_user = facade.create_user(user_data)
             return {
                 'id': new_user.id,
@@ -74,9 +85,10 @@ class AdminUserCreate(Resource):
 # Administrators can modify any user
 @api.route('/users/<user_id>')
 class AdminUserResource(Resource):
+    @api.expect(admin_user_update_model, validate=True)
     @jwt_required()
     def put(self, user_id):
-        current_user = get_jwt_identity()
+        current_user = get_jwt()
         
         # If 'is_admin' is part of the identity payload
         if not current_user.get('is_admin'):
@@ -105,9 +117,10 @@ class AdminUserResource(Resource):
 # Can add amenity to all places
 @api.route('/amenities/')
 class AdminAmenityCreate(Resource):
+    @api.expect(create_amenity_model, validate=True)
     @jwt_required()
     def post(self):
-        current_user = get_jwt_identity()
+        current_user = get_jwt()
         if not current_user.get('is_admin'):
             return {'error': 'Admin privileges required'}, 403
 
@@ -124,9 +137,10 @@ class AdminAmenityCreate(Resource):
 # Can update amenity to all places
 @api.route('/amenities/<amenity_id>')
 class AdminAmenityModify(Resource):
+    @api.expect(update_amenity_model, validate=True)
     @jwt_required()
     def put(self, amenity_id):
-        current_user = get_jwt_identity()
+        current_user = get_jwt()
         if not current_user.get('is_admin'):
             return {'error': 'Admin privileges required'}, 403
 
@@ -146,34 +160,3 @@ class AdminAmenityModify(Resource):
                 return {'error':error_message}, 404
             else:
                 return {'error': 'An unexpected error occurred'}, 500
-
-
-# Allow Admins to Bypass Ownership Restrictions
-@api.route('/places/<place_id>')
-class AdminPlaceModify(Resource):
-    @jwt_required()
-    def put(self, place_id):
-        current_user = get_jwt_identity()
-
-        # Set is_admin default to False if not exists
-        is_admin = current_user.get('is_admin', False)
-        user_id = current_user.get('id')
-
-        place = facade.get_place(place_id)
-        if not is_admin and place.owner_id != user_id:
-            return {'error': 'Unauthorized action'}, 403
-
-        # Logic to update the place
-        data = api.payload or {}
-        current_user = get_jwt_identity()
-        # retrieve place
-        place = facade.get_place(place_id)
-        if not place:
-            return {'error': 'Place not found'}, 404
-        try:
-            update_place = facade.update_place(place_id, data)
-            if update_place.owner_id != current_user:
-                return {'error': 'Unauthorised action'}, 403
-            return update_place, 200
-        except ValueError as e:
-            return {"error:", str(e)}, 404

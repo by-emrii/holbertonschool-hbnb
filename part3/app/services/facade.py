@@ -12,13 +12,14 @@ from app.models.reservation import Reservation
 from app.persistence.user_repository import UserRepository
 from app.persistence.place_repository import PlaceRepository
 from app.persistence.amenity_repository import AmenityRepository
+from app.persistence.review_repository import ReviewRepository
 
 class HBnBFacade:
     def __init__(self):
         # shared repo
         self.user_repo = UserRepository()
         self.place_repo = PlaceRepository()
-        self.review_repo = SQLAlchemyRepository(Review)
+        self.review_repo = ReviewRepository()
         self.amenity_repo = AmenityRepository()
         self.reservation_repo = SQLAlchemyRepository(Reservation)
 
@@ -26,7 +27,7 @@ class HBnBFacade:
         self.user_service = UserService(self.user_repo)
         self.amenity_service = AmenityService(self.amenity_repo)
         self.reservation_service = ReservationService(self.reservation_repo)
-        self.place_service = PlaceService(self.place_repo)
+        self.place_service = PlaceService(self.place_repo, self.user_repo, self.amenity_repo, self.review_repo)
         self.review_service = ReviewService(self.place_repo, self.user_repo, self.review_repo)
         
     """ User CRU """
@@ -110,7 +111,7 @@ class HBnBFacade:
 
     def user_already_reviewed(self, place_id, user_id):
         """Check if a user has already reviewed a given place."""
-        return self.review_service.user_already_reviewed(place_id, user_id)
+        return self.review_repo.user_already_reviewed(place_id, user_id)
 
     #READ REVIEWS
     def get_review_by_id(self, review_id):
@@ -143,9 +144,9 @@ class HBnBFacade:
 
     # Place add_amenity entry point
     def add_amenity_to_place(self, place_id, amenity_id):
-        return self.place_service.add_amenity(place_id, amenity_id)
+        return self.place_service.add_amenity_to_place(place_id, amenity_id)
     # Place add_review entry
     def add_review_to_place(self, place_id, review_id):
-        return self.place_service.add_review(place_id, review_id)
+        return self.place_service.add_review_to_place(place_id, review_id)
 
 facade = HBnBFacade()

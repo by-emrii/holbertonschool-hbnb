@@ -11,16 +11,12 @@ class Review(BaseModel):
     ALLOWED_FORMATS = {"JPEG", "PNG"}
 
     rating = db.Column(db.Integer, nullable=False)
-    text = db.Column(db.String(300), nullable=False)
+    text = db.Column(db.Text, nullable=False)
     upload_image = db.Column(db.JSON, default=list)
 
-    #foreign keys
-    user_id = db.Column(db.String(50), db.ForeignKey('users.id'), nullable=False)
-    place_id = db.Column(db.String(50), db.ForeignKey('places.id'), nullable=False)
-
-    # Relationships
-    user = relationship("User", backref="reviews", lazy=True)
-    place = relationship("Place", backref="reviews", lazy=True)
+    # foreign keys
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    place_id = db.Column(db.String(36), db.ForeignKey('places.id'), nullable=False)
 
     #RATING
     @validates('rating')

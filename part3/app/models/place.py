@@ -1,29 +1,53 @@
 from app import db
 from app.models.base_model import BaseModel
-from sqlalchemy.orm import validates
-import re
+from sqlalchemy.orm import relationship, validates
+
+# association table for Place <-> Amenity (many-to-many)
+# one Place can have many Amenitys + one Amenity can belong to many Places
+# so we need an association table
+
+place_amenities = db.Table(
+    'place_amenities',
+    db.Column('place_id', db.String(36), db.ForeignKey('places.id'), primary_key=True),
+    db.Column('amenity_id', db.String(36), db.ForeignKey('amenities.id'), primary_key=True),
+)
+
 
 """ Class Place represents to Place model in BL"""
-
-
 class Place(BaseModel):
     __tablename__ = 'places'
 
     # Core attributes as required by task_08, except amenity_ids and review_ids
-    title = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(1000), nullable=True)
     price = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
     
-    # Additional attributes from business logic (not mapped as relationships yet)
-    owner_id = db.Column(db.String(36), nullable=False)
     address = db.Column(db.String(200), nullable=True)
     image_url = db.Column(db.String, nullable=True)
 
-    # amenity_ids and review_ids will be handled via relationships in later tasks
-    # For now, we won't persist them as they represent relationships
+    # Foreign Key for User-Place relationship (One-to-Many)
+    owner_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
 
+    # =====================
+    # RELATIONASHIPS
+    # =====================
+
+    # many Places -> one User
+    owner = relationship('User', back_populates='places')
+
+    # one Place -> many Reviews
+    reviews = relationship('Review', back_populates='place', lazy=True)
+
+    # many-to-many Place <-> Amenity
+    amenities = relationship(
+        'Amenity',
+        secondary=place_amenities,
+        backref=db.backref('places', lazy=True),
+        lazy='subquery'
+    )
+    
     # =====================
     # VALIDATORS
     # =====================
@@ -119,54 +143,13 @@ class Place(BaseModel):
         return value
 
     # =====================
-    # UTILITY METHODS
+    # HELPER METHODS
     # =====================
-    # These methods handle amenity_ids and review_ids temporarily
-    
-    @property
-    def amenity_ids(self):
-        """Temporary property for amenity_ids (will be replaced with relationship)"""
-        return getattr(self, '_amenity_ids', [])
-    
-    @amenity_ids.setter
-    def amenity_ids(self, value):
-        """Temporary setter for amenity_ids"""
-        if not isinstance(value, list):
-            raise TypeError("Amenity IDs must be a list")
-        cleaned = list(dict.fromkeys(str(v).strip() for v in value if v))
-        self._amenity_ids = cleaned
 
-    @property
-    def review_ids(self):
-        """Temporary property for review_ids (will be replaced with relationship)"""
-        return getattr(self, '_review_ids', [])
+    def add_amenity(self, amenity):
+        if amenity not in self.amenities:
+            self.amenities.append(amenity)
 
-    @review_ids.setter
-    def review_ids(self, value):
-        """Temporary setter for review_ids"""
-        if not isinstance(value, list):
-            raise TypeError("Review IDs must be a list")
-        cleaned = list(dict.fromkeys(str(v).strip() for v in value if v))
-        self._review_ids = cleaned
-
-    def add_amenity(self, amenity_id):
-        """Add an amenity to the place (temporary method)"""
-        if amenity_id is None:
-            return
-        aid = str(amenity_id).strip()
-        if not aid:
-            return
-        current = list(getattr(self, "amenity_ids", []) or [])
-        current.append(aid)
-        self.amenity_ids = current
-
-    def add_review(self, review_id):
-        """Add a review to the place (temporary method)"""
-        if review_id is None:
-            return
-        rid = str(review_id).strip()
-        if not rid:
-            return
-        current = list(getattr(self, "review_ids", []) or [])
-        current.append(rid)
-        self.review_ids = current
+    def add_review(self, review):
+        if review not in self.reviews:
+            self.reviews.append(review)

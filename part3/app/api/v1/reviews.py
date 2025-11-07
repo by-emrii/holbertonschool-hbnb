@@ -1,16 +1,16 @@
 from flask import request
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace("reviews", description="Review operations")
 
 # Model for creating a review
 review_create_model = api.model('ReviewCreate', {
-    "place_id": fields.String(required=True),
-    "rating": fields.Integer(required=True, min=1, max=5),
-    "text": fields.String(required=True),
-    "upload_image": fields.List(fields.String, required=False)
+    "place_id": fields.String(required=True, description="ID of the place being reviewed"),
+    "rating": fields.Integer(required=True, min=1, max=5, description="Rating between 1 and 5"),
+    "text": fields.String(required=True, description="Review text"),
+    "upload_image": fields.List(fields.String, required=False, description="List of image URLs")
 })
 
 # Model for updating a review
@@ -37,11 +37,15 @@ review_response_model = api.model('Review', {
 class ReviewList(Resource): 
     @jwt_required() 
     @api.expect(review_create_model, validate=True) 
+    @api.response(201, 'Review created successfully', review_response_model)
+    @api.response(400, 'Invalid data or duplicate review')
+    @api.response(403, 'Unauthorized action')
+    @api.response(404, 'Place or user not found')
     #@api.marshal_with(review_response_model, code=201) 
     def post(self): 
         """Create a review""" 
         data = api.payload 
-        current_user = get_jwt_identity() 
+        current_user = get_jwt() 
 
         try:
             # Get place first
@@ -81,7 +85,9 @@ class ReviewList(Resource):
 """Get, update, deleted review by id"""
 @api.route('/<string:review_id>')
 class ReviewResource(Resource):
-    @api.marshal_with(review_response_model, code=200)
+    @api.response(200, 'Review retrieved successfully', review_response_model)
+    @api.response(404, 'Review not found')
+    #@api.marshal_with(review_response_model, code=200)
     def get(self, review_id):
         """Get a single review by ID"""
         try:
@@ -92,20 +98,27 @@ class ReviewResource(Resource):
 
     @jwt_required()
     @api.expect(review_update_model, validate=True)
+    @api.response(200, 'Review updated successfully', review_response_model)
+    @api.response(403, 'Unauthorized action')
     @api.response(404, 'Review not found')
-    @api.response(403, 'Unauthorised action')
     def put(self, review_id):
         """Update a review (owner only)"""
         data = api.payload or {}
-        current_user = get_jwt_identity()
+        current_user = get_jwt()
+        jwt_user_id = get_jwt_identity()
         
+        is_admin = current_user.get('is_admin', False)
+
         try:
             review = facade.get_review_by_id(review_id)
-            if review.user.id != current_user:
+            if not review:
+                return {'error': 'Review not found'}, 404
+            
+            if not is_admin and str(review.user.id) != str(jwt_user_id):
                 return {"error": 'Unauthorised action'}, 403
             
             #update the review
-            update = facade.update_review(review_id, data, current_user)
+            update = facade.update_review(review_id, data, jwt_user_id)
             return update.to_dict(), 200
         
         except PermissionError as e:
@@ -115,10 +128,14 @@ class ReviewResource(Resource):
 
     @jwt_required()     
     @api.response(200, 'Review successfully deleted')
+    @api.response(403, 'Unauthorized action')
     @api.response(404, 'Review not found')
     def delete(self, review_id):
         """Delete a review (owner only)"""
-        current_user = get_jwt_identity()
+        current_user = get_jwt()
+        jwt_user_id = get_jwt_identity()
+
+        is_admin = current_user.get('is_admin', False)
 
         try:
             # Fetch the review
@@ -127,11 +144,11 @@ class ReviewResource(Resource):
                 return {"error": "Review not found"}, 404
             
             # Ownership check
-            if str(review.user.id) != str(current_user):
+            if not is_admin and str(review.user.id) != str(jwt_user_id):
                 return {"error": "Unauthorized action."}, 403
             
             # Delete the review
-            facade.delete_review(review_id, current_user)
+            facade.delete_review(review_id, jwt_user_id)
             return {"message": "Review deleted successfully"}, 200
 
         except PermissionError as e:
@@ -147,7 +164,8 @@ class ReviewResource(Resource):
 """List all reviews of place"""
 @api.route('/place/<string:place_id>')
 class ReviewsByPlace(Resource):
-    @api.marshal_list_with(review_response_model, code=200)
+    @api.response(200, 'List of reviews for the place', [review_response_model])
+    @api.response(404, 'Place not found')
     def get(self, place_id):
         """List all reviews for a specific place"""
         reviews = facade.get_reviews_for_place(place_id)
@@ -157,7 +175,8 @@ class ReviewsByPlace(Resource):
 """List review of user"""
 @api.route('/user/<string:user_id>')
 class ReviewsByUser(Resource):
-    @api.marshal_list_with(review_response_model, code=200)
+    @api.response(200, 'List of reviews made by the user', [review_response_model])
+    @api.response(404, 'User not found')
     def get(self, user_id):
         """List all reviews made by a specific user"""
         reviews = facade.get_reviews_by_user(user_id)
