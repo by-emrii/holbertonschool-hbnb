@@ -15,8 +15,8 @@ class Review(BaseModel):
     upload_image = db.Column(db.JSON, default=list)
 
     # foreign keys
-    user_id = db.Column(db.String(50), db.ForeignKey('users.id'), nullable=False)
-    place_id = db.Column(db.String(50), db.ForeignKey('places.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    place_id = db.Column(db.String(36), db.ForeignKey('places.id'), nullable=False)
 
     #RATING
     @validates('rating')
