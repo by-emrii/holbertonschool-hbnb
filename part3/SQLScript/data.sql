@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS "place_amenity" (
 -- ==========================
 -- Administrator User: 
 -- ==========================
-INSERT INTO "admin" (id, first_name, last_name, email, password, is_admin) VALUES (
+INSERT INTO "users" (id, first_name, last_name, email, password, is_admin) VALUES (
     '36c9050e-ddd3-4c3b-9731-9f487208bbc1',
     'Admin',
     'HBnB',
@@ -127,13 +127,10 @@ INSERT INTO "amenities" (id, name) VALUES
 ('54f0f63a-8c08-45e0-88c8-1824760af8a3', 'Air Conditioning');
 
 -- Read 
-select * FROM amenities;
+SELECT * FROM amenities;
 
 -- Update: 
 UPDATE amenities Set name = 'Great Wifi' WHERE name = 'WiFi';
-
--- Delete 
-DELETE FROM amenities WHERE id = '54f0f63a-8c08-45e0-88c8-1824760af8a2';
 
 -- ==========================
 -- Review: create a review
@@ -166,7 +163,7 @@ INSERT INTO "place_amenity" (place_id, amenity_id) VALUES
 -- Get amenity for place
 SELECT pa.place_id, a.name
 FROM place_amenity pa
-JOIN amenities a NO pa.amenity_id = a.id
+JOIN amenities a ON pa.amenity_id = a.id
 WHERE pa.place_id = '54f0f63a-8c08-45e0-88c8-1824760af8a3'; 
 
 -- Adding amenity to place
@@ -176,4 +173,4 @@ INSERT INTO "place_amenity" (place_id, amenity_id) VALUES ('54f0f63a-8c08-45e0-8
 UPDATE place_amenity SET amenity_id = 'acuuid' WHERE place_id '54f0f63a-8c08-45e0-88c8-1824760af8a3' AND amenity_id '54f0f63a-8c08-45e0-88c8-1824760af8a1';
 
 -- delete AC amenity from place
-DELET FROM place_amenity WHERE place_id = '54f0f63a-8c08-45e0-88c8-1824760af8a3' AND amenity_id '54f0f63a-8c08-45e0-88c8-1824760af8a1';
+DELETE FROM place_amenity WHERE place_id = '54f0f63a-8c08-45e0-88c8-1824760af8a3' AND amenity_id '54f0f63a-8c08-45e0-88c8-1824760af8a1';
