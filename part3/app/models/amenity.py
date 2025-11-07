@@ -5,14 +5,9 @@ class Amenity(BaseModel):
     __tablename__ = 'amenities'
 
     name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(50), nullable=True)
-    
-    __tablename__ = 'amenities'
+    description = db.Column(db.String(50), nullable=True
 
-    name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(50), nullable=True)
-
-    # places = relationship('Place', backref='amenity', lazy=True)
+    places = relationship('Place', backref='amenity', lazy=True)
     
     def __init__(self, name, description=None):
         super().__init__()
