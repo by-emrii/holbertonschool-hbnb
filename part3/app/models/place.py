@@ -35,7 +35,8 @@ class Place(BaseModel):
     # =====================
 
     # many Places -> one User
-    owner = relationship('User', back_populates='places')
+    # no need define owner in place, as place is defined in user by backref.
+    # owner = relationship('User', back_populates='places')
 
     # one Place -> many Reviews
     reviews = relationship('Review', backref='place', lazy=True)
