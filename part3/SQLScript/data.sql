@@ -82,7 +82,7 @@ INSERT INTO "admin" (id, first_name, last_name, email, password, is_admin) VALUE
     'Admin',
     'HBnB',
     'admin@hbnb.io',
-    '$2b$12$abc123hashedpassword',  -- hashed password
+    'admin1234',  -- hashed password
     TRUE
 );
 
