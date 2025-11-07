@@ -99,9 +99,6 @@ UPDATE users SET first_name = 'Lily', last_name = 'Grey' WHERE id = '36c9050e-dd
 DELETE FROM users WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc2';
 
 
--- User cannot update email and password
-UPDATE users SET email = 'jane.doe@hbnb.com', password = 'H3lloWorld' WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc1'
-
 -- ==========================
 -- Place: create a place
 -- ==========================
