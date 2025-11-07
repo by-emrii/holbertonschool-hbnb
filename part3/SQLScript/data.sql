@@ -3,19 +3,7 @@
 -- ==========================
 
 -- ==========================
--- Administrator User
--- ==========================
-CREATE TABLE IF NOT EXISTS "admin" (
-    id CHAR(36) PRIMARY KEY, -- uuid
-    first_name VARCHAR(255), NOT NULL,
-    last_name VARCHAR(255), NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    is_admin BOOLEAN DEFAULT TRUE
-);
-
--- ==========================
--- Regular User
+-- User Table:
 -- ==========================
 CREATE TABLE IF NOT EXISTS "users" (
     id CHAR(36) PRIMARY KEY, -- uuid
@@ -99,7 +87,7 @@ INSERT INTO "admin" (id, first_name, last_name, email, password, is_admin) VALUE
 );
 
 -- Verify admin
-SELECT * FROM admin WHERE is_admin = TRUE;
+SELECT * FROM users WHERE is_admin = TRUE;
 
 --View all users
 SELECT * FROM users;
@@ -110,17 +98,6 @@ UPDATE users SET first_name = 'Lily', last_name = 'Grey' WHERE id = '36c9050e-dd
 -- Admin deletes user
 DELETE FROM users WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc2';
 
--- ==========================
--- User: create a user
--- ==========================
-INSERT INTO "users" (id, first_name, last_name, email, password, is_admin) VALUES (
-    '36c9050e-ddd3-4c3b-9731-9f487208bbc2',
-    'Jane',
-    'Doe',
-    'jane.doe@hbnb.com',
-    '$2b$12$abc123hashedpassword',  -- hashed password
-    FALSE
-);
 
 -- User cannot update email and password
 UPDATE users SET email = 'jane.doe@hbnb.com', password = 'H3lloWorld' WHERE id = '36c9050e-ddd3-4c3b-9731-9f487208bbc1'
