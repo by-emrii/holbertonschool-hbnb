@@ -1,4 +1,5 @@
 from app.models.base_model import BaseModel
+from app.models.place import place_amenity
 from sqlalchemy.orm import relationship, validates
 from app import db
 
@@ -8,7 +9,12 @@ class Amenity(BaseModel):
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(50), nullable=True)
 
-    places = relationship('Place', backref='amenity', lazy=True)
+    places = relationship(
+        'Place',
+        secondary=place_amenity,
+        back_populates='amenities',
+        lazy='subquery'
+    )
 
     @validates("name")
     def validate_name(self, key, value):
