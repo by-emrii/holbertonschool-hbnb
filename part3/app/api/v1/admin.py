@@ -25,14 +25,14 @@ user_create_model = api.model('CreateUser', {
 
 create_amenity_model = api.model('Amenity', {
     'id': fields.String(readonly=True, description='Amenity ID'),
-    'name': fields.String(required=True, description='Name of the amenity', min_length=1, max_length=50),
-    'description': fields.String(required=False, description='Additional details of the amenity', max_length=100)
+    'name': fields.String(required=True, description='Name of the amenity', min_length=1, max_length=255),
+    'description': fields.String(required=False, description='Additional details of the amenity', max_length=255)
     })
 
 update_amenity_model = api.model('Amenity', {
     'id': fields.String(description='Amenity ID'),
-    'name': fields.String(description='Name of the amenity', min_length=1, max_length=50),
-    'description': fields.String(description='Additional details of the amenity', max_length=100)
+    'name': fields.String(description='Name of the amenity', min_length=1, max_length=255),
+    'description': fields.String(description='Additional details of the amenity', max_length=255)
     })
 
 place_update_model = api.model('PlaceUpdate', {
