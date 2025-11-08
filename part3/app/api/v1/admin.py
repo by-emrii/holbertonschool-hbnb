@@ -86,6 +86,10 @@ class AdminUserCreate(Resource):
 @api.route('/users/<user_id>')
 class AdminUserResource(Resource):
     @api.expect(admin_user_update_model, validate=True)
+    @api.response(200, 'User details updated successfully!')
+    @api.response(404, 'User not found')
+    @api.response(404, 'Email already in use')
+    @api.response(404, 'Invalid input')
     @jwt_required()
     def put(self, user_id):
         current_user = get_jwt()
@@ -118,6 +122,9 @@ class AdminUserResource(Resource):
 @api.route('/amenities/')
 class AdminAmenityCreate(Resource):
     @api.expect(create_amenity_model, validate=True)
+    @api.response(201, 'Amenity successfully created')
+    @api.response(400, 'Invalid input data')
+    @api.response(403, 'Unauthorized action')
     @jwt_required()
     def post(self):
         current_user = get_jwt()
@@ -138,6 +145,10 @@ class AdminAmenityCreate(Resource):
 @api.route('/amenities/<amenity_id>')
 class AdminAmenityModify(Resource):
     @api.expect(update_amenity_model, validate=True)
+    @api.response(200, 'Amenity updated successfully')
+    @api.response(404, 'Amenity not found')
+    @api.response(400, 'Invalid input data')
+    @api.response(403, 'Unauthorized action')
     @jwt_required()
     def put(self, amenity_id):
         current_user = get_jwt()
@@ -160,3 +171,26 @@ class AdminAmenityModify(Resource):
                 return {'error':error_message}, 404
             else:
                 return {'error': 'An unexpected error occurred'}, 500
+
+@api.route('/amenities/<amenity_id>')
+class AdminAmenityDelete(Resource):
+    @jwt_required()
+    @api.response(200, 'Amenity successfully deleted')
+    @api.response(403, 'Unauthorized action')
+    @api.response(404, 'Amenity not found')
+    def delete(self, amenity_id):
+        try:
+            claims = get_jwt()
+            if not claims.get('is_admin'):
+                raise PermissionError('Admin privileges required')
+            amenity = facade.get_amenity(amenity_id)
+            if not amenity:
+                raise ValueError('Amenity not found')
+            facade.delete_amenity(amenity_id)
+            return {'message': 'Amenity successfully deleted'}, 200
+        except (PermissionError, ValueError) as e:
+            error_message = str(e)
+            if error_message.startswith('403'):
+                return {'error': error_message}, 403    
+            if error_message.startswith('404'):
+                return {'error': error_message}, 404

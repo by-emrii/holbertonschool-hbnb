@@ -85,6 +85,10 @@ class HBnBFacade:
     # update amenity
     def update_amenity(self, amenity_id, amenity_data):
         return self.amenity_service.update_amenity(amenity_id, amenity_data)
+    
+    # delete amenity
+    def delete_amenity(self, amenity_id):
+        return self.amenity_service.delete_amenity(amenity_id)
 
     """ Reservation CRU """
     # create reservation

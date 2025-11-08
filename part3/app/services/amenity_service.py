@@ -47,3 +47,11 @@ class AmenityService:
             return existing_amenity
         else:
             raise ValueError('Amenity not found')
+
+    """ Delete amenities """    
+    def delete_amenity(self, amenity_id):
+        check_amenity = self.get_amenity(amenity_id)
+        if check_amenity:
+            self.amenity_repo.delete(amenity_id)
+        else:
+            raise ValueError(f"Amenity id {amenity_id} does not exist")
