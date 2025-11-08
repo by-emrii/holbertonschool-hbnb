@@ -6,8 +6,8 @@ from app import db
 class Amenity(BaseModel):
     __tablename__ = 'amenities'
 
-    name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(50), nullable=True)
+    name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
 
     places = relationship(
         'Place',
@@ -25,8 +25,8 @@ class Amenity(BaseModel):
         value = value.strip()
         if len(value) <= 0:
             raise ValueError("Amenity name must not be empty")
-        elif len(value) > 50:
-            raise ValueError("Amenity name cannot exceed 50 characters")
+        elif len(value) > 255:
+            raise ValueError("Amenity name cannot exceed 255 characters")
         
         return value
         
@@ -40,7 +40,7 @@ class Amenity(BaseModel):
             raise TypeError("Amenity description must be a string")
         
         value = value.strip()
-        if len(value) > 100:
-            raise ValueError("Amenity description cannot exceed 100 characters")
+        if len(value) > 255:
+            raise ValueError("Amenity description cannot exceed 255 characters")
         
         return value

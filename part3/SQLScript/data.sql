@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS "reviews" (
 -- ==========================
 CREATE TABLE IF NOT EXISTS "amenities" (
     id CHAR(36) PRIMARY KEY, -- uuid
-    name VARCHAR(255) NOT NULL UNIQUE
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description VARCHAR(255)
 );
 
 -- ==========================
