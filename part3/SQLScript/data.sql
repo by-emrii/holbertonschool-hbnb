@@ -7,10 +7,10 @@
 -- ==========================
 CREATE TABLE IF NOT EXISTS "users" (
     id CHAR(36) PRIMARY KEY, -- uuid
-    first_name VARCHAR(255) NOT NULL,
-    last_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    password VARCHAR(128) NOT NULL,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
 
