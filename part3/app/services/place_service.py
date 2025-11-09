@@ -143,3 +143,19 @@ class PlaceService():
         place.add_review(review)
         db.session.commit()
         return place
+
+    # ---------- Delete Place ----------
+    def delete_place(self, place_id):
+        """
+        Delete a place by ID.
+        This will also handle the cascade deletion of related reviews
+        and removal of associations with amenities.
+        """
+        place = self.get_place(place_id)
+        if place:
+            # SQLAlchemy will handle:
+            # 1. Cascade delete of reviews (if cascade is set)
+            # 2. Removal of place_amenities associations
+            self.place_repo.delete(place_id)
+        else:
+            raise ValueError(f"Place with id {place_id} does not exist")
