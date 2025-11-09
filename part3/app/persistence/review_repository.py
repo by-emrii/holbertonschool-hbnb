@@ -7,8 +7,6 @@ class ReviewRepository(SQLAlchemyRepository):
     def __init__(self):
         super().__init__(Review)
 
-    #def get_reviews_by_id(self, review_id): REDUNDANT -- DELETE PLEASE
-        #"""list all reviews"""
 
     def get_reviews_by_user(self, user_id):
         """List all reviews by users"""

@@ -126,18 +126,6 @@ class HBnBFacade:
         """Fetch all reviews for a specific user."""
         return self.review_service.get_reviews_by_user(user_id)
 
-    def get_user(self, user_id):
-        try:
-            return self.user_service.get_user(user_id)
-        except ValueError:
-            return None
-
-    def get_place(self, place_id):
-        try:
-            return self.place_service.get_place(place_id)
-        except ValueError:
-            return None
-
     def get_reviews_for_place(self, place_id):
         """Fetch all reviews for a specific place."""
         return self.review_service.get_reviews_for_place(place_id)

@@ -74,7 +74,10 @@ class ReviewList(Resource):
                 #"upload_image": data.get("upload_image", []),
             })
 
-            return review.to_dict(), 201
+            return {
+                "review": review.to_dict(),
+                "message": "Review created successfully"
+            }, 201
 
         except ValueError as e:
             return {"error": str(e)}, 400

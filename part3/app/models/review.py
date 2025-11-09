@@ -84,35 +84,26 @@ class Review(BaseModel):
                 #image_urls.append(None)
         from app.services.facade import facade
         
-        # Safely fetch user
+        # Fetch user and place
         user = facade.get_user(self.user_id)
-        if user is None:
-            user_info = {"id": None, "name": "Deleted user"}
-        else:
-            user_info = {
-                "id": user.id,
-                "name": " ".join(filter(None, [getattr(user, "first_name", None), getattr(user, "last_name", None)])),
-            }
-        
-        # Fetch place safely
         place = facade.get_place(self.place_id)
-        if place is None:
-            place_info = None  # review will be filtered out elsewhere if place deleted
-        else:
-            place_info = {
-                "id": place.id,
-                "title": getattr(place, "title", None),
-                "description": getattr(place, "description", None),
-                "address": getattr(place, "address", None),
-                "price": getattr(place, "price", None),
-            }
 
+        # Return dictionary
         return {
             "id": self.id,
             "rating": self.rating,
             "text": self.text,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
-            "user": user_info,
-            "place": place_info,
+            "user": {
+                "id": user.id,
+                "name": " ".join(filter(None, [user.first_name, user.last_name]))
+            },
+            "place": None if place is None else {
+                "id": place.id,
+                "title": place.title,
+                "description": place.description,
+                "address": place.address,
+                "price": place.price,
+            }
         }
