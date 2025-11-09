@@ -102,7 +102,7 @@ def test_review_creation():
         address="123 Test St",
         latitude=0.0,
         longitude=0.0,
-        image_url="https://example.com/place.jpg",
+        #image_url="https://example.com/place.jpg",
         amenity_ids=[]
     )
     review = Review(
@@ -110,14 +110,22 @@ def test_review_creation():
         place=place,
         rating=4,
         text="Great experience!",
-        upload_image=["https://example.com/review.jpg"]
+        #upload_image=["https://example.com/review.jpg"]
     )
-    assert review.user == user
-    assert review.place == place
+    # Check attributes
     assert review.rating == 4
     assert review.text == "Great experience!"
-    assert review.upload_image == ["https://example.com/review.jpg"]
-    
+    #assert review.upload_image == ["https://example.com/review.jpg"]
+
+    # Check to_dict structure
+    review_dict = review.to_dict()
+    assert review_dict["rating"] == 4
+    assert review_dict["text"] == "Great experience!"
+    assert review_dict["user"]["id"] == user.id
+    assert review_dict["user"]["name"] == "John Doe"
+    assert review_dict["place"]["id"] == place.id
+    assert review_dict["place"]["title"] == "Test Place"
+
     print("Review creation test passed!")
 
 

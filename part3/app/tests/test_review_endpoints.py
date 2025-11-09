@@ -8,7 +8,7 @@ class TestReviewEndpoints(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
-    # Create main user
+        # Create main user
         user_resp = self.client.post('/api/v1/users/', json={
             "first_name": "Test",
             "last_name": "User",
@@ -49,7 +49,7 @@ class TestReviewEndpoints(unittest.TestCase):
             "place_id": self.place_id,
             "rating": 4,
             "text": "Nice stay!",
-            "upload_image": ["https://example.com/image.jpg"]
+            #"upload_image": ["https://example.com/image.jpg"]
         })
         data = response.get_json()
         self.assertEqual(response.status_code, 201)
@@ -90,7 +90,7 @@ class TestReviewEndpoints(unittest.TestCase):
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data.get("id"), review_id)
-        self.assertEqual(data.get("user_id"), self.user_id)
+        self.assertEqual(data.get("user")["id"], self.user_id)
 
     def test_get_review_invalid_id(self):
         response = self.client.get('/api/v1/reviews/invalidID')
@@ -134,7 +134,7 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertIn("error", data)
 
-    #Delete Tests
+    # Delete Tests
     def test_delete_review_success(self):
         review = self.create_sample_review()
         review_id = review.get("id")
@@ -171,7 +171,7 @@ class TestReviewEndpoints(unittest.TestCase):
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(data) >= 1)
-        self.assertEqual(data[0].get("place_id"), self.place_id)
+        self.assertEqual(data[0].get("place")["id"], self.place_id)
 
     def test_list_reviews_by_place_not_found(self):
         response = self.client.get('/api/v1/reviews/place/noPlace')
@@ -186,7 +186,7 @@ class TestReviewEndpoints(unittest.TestCase):
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(data) >= 1)
-        self.assertEqual(data[0].get("user_id"), self.user_id)
+        self.assertEqual(data[0].get("user")["id"], self.user_id)
 
     def test_list_reviews_by_user_not_found(self):
         response = self.client.get('/api/v1/reviews/user/noUser')

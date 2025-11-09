@@ -44,7 +44,7 @@ class HBnBFacade:
     def get_user_by_email(self, email):
         return self.user_service.get_user_by_email(email)
 
-    # gel all users
+    # get all users
     def get_all_users(self):
         return self.user_service.get_all_users()
 
@@ -136,19 +136,19 @@ class HBnBFacade:
 
     def update_review(self, review_id, review_data, current_user, is_admin=False):
         """User updates a review of a specific place."""
-        return self.review_service.update_review(review_id, review_data, current_user, is_admin=is_admin)
+        return self.review_service.update_review(review_id, review_data, current_user, is_admin)
 
-    def delete_review(self, review_id, current_user):
+    def delete_review(self, review_id, current_user, is_admin=False):
         """User deletes a review."""
-        return self.review_service.delete_review(review_id, current_user)
+        return self.review_service.delete_review(review_id, current_user, is_admin)
 
-    def get_average_rating(self, place_id):
-        """Calculate the average rating for a place."""
-        return self.review_service.get_average_rating(place_id)
+    #def get_average_rating(self, place_id):
+        #"""Calculate the average rating for a place."""
+        #return self.review_service.get_average_rating(place_id)
 
-    def get_recent_reviews(self, place_id, limit=5):
-        """Fetch the most recent reviews for a place."""
-        return self.review_service.get_recent_reviews(place_id, limit)
+    #def get_recent_reviews(self, place_id, limit=5):
+        #"""Fetch the most recent reviews for a place."""
+        #return self.review_service.get_recent_reviews(place_id, limit)
 
     # Place add_amenity entry point
     def add_amenity_to_place(self, place_id, amenity_id):
