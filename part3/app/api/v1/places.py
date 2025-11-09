@@ -169,21 +169,19 @@ class PlaceResource(Resource):
 
     @api.response(200, 'Place deleted successfully')
     @api.response(404, 'Place not found')
-    @api.response(403, 'Unauthorized action - Admin only')
+    @api.response(403, 'Unauthorized action')
     @jwt_required()
     def delete(self, place_id):
         """
         Delete a place.
-        Only administrators can delete places.
-        Place owners do NOT have permission to delete their own places.
+        Only the owner of the place or an admin can delete it.
+        This will also delete all associated reviews and remove amenity associations.
         """
         current_user = get_jwt()
+        jwt_user_id = get_jwt_identity()
         
-        # Check if user is admin
+        # Get admin status
         is_admin = current_user.get('is_admin', False)
-        
-        if not is_admin:
-            return {'error': 'Unauthorized action - Admin only'}, 403
         
         try:
             # Retrieve place to verify it exists
@@ -191,7 +189,11 @@ class PlaceResource(Resource):
             if not place:
                 return {'error': 'Place not found'}, 404
             
-            # Perform deletion (admin only)
+            # Check authorization: must be owner or admin
+            if not is_admin and str(place.owner_id) != str(jwt_user_id):
+                return {'error': 'Unauthorized action'}, 403
+            
+            # Perform deletion
             facade.delete_place(place_id)
             return {
                 'message': 'Place deleted successfully.'
