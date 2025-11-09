@@ -134,6 +134,7 @@ class PlaceResource(Resource):
     @api.expect(place_update_model, validate=True)
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
+    @api.response(403, 'Unauthorized action')
     @jwt_required()
     def put(self, place_id):
         """ Update place """
@@ -165,3 +166,38 @@ class PlaceResource(Resource):
             }, 200
         except ValueError as e:
             return {'error': str(e)}, 404
+
+    @api.response(200, 'Place deleted successfully')
+    @api.response(404, 'Place not found')
+    @api.response(403, 'Unauthorized action')
+    @jwt_required()
+    def delete(self, place_id):
+        """
+        Delete a place.
+        Only the owner of the place or an admin can delete it.
+        This will also delete all associated reviews and remove amenity associations.
+        """
+        current_user = get_jwt()
+        jwt_user_id = get_jwt_identity()
+        
+        # Get admin status
+        is_admin = current_user.get('is_admin', False)
+        
+        try:
+            # Retrieve place to verify it exists
+            place = facade.get_place(place_id)
+            if not place:
+                return {'error': 'Place not found'}, 404
+            
+            # Check authorization: must be owner or admin
+            if not is_admin and str(place.owner_id) != str(jwt_user_id):
+                return {'error': 'Unauthorized action'}, 403
+            
+            # Perform deletion
+            facade.delete_place(place_id)
+            return {
+                'message': 'Place deleted successfully.'
+            }, 200
+        except ValueError as e:
+            return {'error': str(e)}, 404
+

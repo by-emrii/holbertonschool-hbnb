@@ -69,6 +69,10 @@ class HBnBFacade:
     def update_place(self, place_id, place_data):
         return self.place_service.update_place(place_id, place_data)
 
+    # Delete Place
+    def delete_place(self, place_id):
+        return self.place_service.delete_place(place_id)
+
     """ Amenity CRU """
     # create amenity
     def create_amenity(self, amenity_data):
