@@ -114,11 +114,16 @@ class ReviewResource(Resource):
             if not review:
                 return {'error': 'Review not found'}, 404
             
+            print("JWT cu claims:", current_user)
+            print("jwt current_user:", jwt_user_id)
+            print("review.user.id:", review.user.id)
+            print("is_admin:", is_admin)
+            
             if not is_admin and str(review.user.id) != str(jwt_user_id):
                 return {"error": 'Unauthorised action'}, 403
             
             #update the review
-            update = facade.update_review(review_id, data, jwt_user_id)
+            update = facade.update_review(review_id, data, jwt_user_id, is_admin=is_admin)
             return update.to_dict(), 200
         
         except PermissionError as e:
