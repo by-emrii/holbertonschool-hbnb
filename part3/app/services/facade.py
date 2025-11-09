@@ -130,9 +130,9 @@ class HBnBFacade:
         """Fetch all reviews for a specific place."""
         return self.review_service.get_reviews_for_place(place_id)
 
-    def update_review(self, review_id, review_data, current_user):
+    def update_review(self, review_id, review_data, current_user, is_admin=False):
         """User updates a review of a specific place."""
-        return self.review_service.update_review(review_id, review_data, current_user)
+        return self.review_service.update_review(review_id, review_data, current_user, is_admin=is_admin)
 
     def delete_review(self, review_id, current_user):
         """User deletes a review."""

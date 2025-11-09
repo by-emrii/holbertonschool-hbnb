@@ -27,7 +27,7 @@ user_response = api.model('User',{
 
 @api.route('/')
 class UserList(Resource):
-    @api.expect(user_model, validate=True)
+    # @api.expect(user_model, validate=True) # GET method doesnt need it
     @api.response(201, 'User successfully created')
     @api.response(400, 'Email already registered')
     @api.response(400, 'Invalid input data')

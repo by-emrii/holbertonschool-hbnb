@@ -53,15 +53,15 @@ class ReviewService():
         return self.review_repo.get_reviews_for_place(place_id)
     
     #UPDATE
-    def update_review(self, review_id, review_data, current_user):
+    def update_review(self, review_id, review_data, current_user, is_admin=False):
         """
         Update a review if the current user is the author.
         """
         review = self.get_review_by_id(review_id)
 
-        # Ownership check
+        # Ownership check (admins skips the check)
         user_id = getattr(review.user, "id", review.user)
-        if str(user_id) != str(current_user):
+        if not is_admin and str(user_id) != str(current_user):
             raise PermissionError("Unauthorised action")
 
         # Update the model using Review's own method
