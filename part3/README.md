@@ -16,13 +16,14 @@ This update transforms the prototype backend from an in-memory system into a rob
 
 ## Table of Contents
 1. [Key Features](#key-features)
-1. [Project Structure](#project-structure)
-2. [Requirements](#requirements)
-3. [Installation](#installation)
-4. [Architecture Overview](#business-logic-layer---architecture)
-5. [API Endpoints](#-api-endpoints)
-6. [Example Admin User Endpoints](#-admin-endpoints-example-)
-8. [License](#-license)
+2. [Project Structure](#project-structure)
+3. [Requirements](#requirements)
+4. [Installation](#installation)
+5. [Architecture Overview](#hbnb-architecture-overview)
+6. [API Endpoints](#-api-endpoints)
+7. [Admin User Endpoints Example](#-admin-endpoints-example-)
+8. [Entity Relationship Diagram](#entity-relationship-er-database-diagrams)
+9. [License](#-license)
 
 ## Key Features
 ### 🔐 Authentication and Authorization
@@ -44,7 +45,7 @@ Full CRUD functionality for:
    - Reviews
    - Amenities
    - Reservations
-- Centralized repository and service layers for clean separation of concerns
+Centralized repository and service layers for clean separation of concerns
 
 ### 🧩 Clean Architecture
 - Repository layer manages database operations
@@ -130,6 +131,10 @@ holbertonschool-hbnb/part3
 - Python 3.x
 - Flask
 - Flask-RESTX
+- Flask-JWT-Extended
+- Flask-Bcrypt
+- SQLAlchemy
+- SQLite (for development) / MySQL (for production)
 
 ## Installation
 
@@ -154,12 +159,12 @@ holbertonschool-hbnb/part3
 4. **Create Tables**
    ```bash
    flask shell
-   from app import db
-   db.create_all
-   exit()
+   >>> from app import db
+   >>> db.create_all()
+   >>> exit()
    ```
 
-5. **Populate tables with initial data with SQL Script**
+5. **Populate tables with initial data**
    ```bash
    sqlite3 instance/development.db < SQLScript/data.sql
    ```
@@ -187,8 +192,7 @@ holbertonschool-hbnb/part3
 The Presentation Layer manages all HTTP interactions.
 It is implemented using Flask-RESTX, which provides a structured way to define endpoints, request/response models, and automatic API documentation.
 Key Responsibilities:
-
-Define API namespaces for entities such as Users, Places, Amenities, Reviews, and - Reservations
+- Define API namespaces for entities such as Users, Places, Amenities, Reviews, and - Reservations
 - Handle request validation, serialization, and response formatting
 - Manage authentication and authorization via JWTs
 - Delegate business operations to the Facade Layer
@@ -198,6 +202,50 @@ When a client sends a request to /api/v1/users, the Presentation Layer:
 - Validates the input using a Flask-RESTX model
 - Calls the corresponding method in the Facade
 - Returns a JSON response
+
+It does not contain business logic; instead, it calls Facade methods to perform operations.
+   **Example usage:**
+   ```
+   from flask_restx import Namespace, Resource, fields
+   from flask_jwt_extended import jwt_required, get_jwt
+   from flask import request
+   from app.services import facade
+
+   api = Namespace('admin', description='Admin operations')
+
+   @api.route('/users/')
+   class AdminUserCreate(Resource):
+      @api.expect(user_create_model, validate=True)
+      @api.response(201, 'Admin successfully created')
+      @api.response(400, 'Email already registered')
+      @api.response(400, 'Invalid input data')
+      @api.response(400, 'Invalid phone number')
+      @api.response(400, 'Invalid password')
+      @jwt_required()
+      def post(self):
+         # current_user = get_jwt()
+         claims = get_jwt()
+         if not claims.get('is_admin'):
+               return {'error': 'Admin privileges required'}, 403
+
+         user_data = api.payload
+         email = user_data.get('email')
+
+         # Check if email is already in use
+         if facade.get_user_by_email(email):
+               return {'error': 'Email already registered'}, 400
+
+         # Logic to create a new user
+         try:
+               # user_data = api.payload
+               new_user = facade.create_user(user_data)
+               return {
+                  'id': new_user.id,
+                  'message': "User registered sucessfully"
+                  }, 201
+         except (TypeError,ValueError) as e:
+               return {"error": str(e)}, 400
+   ```
 
 
 ### Business Logic Layer
@@ -294,6 +342,36 @@ Relationships are explicitly defined between models:
                raise ValueError(f"{key.replace('_', ' ').title()} cannot exceed 50 characters")
          return value
    ```
+
+### Persistence Layer
+The Persistence Layer handles all interactions with the database, abstracting SQLAlchemy queries from the rest of the application.
+It consists of a generic repository for standard CRUD operations, and entity-specific repositories for additional domain-specific behaviors.
+
+**Repository**
+The SQLAlchemyRepository class provides a reusable base for all entities:
+- Add objects to the database
+- Retrieve single objects or all objects
+- Update objects with new data
+- Delete objects
+- Query by attribute
+
+**Entity-Specific Repositories**
+Entity repositories inherit from SQLAlchemyRepository and add custom methods specific to that entity.
+
+Example of User Repository:
+```
+   from app.models.user import User
+   from app.persistence.repository import SQLAlchemyRepository
+
+   class UserRepository(SQLAlchemyRepository):
+      def __init__(self):
+         super().__init__(User)
+
+      def get_user_by_email(self, email):
+         """Retrieve a user by their email address."""
+         return self.model.query.filter_by(email=email).first()
+
+```
 
 ## 🌐 API Endpoints
    ### 👥 Users ###
@@ -393,6 +471,8 @@ Relationships are explicitly defined between models:
    }
    ```
 
+## Entity-Relationship (ER) Database diagrams
+tbc
 
 ## 📄 License
 
