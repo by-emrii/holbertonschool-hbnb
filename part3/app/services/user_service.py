@@ -1,4 +1,5 @@
 from app.models.user import User
+from app import db
 
 class UserService:
     def __init__(self, user_repo):
@@ -42,27 +43,25 @@ class UserService:
                 if found_user is not None and found_user.id != user.id:
                     raise ValueError(f"Email already in use: {new_email}")
                 user.email = new_email
+        
+        # Handle password update
+        if 'password' in user_data and user_data['password']:
+            user.hash_password(user_data['password'])
 
         # To update the rest of attributes: name, number, image
         updatable = {
             "first_name",
             "last_name",
-            "encrypted_password",
             "phone_number",
             "profile_img",
             "is_admin",
         }
 
-        # create a dict to store the updated data
-        update_data = {}
-        for key, value in user_data.items():
-            if key in updatable and value is not None:
-                # user model property setter will do validation
-                setattr(user, key, value)
-                update_data[key] = getattr(user, key)  # store updated value to repo
+        for key in updatable:
+            if key in user_data and user_data[key] is not None:
+                setattr(user, key, user_data[key])
 
-        # call repo.update(obj_id, data)
-        self.user_repo.update(user.id, user_data)
+        db.session.commit()
 
         return user
 
