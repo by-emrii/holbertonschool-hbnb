@@ -308,7 +308,7 @@ Relationships are explicitly defined between models:
    |------------|-----------------------------------|-------------------------------------------------------------------------------|
    | Base       | Foundation for all entities.      | id, created_at, updated_at
    | User       | Represents a HBnB platform user.  | id, first_name, last_name, email, password, phone number                              |
-   | Place      | Property listed for rent.         | id, user_id, title, description, price, address, latitude, longitude, amenity_ids |
+   | Place      | Property listed for rent.         | id, owner_id, title, description, price, address, latitude, longitude, amenity_ids |
    | Amenity    | Feature or facility available at a place. | id, name, description                                                      |
    | Review     | User feedback for a place.         | id, user_id, place_id, rating, comment, upload_image                          |
    | Reservation| Booking details for a place.       | id, user_id, place_id, start_date, end_date, price, discount, status, payment_status |
@@ -479,4 +479,5 @@ tbc
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
 
