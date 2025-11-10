@@ -45,6 +45,7 @@ Full CRUD functionality for:
    - Reviews
    - Amenities
    - Reservations
+
 Centralized repository and service layers for clean separation of concerns
 
 ### 🧩 Clean Architecture
@@ -478,3 +479,4 @@ tbc
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
