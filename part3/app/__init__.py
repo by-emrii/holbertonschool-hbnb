@@ -21,7 +21,6 @@ def create_app(config_class="config.DevelopmentConfig"):
     # Import namespaces after app and db are initialized
     from app.api.v1.users import api as users_ns
     from app.api.v1.amenities import api as amenities_ns
-    from app.api.v1.reservations import api as reservations_ns
     from app.api.v1.places import api as places_ns
     from app.api.v1.reviews import api as reviews_ns
     from app.api.v1.auth import api as auth_ns
@@ -36,9 +35,6 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     # Register the amenity namespace
     api.add_namespace(amenities_ns, path='/api/v1/amenities')
-
-    # Reservation namespace
-    api.add_namespace(reservations_ns, path='/api/v1/reservations')
 
     # Place namespace
     api.add_namespace(places_ns, path='/api/v1/places')
