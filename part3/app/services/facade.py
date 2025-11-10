@@ -1,14 +1,12 @@
 from app.persistence.repository import SQLAlchemyRepository
 from app.services.user_service import UserService
 from app.services.amenity_service import AmenityService
-from app.services.reservation_service import ReservationService
 from app.services.place_service import PlaceService
 from app.services.review_service import ReviewService
 from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
 from app.models.amenity import Amenity
-from app.models.reservation import Reservation
 from app.persistence.user_repository import UserRepository
 from app.persistence.place_repository import PlaceRepository
 from app.persistence.amenity_repository import AmenityRepository
@@ -21,12 +19,10 @@ class HBnBFacade:
         self.place_repo = PlaceRepository()
         self.review_repo = ReviewRepository()
         self.amenity_repo = AmenityRepository()
-        self.reservation_repo = SQLAlchemyRepository(Reservation)
 
         # services using shared repos
         self.user_service = UserService(self.user_repo)
         self.amenity_service = AmenityService(self.amenity_repo)
-        self.reservation_service = ReservationService(self.reservation_repo)
         self.place_service = PlaceService(self.place_repo, self.user_repo, self.amenity_repo, self.review_repo)
         self.review_service = ReviewService(self.place_repo, self.user_repo, self.review_repo)
         
@@ -94,23 +90,6 @@ class HBnBFacade:
     def delete_amenity(self, amenity_id):
         return self.amenity_service.delete_amenity(amenity_id)
 
-    """ Reservation CRU """
-    # create reservation
-    def create_reservation(self, reservation_data):
-        return self.reservation_service.create_reservation(reservation_data)
-
-    # get one reservation by ID
-    def get_reservation(self, reservation_id):
-        return self.reservation_service.get_reservation(reservation_id)
-
-    # get all reservations
-    def get_all_reservations(self):
-        return self.reservation_service.get_all_reservations()
-
-    # update an existing reservation
-    def update_reservation(self, reservation_id, reservation_data):
-        return self.reservation_service.update_reservation(reservation_id, reservation_data)
-
     """Review CRU"""
     #CREATE A REVIEW
     def create_review(self, review_data):
@@ -141,14 +120,6 @@ class HBnBFacade:
     def delete_review(self, review_id, current_user, is_admin=False):
         """User deletes a review."""
         return self.review_service.delete_review(review_id, current_user, is_admin)
-
-    #def get_average_rating(self, place_id):
-        #"""Calculate the average rating for a place."""
-        #return self.review_service.get_average_rating(place_id)
-
-    #def get_recent_reviews(self, place_id, limit=5):
-        #"""Fetch the most recent reviews for a place."""
-        #return self.review_service.get_recent_reviews(place_id, limit)
 
     # Place add_amenity entry point
     def add_amenity_to_place(self, place_id, amenity_id):
