@@ -180,21 +180,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertIsInstance(data, list)
         self.assertEqual(len(data), 0)
 
-    def test_list_reviews_by_user(self):
-        self.create_sample_review()
-        response = self.client.get(f'/api/v1/reviews/user/{self.user_id}')
-        data = response.get_json()
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(len(data) >= 1)
-        self.assertEqual(data[0].get("user")["id"], self.user_id)
-
-    def test_list_reviews_by_user_not_found(self):
-        response = self.client.get('/api/v1/reviews/user/noUser')
-        data = response.get_json()
-        self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(data, list)
-        self.assertEqual(len(data), 0)
-
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

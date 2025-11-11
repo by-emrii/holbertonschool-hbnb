@@ -8,9 +8,9 @@ class ReviewRepository(SQLAlchemyRepository):
         super().__init__(Review)
 
 
-    def get_reviews_by_user(self, user_id):
-        """List all reviews by users"""
-        return self.model.query.filter_by(user_id=user_id).all()
+    def get_all(self):
+        """Fetch all reviews from the database."""
+        return Review.query.all()
     
     def get_reviews_for_place(self, place_id):
         """List all reviews for a place"""

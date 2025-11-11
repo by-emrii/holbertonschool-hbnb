@@ -30,6 +30,10 @@ class ReviewService():
         self.review_repo.add(review)
         return review
     
+    def get_all_reviews(self):
+        """Return all reviews."""
+        return self.review_repo.get_all()
+    
     def user_already_reviewed(self, place_id, user_id):
         """
         Check if a user has already reviewed a specific place.
@@ -44,10 +48,6 @@ class ReviewService():
         if not review:
             raise ValueError(f"Review not found")
         return review
-
-    def get_reviews_by_user(self, user_id):
-        """Fetch all reviews made by a specific user (by ID)."""
-        return self.review_repo.get_reviews_by_user(user_id)
 
     def get_reviews_for_place(self, place_id):
         """Fetch all reviews for a specific place (by ID)."""

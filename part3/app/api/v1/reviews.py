@@ -32,9 +32,21 @@ review_response_model = api.model('Review', {
     "updated_at": fields.String,
 })
 
-"""Create a review for a place"""
-@api.route('/') 
-class ReviewList(Resource): 
+"""Create a review for a place / List all reviews in database"""
+@api.route('/')
+class ReviewsList(Resource):
+    @api.doc(security=None)
+    @api.response(200, 'List of reviews made by the user', [review_response_model])
+    def get(self):
+        """List all reviews made by a specific user"""
+        reviews = facade.get_all_reviews()
+
+        # Only include reviews whose place still exists
+        reviews = [r for r in reviews if r.to_dict().get('place') is not None]
+
+        return [r.to_dict() for r in reviews], 200
+
+    """Create a review for a place"""
     @jwt_required() 
     @api.expect(review_create_model, validate=True) 
     @api.response(201, 'Review created successfully', review_response_model)
@@ -84,26 +96,20 @@ class ReviewList(Resource):
         except PermissionError as e:
             return {"error": str(e)}, 403  
             
-"""Get, update, deleted review by id"""
+"""Get, update, deleted review by review_id"""
 @api.route('/<string:review_id>')
 class ReviewResource(Resource):
-    @jwt_required()
+    @api.doc(security=None)
     @api.response(200, 'Review retrieved successfully', review_response_model)
     @api.response(404, 'Review not found')
     def get(self, review_id):
         """Get a single review by ID"""
-        current_user = get_jwt()
-        jwt_user_id = get_jwt_identity()
-        is_admin = current_user.get('is_admin', False)
 
         try:
             review = facade.get_review_by_id(review_id)
             if not review:
                 return {'error': 'Review not found'}, 404
-            
-            if not is_admin and str(review.user.id) != str(jwt_user_id):
-                return {'error': 'Unauthorised action'}, 403
-            
+   
             return review.to_dict(), 200
         
         except ValueError as e:
@@ -176,7 +182,6 @@ class ReviewResource(Resource):
 """List all reviews of place"""
 @api.route('/place/<string:place_id>')
 class ReviewsByPlace(Resource):
-    @jwt_required()
     @api.response(200, 'List of reviews for the place', [review_response_model])
     @api.response(404, 'Place not found')
     def get(self, place_id):
@@ -189,28 +194,7 @@ class ReviewsByPlace(Resource):
         reviews = facade.get_reviews_for_place(place_id)
 
         # Only include reviews whose place still exists
-        reviews = [r for r in reviews if r.to_dict()['place'] is not None]
+        reviews = [r for r in reviews if r.to_dict().get('place') is not None]
 
         return [r.to_dict() for r in reviews], 200
 
-"""List review of user"""
-@api.route('/user/<string:user_id>')
-class ReviewsByUser(Resource):
-    @jwt_required()
-    @api.response(200, 'List of reviews made by the user', [review_response_model])
-    @api.response(404, 'User not found')
-    def get(self, user_id):
-        """List all reviews made by a specific user"""
-        current_user = get_jwt()
-        jwt_user_id = get_jwt_identity()
-        is_admin = current_user.get('is_admin', False)
-
-        if not is_admin and str(user_id) != str(jwt_user_id):
-            return {"error": "Unauthorized action"}, 403
-
-        reviews = facade.get_reviews_by_user(user_id)
-
-        # Only include reviews whose place still exists
-        reviews = [r for r in reviews if r.to_dict()['place'] is not None]
-
-        return [r.to_dict() for r in reviews], 200

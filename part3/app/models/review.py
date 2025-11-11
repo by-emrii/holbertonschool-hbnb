@@ -9,6 +9,10 @@ from app.models.base_model import BaseModel
 class Review(BaseModel):
     """Represents a review left by a user for a place."""
     __tablename__ = 'reviews'
+    #User can only make one review per place
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'place_id', name='unique_user_place_review'),
+    )
     #ALLOWED_FORMATS = {"JPEG", "PNG"}
 
     rating = db.Column(db.Integer, nullable=False)

@@ -96,6 +96,10 @@ class HBnBFacade:
         """Create and save a review."""
         return self.review_service.create_review(review_data)
 
+    def get_all_reviews(self):
+        """Retrieve all reviews from the database."""
+        return self.review_service.get_all_reviews()
+
     def user_already_reviewed(self, place_id, user_id):
         """Check if a user has already reviewed a given place."""
         return self.review_repo.user_already_reviewed(place_id, user_id)
@@ -104,10 +108,6 @@ class HBnBFacade:
     def get_review_by_id(self, review_id):
         """Retrieve a single review by ID."""
         return self.review_service.get_review_by_id(review_id)
-
-    def get_reviews_by_user(self, user_id):
-        """Fetch all reviews for a specific user."""
-        return self.review_service.get_reviews_by_user(user_id)
 
     def get_reviews_for_place(self, place_id):
         """Fetch all reviews for a specific place."""
