@@ -166,7 +166,7 @@ holbertonschool-hbnb/part3
 
 6. **Run the application**
    ```bash
-   python run.py
+   python3 run.py
    ```
    The API will start at:
    ```bash
@@ -471,6 +471,7 @@ Example of User Repository:
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
 
 
 
