@@ -214,13 +214,13 @@ holbertonschool-hbnb/part3
    > If this returns a version number, MySQL is installed. If not, proceed to step 2 to install it.
 
 2. **Install MySQL**
-   macOS (with Homebrew)
+   **macOS (with Homebrew):**
 
    ```bash
    brew install mysql
    ```
 
-   Ubuntu
+   **Ubuntu:**
 
    ```bash
    sudo apt update
@@ -237,13 +237,13 @@ holbertonschool-hbnb/part3
 
 4. **Start MySQL server**
 
-   macOS
+   **macOS:**
 
    ```bash
    brew services start mysql
    ```
 
-   Ubuntu
+   **Ubuntu:**
 
    ```bash
    sudo service mysql start
@@ -605,3 +605,4 @@ GET /api/v1/users/as235bjkfas882
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
