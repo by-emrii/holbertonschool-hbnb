@@ -1,4 +1,5 @@
 # 🏠 Holberton School - HBnB Project Part 3
+
 This phase of the Holberton HBnB Project delivers a secure and database-driven backend built with Flask, SQLAlchemy, and JWT authentication.
 
 The application now supports persistent data storage, user authentication, and role-based authorization using a scalable architecture designed for production deployment.
@@ -12,9 +13,10 @@ Part 3 enhances the HBnB backend by integrating:
 - Full CRUD operations for all entities
 - Data validation and schema visualization
 - Production-ready configuration supporting both SQLite (development) and MySQL (production)
-This update transforms the prototype backend from an in-memory system into a robust RESTful API.
+  This update transforms the prototype backend from an in-memory system into a robust RESTful API.
 
 ## Table of Contents
+
 1. [Key Features](#key-features)
 2. [Project Structure](#project-structure)
 3. [Requirements](#requirements)
@@ -26,34 +28,41 @@ This update transforms the prototype backend from an in-memory system into a rob
 9. [License](#-license)
 
 ## Key Features
+
 ### 🔐 Authentication and Authorization
+
 - Secure login using JWT tokens (flask-jwt-extended)
 - Password hashing with Flask-Bcrypt
 - Role-based access control via the is_admin attribute
 - Token-protected endpoints for all authenticated routes
 
 ### 🗄️ Database Integration
+
 - Data persistence using SQLAlchemy ORM
 - SQLite configured for local development
 - MySQL ready for production deployment
 - Database schema designed and visualized with mermaid.js
 
 ### ⚙️ CRUD Operations
+
 Full CRUD functionality for:
-   - Users
-   - Places
-   - Reviews
-   - Amenities
+
+- Users
+- Places
+- Reviews
+- Amenities
 
 Centralized repository and service layers for clean separation of concerns
 
 ### 🧩 Clean Architecture
+
 - Repository layer manages database operations
 - Service layer encapsulates business logic
 - API layer exposes RESTful endpoints using Flask-RESTX namespaces
 - Application factory pattern for modular configuration and environment handling
 
 ## Project Structure
+
 ```
 holbertonschool-hbnb/part3
 ├── app/                                # Main application package
@@ -101,7 +110,7 @@ holbertonschool-hbnb/part3
 │   |   └── test_user_endpoints.py
 │   │
 │   └── __init__.py                    # Initialises Flask app, extensions, and API namespaces
-│   
+│
 │
 │
 ├── docs/                               # Project documentation and testing reports
@@ -134,24 +143,29 @@ holbertonschool-hbnb/part3
 ## Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/by-emrii/holbertonschool-hbnb.git
    cd holbertonschool-hbnb
    ```
 
 2. **Create a virtual environment**
+
    ```bash
+   apt install python3.8-venv # On Windows: sudo apt install python3.8-venv
    python3 -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. **Install dependencies**
+
    ```bash
    cd part3
    pip install -r requirements.txt
    ```
 
 4. **Create Tables**
+
    ```bash
    flask shell
    >>> from app import db
@@ -160,7 +174,13 @@ holbertonschool-hbnb/part3
    ```
 
 5. **Populate tables with initial data**
+
+   > To perform the tests in Tasks 1–9, you must be logged in as an admin user. This step seeds the admin_user data to enable testing for these tasks.
+
    ```bash
+   apt update
+   apt install mysql-server
+   apt install sqlite3
    sqlite3 instance/development.db < seed_data.sql
    ```
 
@@ -173,20 +193,22 @@ holbertonschool-hbnb/part3
    http://127.0.0.1:5000/api/v1/
    ```
 
-
 ## HBnB Architecture Overview
+
 ### Architecture Overview
+
 1. API Layer - Presentation Layer
 2. Facade - Business Logic Layer
 3. Services - Business Logic Layer
 4. Models - Business Logic Layer
 5. Repository - Persistence Layer
 
-
 ### Presentation Layer
+
 The Presentation Layer manages all HTTP interactions.
 It is implemented using Flask-RESTX, which provides a structured way to define endpoints, request/response models, and automatic API documentation.
 Key Responsibilities:
+
 - Define API namespaces for entities such as Users, Places, Amenities, Reviews.
 - Handle request validation, serialization, and response formatting
 - Manage authentication and authorization via JWTs
@@ -194,154 +216,165 @@ Key Responsibilities:
 
 Example:
 When a client sends a request to /api/v1/users, the Presentation Layer:
+
 - Validates the input using a Flask-RESTX model
 - Calls the corresponding method in the Facade
 - Returns a JSON response
 
 It does not contain business logic; instead, it calls Facade methods to perform operations.
-   **Example usage:**
-   ```
-   from flask_restx import Namespace, Resource, fields
-   from flask_jwt_extended import jwt_required, get_jwt
-   from flask import request
-   from app.services import facade
+**Example usage:**
 
-   api = Namespace('admin', description='Admin operations')
+```
+from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import jwt_required, get_jwt
+from flask import request
+from app.services import facade
 
-   @api.route('/users/')
-   class AdminUserCreate(Resource):
-      @api.expect(user_create_model, validate=True)
-      @api.response(201, 'Admin successfully created')
-      @api.response(400, 'Email already registered')
-      @api.response(400, 'Invalid input data')
-      @api.response(400, 'Invalid phone number')
-      @api.response(400, 'Invalid password')
-      @jwt_required()
-      def post(self):
-         # current_user = get_jwt()
-         claims = get_jwt()
-         if not claims.get('is_admin'):
-               return {'error': 'Admin privileges required'}, 403
+api = Namespace('admin', description='Admin operations')
 
-         user_data = api.payload
-         email = user_data.get('email')
+@api.route('/users/')
+class AdminUserCreate(Resource):
+   @api.expect(user_create_model, validate=True)
+   @api.response(201, 'Admin successfully created')
+   @api.response(400, 'Email already registered')
+   @api.response(400, 'Invalid input data')
+   @api.response(400, 'Invalid phone number')
+   @api.response(400, 'Invalid password')
+   @jwt_required()
+   def post(self):
+      # current_user = get_jwt()
+      claims = get_jwt()
+      if not claims.get('is_admin'):
+            return {'error': 'Admin privileges required'}, 403
 
-         # Check if email is already in use
-         if facade.get_user_by_email(email):
-               return {'error': 'Email already registered'}, 400
+      user_data = api.payload
+      email = user_data.get('email')
 
-         # Logic to create a new user
-         try:
-               # user_data = api.payload
-               new_user = facade.create_user(user_data)
-               return {
-                  'id': new_user.id,
-                  'message': "User registered sucessfully"
-                  }, 201
-         except (TypeError,ValueError) as e:
-               return {"error": str(e)}, 400
-   ```
+      # Check if email is already in use
+      if facade.get_user_by_email(email):
+            return {'error': 'Email already registered'}, 400
 
+      # Logic to create a new user
+      try:
+            # user_data = api.payload
+            new_user = facade.create_user(user_data)
+            return {
+               'id': new_user.id,
+               'message': "User registered sucessfully"
+               }, 201
+      except (TypeError,ValueError) as e:
+            return {"error": str(e)}, 400
+```
 
 ### Business Logic Layer
+
 The Business Logic Layer (BLL) contains the application’s core rules and workflows.
 It is composed of three main parts: the Facade, Services, and Domain Models.
 
 #### 1. Facade Layer
+
 The Facade acts as the bridge between the Presentation Layer and Services.
 It exposes high-level operations (e.g., create_user, update_place) that internally call one or more services.
 
 This simplifies controller code and keeps the API layer clean and uniform.
 
 Example Flow:
+
 ```
 /api/v1/users  →  Facade  →  UserService  →  UserRepository
 ```
 
 #### 2. Service Layer
+
 Each Service model encapsulates the business rules and logic for a specific entity (User, Place, Review, Amenity, Reservation).
 
-   | Service           | Responsibility                                                            |
-   |-------------------|---------------------------------------------------------------------------|
-   | UserService       | Manages user creation, authentication, updates, and admin privileges.     |
-   | PlaceService      | Handle creation and management of property listings.                      |
-   | AmenityService    | Manage amenities associated with places.                                  |
-   | ReviewService     | Process user reviews and ratings for places.                              |
-   | ReservationService| Manage booking dates and availability logic.                              |
+| Service            | Responsibility                                                        |
+| ------------------ | --------------------------------------------------------------------- |
+| UserService        | Manages user creation, authentication, updates, and admin privileges. |
+| PlaceService       | Handle creation and management of property listings.                  |
+| AmenityService     | Manage amenities associated with places.                              |
+| ReviewService      | Process user reviews and ratings for places.                          |
+| ReservationService | Manage booking dates and availability logic.                          |
 
-   **Example usage:**
-   ```
-   from app.models.user import User
+**Example usage:**
 
-   class UserService:
-      def __init__(self, user_repo):
-         self.user_repo = user_repo
+```
+from app.models.user import User
 
-      # Create user
-      def create_user(self, user_data):
-         existing = self.user_repo.get_by_attribute('email', user_data['email'])
-         if existing:
-               raise ValueError('Email already used - choose another email')
-         user = User(**user_data)
-         user.hash_password(user_data['password']) # hash pwd before saving
-         self.user_repo.add(user)
-         return user
-   ```
+class UserService:
+   def __init__(self, user_repo):
+      self.user_repo = user_repo
+
+   # Create user
+   def create_user(self, user_data):
+      existing = self.user_repo.get_by_attribute('email', user_data['email'])
+      if existing:
+            raise ValueError('Email already used - choose another email')
+      user = User(**user_data)
+      user.hash_password(user_data['password']) # hash pwd before saving
+      self.user_repo.add(user)
+      return user
+```
 
 #### 3. Domain Models
+
 The Models represent core entities and their relationships, implemented using SQLAlchemy ORM.
 Each model inherits from a shared BaseModel, which includes fields like id, created_at, and updated_at.
 
 Relationships are explicitly defined between models:
+
 - A User can own multiple Places
 - A Place can have multiple Reviews
 - A Place can have many Amenities (many-to-many)
 
-   | Model       | Description                       | Key Attributes                                                                 |
-   |------------|-----------------------------------|-------------------------------------------------------------------------------|
-   | Base       | Foundation for all entities.      | id, created_at, updated_at
-   | User       | Represents a HBnB platform user.  | id, first_name, last_name, email, password, phone number                              |
-   | Place      | Property listed for rent.         | id, owner_id, title, description, price, address, latitude, longitude, amenity_ids |
-   | Amenity    | Feature or facility available at a place. | id, name, description                                                      |
-   | Review     | User feedback for a place.         | id, user_id, place_id, rating, comment, upload_image                          |
+  | Model   | Description                               | Key Attributes                                                                     |
+  | ------- | ----------------------------------------- | ---------------------------------------------------------------------------------- |
+  | Base    | Foundation for all entities.              | id, created_at, updated_at                                                         |
+  | User    | Represents a HBnB platform user.          | id, first_name, last_name, email, password, phone number                           |
+  | Place   | Property listed for rent.                 | id, owner_id, title, description, price, address, latitude, longitude, amenity_ids |
+  | Amenity | Feature or facility available at a place. | id, name, description                                                              |
+  | Review  | User feedback for a place.                | id, user_id, place_id, rating, comment, upload_image                               |
 
-   **Example usage:**
-   ```
-   from app import db
-   from app.models.base_model import BaseModel
-   from sqlalchemy.orm import validates
+  **Example usage:**
 
-   class User(BaseModel):
-      __tablename__ = 'users'
+  ```
+  from app import db
+  from app.models.base_model import BaseModel
+  from sqlalchemy.orm import validates
 
-      first_name = db.Column(db.String(50), nullable=False)
-      last_name = db.Column(db.String(50), nullable=False)
-      email = db.Column(db.String(120), nullable=False, unique=True)
-      password = db.Column(db.String(128), nullable=False)
-      is_admin = db.Column(db.Boolean, default=False)
-      phone_number = db.Column(db.String, nullable=True)
-      profile_img = db.Column(db.String, nullable=True)
+  class User(BaseModel):
+     __tablename__ = 'users'
 
-      places = relationship('Place', backref='owner', lazy=True)
-      reviews = relationship('Review', backref='user', lazy=True)
+     first_name = db.Column(db.String(50), nullable=False)
+     last_name = db.Column(db.String(50), nullable=False)
+     email = db.Column(db.String(120), nullable=False, unique=True)
+     password = db.Column(db.String(128), nullable=False)
+     is_admin = db.Column(db.Boolean, default=False)
+     phone_number = db.Column(db.String, nullable=True)
+     profile_img = db.Column(db.String, nullable=True)
 
-      @validates('first_name', 'last_name')
-      def validate_name(self, key, value):
-         """ First and last name validations """
-         if not isinstance(value, str):
-               raise TypeError(f"{key.replace('_',' ').title()} must be a string")
-         value = value.strip()
-         if len(value) > 50:
-               raise ValueError(f"{key.replace('_', ' ').title()} cannot exceed 50 characters")
-         return value
-   ```
+     places = relationship('Place', backref='owner', lazy=True)
+     reviews = relationship('Review', backref='user', lazy=True)
+
+     @validates('first_name', 'last_name')
+     def validate_name(self, key, value):
+        """ First and last name validations """
+        if not isinstance(value, str):
+              raise TypeError(f"{key.replace('_',' ').title()} must be a string")
+        value = value.strip()
+        if len(value) > 50:
+              raise ValueError(f"{key.replace('_', ' ').title()} cannot exceed 50 characters")
+        return value
+  ```
 
 ### Persistence Layer
+
 The Persistence Layer handles all interactions with the database, abstracting SQLAlchemy queries from the rest of the application.
 It consists of a generic repository for standard CRUD operations, and entity-specific repositories for additional domain-specific behaviors.
 
 **Repository**
 The SQLAlchemyRepository class provides a reusable base for all entities:
+
 - Add objects to the database
 - Retrieve single objects or all objects
 - Update objects with new data
@@ -352,6 +385,7 @@ The SQLAlchemyRepository class provides a reusable base for all entities:
 Entity repositories inherit from SQLAlchemyRepository and add custom methods specific to that entity.
 
 Example of User Repository:
+
 ```
    from app.models.user import User
    from app.persistence.repository import SQLAlchemyRepository
@@ -367,113 +401,136 @@ Example of User Repository:
 ```
 
 ## 🌐 API Endpoints
-   ### 👥 Users ###
+
+### 👥 Users
+
       1. GET /api/v1/users/  - Get all existing users
       2. GET /api/v1/users/{user_id}  - Get user details
-   ### 🔰 Admin ###
+
+### 🔰 Admin
+
       1. POST /api/v1/users/  - Admin can register new users
       2. PUT /api/v1/users/{user_id}  - Admin can update user information
       3. POST /api/v1/amenities/ - Admin can create amenities
       4. PUT /api/v1/amenities/{amenity_id} - Admin can update amenity
-   ### 🛠️ Login ###
+
+### 🛠️ Login
+
       1. POST /api/v1/auth/login - Any user can login with email and password
       2. GET /api/v1/auth/protected - A protected endpoint that requires JWT token
-   ### 🏠 Places ###
+
+### 🏠 Places
+
       1. POST /api/v1/places/  - Create a new place
-      2. GET /api/v1/places/   - Get all places 
+      2. GET /api/v1/places/   - Get all places
       3. GET /api/v1/places/{place_id} - Get place details
       4. PUT /api/v1/places/{place_id}  - Update place information
       5. DELETE /api/v1/places/{place_id} - Delete a place
-   ### 📌 Amenities ###
+
+### 📌 Amenities
+
       1. GET /api/v1/amenities/ - Get all amenities
       2. GET /api/v1/amenities/{amenity_id} - Get amenity details
       3. DELETE /api/v1/amenities/{amenity_id} - Admin can delete any amenity
-   ### 📝 Reviews ###
+
+### 📝 Reviews
+
       1. POST /api/v1/reviews/ - Create review
       2. GET /api/v1/reviews/ - Get all reviews
       3. GET /api/v1/reviews/{review_id} - Get review details
       4. PUT /api/v1/reviews/{review_id} - Update review
       5. DELETE /api/v1/reviews/{review_id} - Delete review
-   ### 🕒 Reservations ###
+
+### 🕒 Reservations
+
       1. POST /api/v1/reservations/ - Create a new reservation
       2. GET /api/v1/reservations/   - Get all reservations
       3. GET /api/v1/reservations/{reservation_id}  - Get reservation details
       4. PUT /api/v1/reservations/{reservation_id}  - Update reservation
-   
-## 🌐 Admin Endpoints Example 🌐 ##
 
-   ### 1. Register a New User ###
-   **Endpoint** -- _POST /api/v1/users/_
+## 🌐 Admin Endpoints Example 🌐
 
-   **Request Body**
-   ```json
-   {
-     "first_name": "Alice",
-     "last_name": "Smith",
-     "email": "alice@example.com",
-     "phone_number": "+61412345678",
-     "password": "password123"
-   }
-   ```
-   **Response**
-   ```json
-   {
-     "user_id": "as235bjkfas882",
-     "first_name": "Alice",
-     "last_name": "Smith",
-     "email": "alice@example.com",
-     "phone_number": "+61412345678"
-   }
-   ```
-   ### 2. Get User Details ###
-   **Endpoint** -- _GET /api/v1/users/{user_id}_
+### 1. Register a New User
 
-   **Example Request**
-   ```
-   GET /api/v1/users/as235bjkfas882
-   ```
-   **Response**
-   ```json
-   {
-     "user_id": "as235bjkfas882",
-     "first_name": "Alice",
-     "last_name": "Smith",
-     "email": "alice@example.com",
-     "phone_number": "+61412345678"
-   }
-   ```
-   ### 3. Update User Information ###
-   **Endpoint** -- _PUT /api/v1/users/{user_id}_
+**Endpoint** -- _POST /api/v1/users/_
 
-   **Request Body**
-   ```json
-   {
-     "first_name": "Alice",
-     "last_name": "Johnson",
-     "phone_number": "+61498765432"
-   }
-   ```
-   **Response**
-   ```json
-   {
-     "user_id": "as235bjkfas882",
-     "first_name": "Alice",
-     "last_name": "Johnson",
-     "email": "alice@example.com",
-     "phone_number": "+61412345678"
-   }
-   ```
+**Request Body**
+
+```json
+{
+  "first_name": "Alice",
+  "last_name": "Smith",
+  "email": "alice@example.com",
+  "phone_number": "+61412345678",
+  "password": "password123"
+}
+```
+
+**Response**
+
+```json
+{
+  "user_id": "as235bjkfas882",
+  "first_name": "Alice",
+  "last_name": "Smith",
+  "email": "alice@example.com",
+  "phone_number": "+61412345678"
+}
+```
+
+### 2. Get User Details
+
+**Endpoint** -- _GET /api/v1/users/{user_id}_
+
+**Example Request**
+
+```
+GET /api/v1/users/as235bjkfas882
+```
+
+**Response**
+
+```json
+{
+  "user_id": "as235bjkfas882",
+  "first_name": "Alice",
+  "last_name": "Smith",
+  "email": "alice@example.com",
+  "phone_number": "+61412345678"
+}
+```
+
+### 3. Update User Information
+
+**Endpoint** -- _PUT /api/v1/users/{user_id}_
+
+**Request Body**
+
+```json
+{
+  "first_name": "Alice",
+  "last_name": "Johnson",
+  "phone_number": "+61498765432"
+}
+```
+
+**Response**
+
+```json
+{
+  "user_id": "as235bjkfas882",
+  "first_name": "Alice",
+  "last_name": "Johnson",
+  "email": "alice@example.com",
+  "phone_number": "+61412345678"
+}
+```
 
 ## Entity-Relationship (ER) Database diagrams
+
 ![ER Diagram](ER_Diagram.png)
 
 ## 📄 License
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
-
-
-
-
-
-
