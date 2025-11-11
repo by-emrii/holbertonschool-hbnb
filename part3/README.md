@@ -151,10 +151,18 @@ holbertonschool-hbnb/part3
 
 2. **Create a virtual environment**
 
+   > Ensure that you have python installed before running the command
+
+   **macOS/Darwin**
    ```bash
-   apt install python3.8-venv # On Windows: sudo apt install python3.8-venv
    python3 -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+   **Windows**
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate
    ```
 
 3. **Install dependencies**
@@ -168,6 +176,9 @@ holbertonschool-hbnb/part3
 
    ```bash
    flask shell
+   ```
+   Then inside the shell:
+   ```bash
    >>> from app import db
    >>> db.create_all()
    >>> exit()
@@ -178,9 +189,6 @@ holbertonschool-hbnb/part3
    > To perform the tests in Tasks 1–9, you must be logged in as an admin user. This step seeds the admin_user data to enable testing for these tasks.
 
    ```bash
-   apt update
-   apt install mysql-server
-   apt install sqlite3
    sqlite3 instance/development.db < seed_data.sql
    ```
 
@@ -210,7 +218,6 @@ holbertonschool-hbnb/part3
 
    ```bash
    brew install mysql
-   brew services start mysql
    ```
 
    Ubuntu
@@ -218,22 +225,41 @@ holbertonschool-hbnb/part3
    ```bash
    sudo apt update
    sudo apt install mysql-server
-   sudo systemctl start mysql
    ```
 
    Windows: Download and install from the MySQL website
 
-3. **Run SQL scripts**
+3. **Navigate to SQLScript file**
+
+   ```bash
+   cd SQLScript
+   ```
+
+4. **Start MySQL server**
+
+   macOS
+
+   ```bash
+   brew services start mysql
+   ```
+
+   Ubuntu
+
+   ```bash
+   sudo service mysql start
+   ```
+
+5. **Run SQL scripts**
 
    ```bash
    cat create_database.sql | mysql -uroot -p
    cat run_operations.sql | mysql -uroot -p
    ```
 
-4. **Connect to the MySQL server to query the database**
+6. **Connect to the MySQL server to query the database**
 
    ```bash
-   sudo mysql
+   mysql -u root
    Welcome to the MySQL monitor...
    mysql> show databases;
    ```
