@@ -193,6 +193,51 @@ holbertonschool-hbnb/part3
    http://127.0.0.1:5000/api/v1/
    ```
 
+## Running SQL scripts to generate tables & queries
+
+> These instructions are specific to testing of Task 10 of HBnB part3.
+
+1. **Check if you have MySQL installed**
+
+   ```bash
+   mysql --version
+   ```
+
+   > If this returns a version number, MySQL is installed. If not, proceed to step 2 to install it.
+
+2. **Install MySQL**
+   macOS (with Homebrew)
+
+   ```bash
+   brew install mysql
+   brew services start mysql
+   ```
+
+   Ubuntu
+
+   ```bash
+   sudo apt update
+   sudo apt install mysql-server
+   sudo systemctl start mysql
+   ```
+
+   Windows: Download and install from the MySQL website
+
+3. **Run SQL scripts**
+
+   ```bash
+   cat create_database.sql | mysql -uroot -p
+   cat run_operations.sql | mysql -uroot -p
+   ```
+
+4. **Connect to the MySQL server to query the database**
+
+   ```bash
+   sudo mysql
+   Welcome to the MySQL monitor...
+   mysql> show databases;
+   ```
+
 ## HBnB Architecture Overview
 
 ### Architecture Overview
