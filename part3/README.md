@@ -473,11 +473,12 @@ Example of User Repository:
    ```
 
 ## Entity-Relationship (ER) Database diagrams
-tbc
+![ER Diagram](./part3/ER_Diagram.png)
 
 ## 📄 License
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
 
 
