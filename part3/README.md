@@ -161,7 +161,7 @@ holbertonschool-hbnb/part3
 
 5. **Populate tables with initial data**
    ```bash
-   sqlite3 instance/development.db < SQLScript/data.sql
+   sqlite3 instance/development.db < seed_data.sql
    ```
 
 6. **Run the application**
@@ -471,6 +471,7 @@ Example of User Repository:
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
 
 
 
