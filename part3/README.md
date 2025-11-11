@@ -44,7 +44,6 @@ Full CRUD functionality for:
    - Places
    - Reviews
    - Amenities
-   - Reservations
 
 Centralized repository and service layers for clean separation of concerns
 
@@ -65,7 +64,6 @@ holbertonschool-hbnb/part3
 │   │       ├── amenities.py            # Endpoints for Amenity operations
 │   │       ├── base_model.py           # Shared structure or base for API models
 │   │       ├── places.py               # Endpoints for Place operations
-│   │       ├── reservations.py         # Endpoints for Reservation operations
 │   │       ├── reviews.py              # Endpoints for Review operations
 │   │       ├── users.py                # Endpoints for User operations
 |   |       ├── admin.py                # Endpoints for Admin only operations
@@ -76,7 +74,6 @@ holbertonschool-hbnb/part3
 │   │   ├── amenity.py                  # Amenity model definition
 │   │   ├── base_model.py               # Base class with shared attributes/methods
 │   │   ├── place.py                    # Place model definition
-│   │   ├── reservation.py              # Reservation model definition
 │   │   ├── review.py                   # Review model definition
 │   │   └── user.py                     # User model definition
 │   │
@@ -93,7 +90,6 @@ holbertonschool-hbnb/part3
 │   │   ├── amenity_service.py          # Logic for managing amenities
 │   │   ├── facade.py                   # Facade pattern – simplifies API-to-service interaction
 │   │   ├── place_service.py            # Logic for managing places
-│   │   ├── reservation_service.py      # Logic for managing reservations
 │   │   ├── review_service.py           # Logic for managing reviews
 │   │   └── user_service.py             # Logic for managing users
 │   │
@@ -102,7 +98,6 @@ holbertonschool-hbnb/part3
 │   |   ├── test_amenity_endpoints.py
 │   |   ├── test_models.py              # Testing for each models
 │   |   ├── test_place_endpoints.py
-│   |   ├── test_reservation_endpoints.py
 │   |   └── test_user_endpoints.py
 │   │
 │   └── __init__.py                    # Initialises Flask app, extensions, and API namespaces
@@ -114,7 +109,6 @@ holbertonschool-hbnb/part3
 │   ├── place_tests.pdf                 # Documented test log for Place endpoints
 │   ├── amenity_tests.pdf               # Documented test log for Amenity endpoints
 │   ├── review_tests.pdf                # Documented test log for Review endpoints
-│   └── reservation_tests.pdf           # Documented test log for Reservation endpoints
 │
 ├── SQLScript/                          # SQL Scripts
 │   └── data.sql                        # Script for table generation and initial data
@@ -193,7 +187,7 @@ holbertonschool-hbnb/part3
 The Presentation Layer manages all HTTP interactions.
 It is implemented using Flask-RESTX, which provides a structured way to define endpoints, request/response models, and automatic API documentation.
 Key Responsibilities:
-- Define API namespaces for entities such as Users, Places, Amenities, Reviews, and - Reservations
+- Define API namespaces for entities such as Users, Places, Amenities, Reviews.
 - Handle request validation, serialization, and response formatting
 - Manage authentication and authorization via JWTs
 - Delegate business operations to the Facade Layer
@@ -302,7 +296,6 @@ Relationships are explicitly defined between models:
 - A User can own multiple Places
 - A Place can have multiple Reviews
 - A Place can have many Amenities (many-to-many)
-- A User can make Reservations
 
    | Model       | Description                       | Key Attributes                                                                 |
    |------------|-----------------------------------|-------------------------------------------------------------------------------|
@@ -311,7 +304,6 @@ Relationships are explicitly defined between models:
    | Place      | Property listed for rent.         | id, owner_id, title, description, price, address, latitude, longitude, amenity_ids |
    | Amenity    | Feature or facility available at a place. | id, name, description                                                      |
    | Review     | User feedback for a place.         | id, user_id, place_id, rating, comment, upload_image                          |
-   | Reservation| Booking details for a place.       | id, user_id, place_id, start_date, end_date, price, discount, status, payment_status |
 
    **Example usage:**
    ```
@@ -473,12 +465,13 @@ Example of User Repository:
    ```
 
 ## Entity-Relationship (ER) Database diagrams
-![ER Diagram](./part3/ER_Diagram.png)
+![ER Diagram](ER_Diagram.png)
 
 ## 📄 License
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
 
 
 
