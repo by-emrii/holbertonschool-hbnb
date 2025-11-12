@@ -154,12 +154,14 @@ holbertonschool-hbnb/part3
    > Ensure that you have python installed before running the command
 
    **macOS/Darwin**
+
    ```bash
    python3 -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
    **Windows**
+
    ```bash
    python -m venv venv
    venv\Scripts\activate
@@ -177,7 +179,9 @@ holbertonschool-hbnb/part3
    ```bash
    flask shell
    ```
+
    Then inside the shell:
+
    ```bash
    >>> from app import db
    >>> db.create_all()
@@ -205,15 +209,7 @@ holbertonschool-hbnb/part3
 
 > These instructions are specific to testing of Task 10 of HBnB part3.
 
-1. **Check if you have MySQL installed**
-
-   ```bash
-   mysql --version
-   ```
-
-   > If this returns a version number, MySQL is installed. If not, proceed to step 2 to install it.
-
-2. **Install MySQL**
+1. **Install MySQL**
    **macOS (with Homebrew):**
 
    ```bash
@@ -228,6 +224,12 @@ holbertonschool-hbnb/part3
    ```
 
    Windows: Download and install from the MySQL website
+
+2. **Check that you have successfully installed MySQL**
+
+   ```bash
+   mysql --version
+   ```
 
 3. **Navigate to SQLScript file**
 
@@ -605,4 +607,3 @@ GET /api/v1/users/as235bjkfas882
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
-
