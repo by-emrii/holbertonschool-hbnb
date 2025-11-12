@@ -10,8 +10,8 @@ api = Namespace('amenities', description='Amenity operations')
 # Define the Amenity model blueprint for validation and documentation
 amenity_model = api.model('Amenity', {
     'id': fields.String(readonly=True, description='Amenity ID'),
-    'name': fields.String(required=True, description='Name of the amenity', min_length=1, max_length=255),
-    'description': fields.String(required=False, description='Additional details of the amenity', max_length=255)
+    'name': fields.String(required=True, description='Name of the amenity', min_length=1, max_length=50),
+    'description': fields.String(required=False, description='Additional details of the amenity', max_length=100)
     })
 
 # create root endpoint using Resource
