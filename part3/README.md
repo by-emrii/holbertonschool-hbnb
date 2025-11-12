@@ -367,7 +367,6 @@ Each Service model encapsulates the business rules and logic for a specific enti
 | PlaceService       | Handle creation and management of property listings.                  |
 | AmenityService     | Manage amenities associated with places.                              |
 | ReviewService      | Process user reviews and ratings for places.                          |
-| ReservationService | Manage booking dates and availability logic.                          |
 
 **Example usage:**
 
@@ -514,12 +513,6 @@ Example of User Repository:
       4. PUT /api/v1/reviews/{review_id} - Update review
       5. DELETE /api/v1/reviews/{review_id} - Delete review
 
-### 🕒 Reservations
-
-      1. POST /api/v1/reservations/ - Create a new reservation
-      2. GET /api/v1/reservations/   - Get all reservations
-      3. GET /api/v1/reservations/{reservation_id}  - Get reservation details
-      4. PUT /api/v1/reservations/{reservation_id}  - Update reservation
 
 ## 🌐 Admin Endpoints Example 🌐
 
@@ -534,7 +527,6 @@ Example of User Repository:
   "first_name": "Alice",
   "last_name": "Smith",
   "email": "alice@example.com",
-  "phone_number": "+61412345678",
   "password": "password123"
 }
 ```
@@ -543,11 +535,10 @@ Example of User Repository:
 
 ```json
 {
-  "user_id": "as235bjkfas882",
+  "id": "as235bjkfas882",
   "first_name": "Alice",
   "last_name": "Smith",
   "email": "alice@example.com",
-  "phone_number": "+61412345678"
 }
 ```
 
@@ -565,11 +556,10 @@ GET /api/v1/users/as235bjkfas882
 
 ```json
 {
-  "user_id": "as235bjkfas882",
+  "id": "as235bjkfas882",
   "first_name": "Alice",
   "last_name": "Smith",
   "email": "alice@example.com",
-  "phone_number": "+61412345678"
 }
 ```
 
@@ -591,15 +581,30 @@ GET /api/v1/users/as235bjkfas882
 
 ```json
 {
-  "user_id": "as235bjkfas882",
+  "id": "as235bjkfas882",
   "first_name": "Alice",
   "last_name": "Johnson",
   "email": "alice@example.com",
-  "phone_number": "+61412345678"
 }
 ```
 
 ## Entity-Relationship (ER) Database diagrams
+
+
+The diagram below illustrates the database schema for the HBnB project, showing the main entities and their relationships. It defines how data is structured and interconnected across the application.
+
+- User – Represents individuals using the platform. Each user can create multiple places and write multiple reviews.
+
+- Place – Stores property information such as title, description, location, and price. Each place is owned by a user and can have many reviews and be linked to multiple amenities.
+
+- Amenity – Represents features or services available at a place (e.g., Wi-Fi, pool). A place can have many amenities, and each amenity can belong to multiple places, forming a many-to-many relationship through the Place_Amenity table.
+
+- Review – Contains user feedback for a place, linked to both the user who wrote it and the place being reviewed.
+
+- Place_Amenity – A junction table that manages the many-to-many relationship between places and amenities.
+
+
+This ERD ensures that the data model aligns with the project’s ORM (SQLAlchemy) implementation and supports clear relationships between users, places, amenities, and reviews.
 
 ![ER Diagram](ER_Diagram.png)
 
