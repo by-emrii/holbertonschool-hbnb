@@ -153,7 +153,7 @@ holbertonschool-hbnb/part3
 
    > Ensure that you have python installed before running the command
 
-   **macOS/Darwin**
+   **macOS/Ubuntu**
 
    ```bash
    python3 -m venv venv
@@ -612,3 +612,4 @@ This ERD ensures that the data model aligns with the project’s ORM (SQLAlchemy
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
