@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Review - HBNB</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../../static/css/styles.css" />
+    <link rel="stylesheet" href="../../static/css/add_review_style.css" />
   </head>
   <body>
     <!-- HEADER -->
@@ -49,11 +50,12 @@
       <!-- Add Review Form -->
       <section id="add-review" class="add-review">
         <h2>Add a Review</h2>
+        <br />
         <form id="review-form" class="form">
-          <label for="review-text">Your Review:</label>
+          <label for="review-text"><strong>Review:</strong></label>
           <textarea id="review-text" name="review-text" required></textarea>
 
-          <label for="review-rating">Rating:</label>
+          <label for="review-rating"><strong>Rating:</strong></label>
           <select id="review-rating" name="review-rating" required>
             <option value="1">1 Star</option>
             <option value="2">2 Stars</option>
@@ -62,7 +64,7 @@
             <option value="5">5 Stars</option>
           </select>
 
-          <button type="submit">Submit Review</button>
+          <button type="submit" class="add-review-btn">Submit Review</button>
         </form>
       </section>
     </main>
