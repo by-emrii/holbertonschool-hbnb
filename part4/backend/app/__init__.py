@@ -23,22 +23,10 @@ def create_app(config_class="config.DevelopmentConfig"):
     jwt.init_app(app)
     db.init_app(app)
 
-    # ========================
-    #   FRONT-END ROUTES
-    # ========================
-
-    @app.route("/")
+    # template routes
+    @app.route('/')
     def index():
-        return render_template("index/index.html")
-
-    @app.route("/login")
-    def login():
-        return render_template("login/login.html")
-
-
-    # ========================
-    #   API ROUTES
-    # ========================
+        return render_template('index/index.html')
 
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API', doc='/api/v1/')
 
