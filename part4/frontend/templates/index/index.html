@@ -31,7 +31,10 @@
                     <!-- Options will be populated dynamically -->
                 </select>
             </section>
-            <div class="card-wrapper">
+            <section id="places-list">
+                <!-- List of places will be populated dynamically-->
+            </section>
+            <!-- <div class="card-wrapper">
                 <div class="place-card">
                     <div>
                         <h2 class="card-title">Beautiful Beach House</h2>
@@ -49,11 +52,11 @@
                     <div class="price">Price per night: $200</div>
                     <button id="details-button">View Details</button>
                 </div>
-            </div>
+            </div> -->
             <!-- List of places will be populated dynamically -->
         </section>
     <!-- {% include "includes/footer.html" %} -->
     </main>
-    <script src="{{ url_for('static', filename='javascript/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/index.js') }}"></script>
 </body>
 </html>
