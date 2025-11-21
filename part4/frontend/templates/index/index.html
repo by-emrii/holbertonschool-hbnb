@@ -13,11 +13,6 @@
 </head>
 <body>
     {% include "includes/header.html" %}
-    <header>
-        <nav>
-            <a href="login.html" id="login-link">Login</a>
-        </nav>
-    </header>
     <main> 
         <section id="places-container">
             <h1 class="container-title">Available Places</h1>
@@ -55,8 +50,8 @@
             </div> -->
             <!-- List of places will be populated dynamically -->
         </section>
-    <!-- {% include "includes/footer.html" %} -->
     </main>
+    {% include "includes/footer.html" %}
     <script src="{{ url_for('static', filename='javascript/index.js') }}"></script>
 </body>
 </html>
