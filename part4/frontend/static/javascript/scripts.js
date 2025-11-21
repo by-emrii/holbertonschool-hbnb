@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loginUser(email, password) {
   try {
-        const response = await fetch('https://127.0.0.1:5000/api/v1/auth/login', {
+        const response = await fetch('http://127.0.0.1:5000/api/v1/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ async function loginUser(email, password) {
       document.cookie = `token=${data.access_token}; path=/`;
 
       // redirect to home/index page
-      window.location.href = 'index.html';
+      window.location.href = 'http://127.0.0.1:5000/';
     } else {
         alert('Login failed: ' + response.statusText);
     }
