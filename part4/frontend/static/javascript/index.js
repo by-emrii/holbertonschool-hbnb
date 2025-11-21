@@ -47,9 +47,9 @@ async function fetchPlaces(token) {
 
 // Populate places list dynamically
 function displayPlaces(places) {
-    const placeCard = document.getElementByClassName('places-list');
+    const placeCard = document.querySelector('.places-list');
     placeCard.innerHTML = '';
-    for (let place in places) {
+    for (const place of places) {
         const placeDiv = document.createElement('div');
         placeDiv.setAttribute('class', 'place-card');
         placeDiv.innerHTML = `
@@ -64,6 +64,19 @@ function displayPlaces(places) {
 
 // Implement Client side filtering
 document.getElementById('price-filter').addEventListener('change', (event) => {
-    // Get the selected price value
-    // Iterate over the places and show/hide them based on the selected price
+    const filteredPrice = this.value; // this refers to the drop-down element
+    const places = document.getElementById('places-list');
+    
+    for (const place of places) {
+        const placePrice = parseFloat(place.price);
+        if (filteredPrice === 'All' || placePrice <= filteredPrice) {
+            place.style.display ='block';
+        } else {
+            place.style.display ='none';
+        }
+    }
+    //     Getting a reference to all the place elements on your page.
+    // Iterating through these place elements.
+    // For each place, checking if its price falls within the selectedPrice range.
+    // Showing or hiding the place elements accordingly (e.g., by changing their style.display property).
 });
