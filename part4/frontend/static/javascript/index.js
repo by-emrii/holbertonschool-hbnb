@@ -64,7 +64,7 @@ function displayPlaces(places) {
 
 // Implement Client side filtering
 document.getElementById('price-filter').addEventListener('change', (event) => {
-    const filteredPrice = this.value; // this refers to the drop-down element
+    const filteredPrice = parseFloat(this.value); // this refers to the drop-down element
     const places = document.getElementById('places-list');
     
     for (const place of places) {
@@ -75,8 +75,4 @@ document.getElementById('price-filter').addEventListener('change', (event) => {
             place.style.display ='none';
         }
     }
-    //     Getting a reference to all the place elements on your page.
-    // Iterating through these place elements.
-    // For each place, checking if its price falls within the selectedPrice range.
-    // Showing or hiding the place elements accordingly (e.g., by changing their style.display property).
 });
