@@ -5,24 +5,14 @@
     font-family: Arial, sans-serif;
 }
 
-body {
+/* body {
     background-color: #f4f4f4;
     color: #333;
     display: flex;
     justify-content: center;   
     align-items: center;       
     min-height: 100vh;  
-}
-
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    align-items:baseline;
-}
+} */
 
 nav a {
     color: #fff;
@@ -33,6 +23,9 @@ nav a {
 
 main {
     padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .places-container {
