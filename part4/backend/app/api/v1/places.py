@@ -68,7 +68,7 @@ def _enrich_place_with_amenities(place, facade=facade):
 
     return {
         'id': place.id,
-        'owner_id': place.owner.id,
+        'owner_id': place.owner_id,
         'title': place.title,
         'description': place.description or '',
         'price': place.price,
