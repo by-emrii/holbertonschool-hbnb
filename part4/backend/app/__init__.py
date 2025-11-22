@@ -34,6 +34,11 @@ def create_app(config_class="config.DevelopmentConfig"):
     @app.route("/login")
     def login():
         return render_template("login/login.html")
+    
+    @app.route("/place_details")
+    def place_details():
+        return render_template("place_details/place_details.html")
+
 
     # ========================
     #   API ROUTES
