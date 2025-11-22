@@ -1,7 +1,7 @@
 body {
     background-color: #f4f4f4;
     font-family: Arial, sans-serif;
-    color: #333;
+    color: #434343;
 }
 
 main {
@@ -9,14 +9,13 @@ main {
 }
 
 h1 {
+    margin-top: 50px;
     text-align: center;
-    font-size: 32px;
+    font-size: 30px;
     margin-bottom: 30px;
-}
-
-h2 {
-    font-size: 22px;
-    margin-bottom: 15px;
+    color: #434343;
+    background-color: rgb(185, 185, 185);
+    padding: 50px;
 }
 
 /*Review Form*/
@@ -43,6 +42,11 @@ h2 {
     margin-bottom: 20px;
 }
 
+.review-form textarea:focus {
+    border: 1px solid #ccc;
+    outline: none;
+}
+
 .review-form select {
     width: 100%;
     padding: 12px;
@@ -53,41 +57,54 @@ h2 {
 
 
 /* Rating */
+.rating-label {
+    text-align: center;
+    font-size: 60px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #e0241a;
+}
+
 .star-rating {
     justify-content: center;
     direction: rtl;   /* makes clicking behavior intuitive */
     display: flex;
-    gap: 5px;
-    font-size: 32px;
+    gap: 10px;
+    font-size: 50px;
     cursor: pointer;
     margin-bottom: 20px;
 }
 
+/* Hide radio inputs */
 .star-rating input {
     display: none;
 }
 
 .star {
-    color: #ccc;
-    transition: color 0.2s;
+    color: transparent; 
+    -webkit-text-stroke: 1px #6a6a6a; 
+    transition: color 0.2s, -webkit-text-stroke-color 0.2s;
 }
 
 .star:hover,
 .star:hover ~ .star {
-    color: gold;
+    color: rgb(255, 208, 0);
+    -webkit-text-stroke-color: rgb(255, 208, 0);
 }
 
 .star-rating input:checked ~ label {
-    color: gold;
+    color: rgb(255, 208, 0);
+    -webkit-text-stroke-color: rgb(255, 208, 0);
 }
 
 
 /*Submit button*/
 .submit-btn {
+    margin-top: 15px;
     width: 100%;
-    background: orange;
+    background: #e0241a;
     color: white;
-    padding: 15px;
+    padding: 10px;
     border: none;
     font-size: 16px;
     border-radius: 6px;
@@ -95,5 +112,5 @@ h2 {
 }
 
 .submit-btn:hover {
-  background-color: gray;
+  background-color: black;
 } 
