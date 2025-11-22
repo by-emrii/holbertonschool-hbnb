@@ -10,14 +10,12 @@ review_create_model = api.model('ReviewCreate', {
     "place_id": fields.String(required=True, description="ID of the place being reviewed"),
     "rating": fields.Integer(required=True, min=1, max=5, description="Rating between 1 and 5"),
     "text": fields.String(required=True, description="Review text"),
-    #"upload_image": fields.List(fields.String, required=False, description="List of image URLs")
 })
 
 # Model for updating a review
 review_update_model = api.model('ReviewUpdate', {
     "rating": fields.Integer(required=True, min=1, max=5),
     "text": fields.String(required=True, max_length=300),
-    #"upload_image": fields.List(fields.String, required=False),
 })
 
 # Model for response
@@ -27,7 +25,6 @@ review_response_model = api.model('Review', {
     "place_id": fields.String,
     "rating": fields.Integer,
     "text": fields.String,
-    #"upload_image": fields.List(fields.String),
     "created_at": fields.String,
     "updated_at": fields.String,
 })
@@ -83,7 +80,6 @@ class ReviewsList(Resource):
                 "place": place,
                 "rating": data["rating"],
                 "text": data["text"],
-                #"upload_image": data.get("upload_image", []),
             })
 
             return {

@@ -22,8 +22,7 @@ class ReviewService():
             user_id=user.id,
             place_id=place.id,
             rating=review_data["rating"],
-            text=review_data["text"],
-            #upload_image=review_data.get("upload_image", [])
+            text=review_data["text"]
         )
 
         # Save to repository
@@ -78,17 +77,3 @@ class ReviewService():
         # Delete the review
         self.review_repo.delete(review_id)
         return True
-
-    #GETTING THE AVERAGE RATING AND RECENT REVIEWS
-    #def get_average_rating(self, place_id):
-        #"""Calculate average rating for a place."""
-        #avg = self.review_repo.get_average_rating_for_place(place_id)
-        #return round(avg, 2) if avg else 0
-
-    #def get_recent_reviews(self, place_id, limit=5):
-        #"""Return the most recent reviews for a place."""
-        #reviews = self.review_repo.get_reviews_for_place(place_id)
-        #return sorted(reviews, key=lambda r: r.created_at, reverse=True)[:limit]
-    
-    
-    
