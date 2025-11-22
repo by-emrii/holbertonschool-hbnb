@@ -37,7 +37,7 @@ function checkAuthentication() {
 }
 
 // ============== 4. Fetch Place Details ==============
-async function fetchPlaceDetails(token, placeId) {
+async function fetchPlaceDetails(placeId, token) {
   try {
     const headers = {
       "Content-Type": "application/json",
