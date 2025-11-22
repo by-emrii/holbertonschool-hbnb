@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Review</title>
+    <link rel="stylesheet" href="../../static/css/review_style.css" />
+    <link rel="stylesheet" href="../../static/css/styles.css" />
+    <link rel="stylesheet" href="../../static/css/header.css" />
+    <link rel="stylesheet" href="../../static/css/footer.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+      <div class="header-container">
+        <a href="../index/index.html">
+          <img
+            src="../../static/images/logo.png"
+            alt="HBnB logo"
+            class="logo"
+          />
+        </a>
+
+        <nav>
+          <ul>
+            <li>
+              <a href="../login/login.html" class="login-button">Login</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+
+    <main class="review_page">
+        <!-- Add something to idfentify the place you're reviewing -->
+    
+        <h1>Reviewing: Beautiful Beach House</h1>
+        <form id="review-form" class="review-form">
+
+            <h2>Add a Review</h2>
+
+            <label for="review">Your Review:</label>
+            <textarea id="review" name="review" 
+            required></textarea>
+
+            <label for="rating">Rating:</label>
+                <div class="star-rating">
+                  <input type="radio" name="rating" id="star5" value="5" />
+                  <label for="star5" class="star">★</label>
+
+                  <input type="radio" name="rating" id="star4" value="4" />
+                  <label for="star4" class="star">★</label>
+
+                  <input type="radio" name="rating" id="star3" value="3" />
+                  <label for="star3" class="star">★</label>
+
+                  <input type="radio" name="rating" id="star2" value="2" />
+                  <label for="star2" class="star">★</label>
+
+                  <input type="radio" name="rating" id="star1" value="1" />
+                  <label for="star1" class="star">★</label>
+                </div>
+                <!-- Options for rating -->
+              <select id="rating" name="rating" required>
+                <option value="1">1 - Poor</option>
+                <option value="2">2 - Fair</option>
+                <option value="3">3 - Good</option>
+                <option value="4">4 - Very Good</option>
+                <option value="5">5 - Excellent</option>          
+              </select>
+
+            <button type="submit" class="submit-btn">Submit Review</button>
+        </form>
+        
+    </main>
+    <!-- FOOTER -->
+    <!-- {% include 'includes/footer.html' %} -->
+    <footer>
+      <p>© 2025 HBnB Evolution. All rights reserved</p>
+    </footer>
+    
+    <script src="scripts.js"></script>
+</body>
+</html>
