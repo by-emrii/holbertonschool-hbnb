@@ -1,0 +1,74 @@
+/* ====== Place Details Section ====== */
+
+.place-info {
+  background-color: white;
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.place-details h1 {
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.place-info p {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ====== Review cards List ====== */
+
+#reviews {
+  margin-top: 2rem;
+}
+
+#reviews h2 {
+  margin-left: 20px; /* align with review-card */
+  margin-bottom: 10px;
+}
+
+.review-card {
+  background-color: #fff;
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-card p {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+/* ====== Add Review Button Section ====== */
+
+.action-button {
+  background-color: #ff7a00;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 20px; /* align with review-card */
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.action-button:hover {
+  text-decoration: underline;
+}
+
+section nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+section nav li {
+  display: inline-block;
+}

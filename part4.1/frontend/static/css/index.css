@@ -1,0 +1,96 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* body {
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    justify-content: center;   
+    align-items: center;       
+    min-height: 100vh;  
+} */
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem;
+    float: right;
+}
+
+main {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.places-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+}
+
+.card-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.place-card {
+    background-color: white;
+    margin: 20px;
+    padding: 10px;
+    border: 1px;
+    border-style: solid;
+    border-color: #ddd;
+    border-radius: 15px;
+    width: 280px;
+    height: auto;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+;
+}
+
+.container-title {
+    font-size: 3rem;
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.8rem;
+    word-wrap: break-word;
+    margin-bottom: 20px;
+}
+
+.price {
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+#details-button {
+    color: white;
+    background-color: orange;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#details-button:hover {
+    cursor: pointer;
+    background-color: #ff7a00;
+}
+
+#filter {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 25px;
+    font-size: 1.25rem;
+}

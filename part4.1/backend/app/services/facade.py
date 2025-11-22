@@ -1,0 +1,131 @@
+from app.persistence.repository import SQLAlchemyRepository
+from app.services.user_service import UserService
+from app.services.amenity_service import AmenityService
+from app.services.place_service import PlaceService
+from app.services.review_service import ReviewService
+from app.models.user import User
+from app.models.place import Place
+from app.models.review import Review
+from app.models.amenity import Amenity
+from app.persistence.user_repository import UserRepository
+from app.persistence.place_repository import PlaceRepository
+from app.persistence.amenity_repository import AmenityRepository
+from app.persistence.review_repository import ReviewRepository
+
+class HBnBFacade:
+    def __init__(self):
+        # shared repo
+        self.user_repo = UserRepository()
+        self.place_repo = PlaceRepository()
+        self.review_repo = ReviewRepository()
+        self.amenity_repo = AmenityRepository()
+
+        # services using shared repos
+        self.user_service = UserService(self.user_repo)
+        self.amenity_service = AmenityService(self.amenity_repo)
+        self.place_service = PlaceService(self.place_repo, self.user_repo, self.amenity_repo, self.review_repo)
+        self.review_service = ReviewService(self.place_repo, self.user_repo, self.review_repo)
+        
+    """ User CRU """
+    # Placeholder method for creating a user
+    def create_user(self, user_data):
+        # Logic will be implemented in later tasks
+        return self.user_service.create_user(user_data)
+
+    # get user
+    def get_user(self, user_id):
+        return self.user_service.get_user(user_id)
+
+    # get user by email
+    def get_user_by_email(self, email):
+        return self.user_service.get_user_by_email(email)
+
+    # get all users
+    def get_all_users(self):
+        return self.user_service.get_all_users()
+
+    # update user
+    def update_user(self, user_id, user_data):
+        return self.user_service.update_user(user_id, user_data)
+
+    """ Place CRU """
+    # Create place
+    def create_place(self, place_data):
+        return self.place_service.create_place(place_data)
+
+    # Get all places
+    def list_places(self):
+        return self.place_service.list_places()
+
+    # Get a Place
+    def get_place(self, place_id):
+        return self.place_service.get_place(place_id)
+
+    # Update Place
+    def update_place(self, place_id, place_data):
+        return self.place_service.update_place(place_id, place_data)
+
+    # Delete Place
+    def delete_place(self, place_id):
+        return self.place_service.delete_place(place_id)
+
+    """ Amenity CRU """
+    # create amenity
+    def create_amenity(self, amenity_data):
+        return self.amenity_service.create_amenity(amenity_data)
+
+    # get amenity
+    def get_amenity(self, amenity_id):
+        return self.amenity_service.get_amenity(amenity_id)
+    
+    # get all amenities
+    def get_all_amenities(self):
+        return self.amenity_service.get_all_amenities()
+    
+    # update amenity
+    def update_amenity(self, amenity_id, amenity_data):
+        return self.amenity_service.update_amenity(amenity_id, amenity_data)
+    
+    # delete amenity
+    def delete_amenity(self, amenity_id):
+        return self.amenity_service.delete_amenity(amenity_id)
+
+    """Review CRU"""
+    #CREATE A REVIEW
+    def create_review(self, review_data):
+        """Create and save a review."""
+        return self.review_service.create_review(review_data)
+
+    def get_all_reviews(self):
+        """Retrieve all reviews from the database."""
+        return self.review_service.get_all_reviews()
+
+    def user_already_reviewed(self, place_id, user_id):
+        """Check if a user has already reviewed a given place."""
+        return self.review_repo.user_already_reviewed(place_id, user_id)
+
+    #READ REVIEWS
+    def get_review_by_id(self, review_id):
+        """Retrieve a single review by ID."""
+        return self.review_service.get_review_by_id(review_id)
+
+    def get_reviews_for_place(self, place_id):
+        """Fetch all reviews for a specific place."""
+        return self.review_service.get_reviews_for_place(place_id)
+
+    def update_review(self, review_id, review_data, current_user, is_admin=False):
+        """User updates a review of a specific place."""
+        return self.review_service.update_review(review_id, review_data, current_user, is_admin)
+
+    def delete_review(self, review_id, current_user, is_admin=False):
+        """User deletes a review."""
+        return self.review_service.delete_review(review_id, current_user, is_admin)
+
+    # Place add_amenity entry point
+    def add_amenity_to_place(self, place_id, amenity_id):
+        return self.place_service.add_amenity_to_place(place_id, amenity_id)
+    # Place add_review entry
+    def add_review_to_place(self, place_id, review_id):
+        return self.place_service.add_review_to_place(place_id, review_id)
+
+facade = HBnBFacade()
