@@ -224,7 +224,7 @@ async function initializePage() {
   const addReviewBtn = document.getElementById("go-to-add-review");
   if (addReviewBtn) {
     addReviewBtn.onclick = function () {
-      location.href = `add_review.html?place_id=${placeId}`;
+      location.href = `add_review?place_id=${placeId}`;
     };
   }
 }

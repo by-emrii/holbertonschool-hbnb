@@ -101,8 +101,11 @@ class Review(BaseModel):
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
             "user": {
                 "id": user.id,
-                "name": " ".join(filter(None, [user.first_name, user.last_name]))
-            },
+                # "name": " ".join(filter(None, [user.first_name, user.last_name]))
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email
+            } if user else None,
             "place": None if place is None else {
                 "id": place.id,
                 "title": place.title,

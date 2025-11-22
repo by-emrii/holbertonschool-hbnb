@@ -97,6 +97,19 @@ INSERT INTO places (id, owner_id, title, address, price, latitude, longitude, de
     'Remote farm with cute animals.'
 );
 
+
+-- ==========================
+-- Amenities:
+-- ==========================
+INSERT INTO amenities (id, name, description) VALUES 
+    ('550e8400-e29b-41d4-a716-446655440001', 'WiFi', 'High-speed wireless internet'),
+    ('550e8400-e29b-41d4-a716-446655440003', 'Air Conditioning', 'Climate control'),
+    ('550e8400-e29b-41d4-a716-446655440004', 'Kitchen', 'Full kitchen with appliances'),
+    ('550e8400-e29b-41d4-a716-446655440005', 'Parking', 'Free parking space'),
+    ('550e8400-e29b-41d4-a716-446655440006', 'TV', 'Flat-screen television'),
+    ('550e8400-e29b-41d4-a716-446655440007', 'Heating', 'Central heating');
+
+
 -- ==========================
 -- Place-Amenity Associations:
 -- ==========================

@@ -39,6 +39,10 @@ def create_app(config_class="config.DevelopmentConfig"):
     def place_details():
         return render_template("place_details/place_details.html")
 
+    @app.route("/add_review")
+    def add_review():
+        return render_template("place_details/add_review.html")
+
 
     # ========================
     #   API ROUTES
