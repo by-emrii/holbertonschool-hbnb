@@ -1,68 +1,205 @@
-/* ====== Place Details Section ====== */
+/* ------------ GLOBAL -------------- */
+body {
+  background-color: #f8f8f8;
+  font-family: Arial, sans-serif;
+  color: #434343;
+}
 
-.place-info {
-  background-color: white;
-  margin: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+main {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+:root {
+  --content-width: 1300px;
+  --brand-red: #e0241a;
+}
+
+/* ---------- HERO IMAGE ---------- */
+.listing-image-container {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.15);
+}
+
+.hero-img {
+  width: 100%;
+  display: block;
 }
 
 .place-details h1 {
-  margin-bottom: 0.5rem;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* ---------- PLACE DETAILS SECTION ---------- */
+#listing-info-card {
+  max-width: var(--content-width);
+  margin: -60px auto 20px;
+  background-color: var(--brand-red);
+  padding: 40px;
+  border-radius: 20px;
+  height: 230px;
+  position: relative;
+  z-index: 5;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.12);
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  text-align: center; /* ← makes 0, stars, and 4 centered nicely */
+}
+
+/* PRICE AND HOST */
+.price-container p {
+  margin: 0;
+}
+
+.dollar-sign,
+#place-price {
+  font-weight: bold;
+  font-size: 80px;
+  color: white;
+}
+
+.per-night {
+  font-size: 25px;
+  color: white;
+}
+
+/*AVERAGE RATING*/
+.rating {
   text-align: center;
 }
 
-.place-info p {
-  margin-bottom: 1rem;
-  line-height: 1.5;
-  text-align: center;
+.average-rating {
+  font-weight: bold;
+  font-size: 80px;
+  color: white;
 }
 
-/* ====== Review cards List ====== */
+.rating-title {
+  font-size: 25px;
+  color: white;
+}
 
+/*STAR RATING*/
+.star-rating {
+  font-weight: bold;
+  font-size: 40px;
+  color: white;
+  white-space: nowrap; /* prevent vertical stacking */
+}
+
+/* PLACE DETAILS */
+.place-details-container {
+  padding: 40px;
+  height: 180px;
+}
+
+.place-details-container p {
+  font-size: 25px;
+}
+
+/* ---------- AMENITIES SECTION ---------- */
+#amenities {
+  background-color: white;
+  min-height: 300px;
+  max-width: var(--content-width);
+  padding: 40px;
+  margin: 0 auto;
+}
+
+.amenities-title {
+  font-size: 30px;
+  padding-bottom: 30px;
+  font-weight: bold;
+}
+
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+  margin-top: 20px;
+}
+
+.amenity-box {
+  background-color: #efefef;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 18px;
+}
+
+/*Iconc*/
+.bi.bi-wifi,
+.bi.bi-fan,
+.bi.bi-water {
+  color: var(--brand-red);
+  margin-bottom: 15px;
+}
+
+/* ---------- REVIEWS ---------- */
 #reviews {
-  margin-top: 2rem;
+  margin-top: 40px;
+  padding: 40px;
+  max-width: var(--content-width);
 }
 
-#reviews h2 {
-  margin-left: 20px; /* align with review-card */
-  margin-bottom: 10px;
+.review-title {
+  font-size: 30px;
+  padding-bottom: 40px;
+  font-weight: bold;
+}
+
+.review-rows {
+  display: grid;
+  grid-template-columns: repeat(1, 3fr);
+  gap: 40px;
+  font-size: 25px;
+}
+
+.review-rows hr {
+  border: none;
+  border-top: 1px solid #e9a6a1;
+  margin: 15px 0;
+}
+
+.author-name {
+  font-weight: bold;
+  padding-bottom: 20px;
 }
 
 .review-card {
-  background-color: #fff;
-  margin: 20px;
+  margin: 20px 0;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 25px;
 }
 
-.review-card p {
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
-}
-
-/* ====== Add Review Button Section ====== */
-
+/* ---------- ADD REVIEW BUTTON ---------- */
 .action-button {
-  background-color: #ff7a00;
+  background-color: var(--brand-red);
   color: white;
-  font-size: 18px;
+  font-size: 30px;
   font-weight: bold;
-  margin-left: 20px; /* align with review-card */
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  border: none;
+  cursor: pointer;
+  float: right;
 }
 
 .action-button:hover {
-  text-decoration: underline;
+  background-color: #4d4d4d;
 }
 
+/* ---------- NAV LIST ---------- */
 section nav ul {
   list-style: none;
   margin: 0;

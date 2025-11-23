@@ -1,12 +1,16 @@
 header {
-  background-color: #ffffff;
+  background-color: #e0241a;
   padding: 6px 16px;
 }
 
-/*#e0241a*/
+:root {
+  --content-width: 1300px;
+  --brand-red: #e0241a;
+}
 
 .header-container {
   width: 100%;
+  max-width: var(--content-width);
   height: 50px;
   margin: 0 auto;
   display: flex;
@@ -31,7 +35,6 @@ header nav li {
 
 .login-button {
   color: white;
-  background-color: #e0241a;
   padding: 5px 10px 5px 10px;
   border-radius: 5px;
   text-decoration: none;
@@ -42,5 +45,4 @@ header nav li {
 .login-button:hover {
   text-decoration: underline;
   color: white;
-  background-color: black; 
 }
