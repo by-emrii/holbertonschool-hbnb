@@ -9,7 +9,26 @@
     <link rel="stylesheet" href="../../static/css/footer.css" />
 </head>
 <body>
-    {% include "includes/header.html" %}
+    <!-- HEADER -->
+      <header>
+          <div class="header-container">
+            <a href="../index/index.html">
+              <img
+                src="../../static/images/logo.png"
+                alt="HBnB logo"
+                class="logo"
+              />
+            </a>
+
+            <nav>
+              <ul>
+                <li>
+                  <a href="../login/login.html" class="login-button">Login</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+      </header>
 
     <main>
         <form id="login-form">
@@ -24,7 +43,11 @@
         </form>
     </main>
 
-    {% include "includes/footer.html" %}
+    <!-- FOOTER -->
+    <!-- {% include 'includes/footer.html' %} -->
+    <footer>
+      <p>© 2025 HBnB Evolution. All rights reserved</p>
+    </footer>
 
     <script src="../../static/javascript/scripts.js"></script>
 </body>

@@ -12,7 +12,27 @@
     <link rel="stylesheet" href="../../static/css/footer.css" />
 </head>
 <body>
-    {% include "includes/header.html" %}
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+          <a href="../index/index.html">
+            <img
+              src="../../static/images/logo.png"
+              alt="HBnB logo"
+              class="logo"
+            />
+          </a>
+
+          <nav>
+            <ul>
+              <li>
+                <a href="../login/login.html" class="login-button">Login</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+    </header>
+
     <main> 
         <section id="places-container">
             <h1 class="container-title">Available Places</h1>
@@ -50,8 +70,86 @@
             </div>
             List of places will be populated dynamically -->
         </section>
+      
+      <!--GRACE-->
+      <!-- PLACES -->
+      <section id="places">
+        <div class="places-grid">
+
+          <div class="place-item">
+            <h2 class="property-name"> Beautiful Beach House</h2>
+            <div class="listing-image-container">
+              <img class="hero-img" src="../../static/images/mockup.jpg" alt="Beach House">
+            </div>
+
+            <div class="places-box">
+              <div class="price-container">
+                <span class="dollar-sign">$</span>
+                <span id="place-price">0</span>
+                <span class="per-night">Per night</span>
+              </div>
+
+              <div class="rating">
+                <span class="average-rating">4</span>
+                <span class="rating-title">Rating</span>
+              </div>
+            </div>
+            <button class="view-details-btn">View Details</button>
+          </div>
+
+          <div class="place-item">
+            <h2 class="property-name"> Cozy Cabin</h2>
+            <div class="listing-image-container">
+              <img class="hero-img" src="../../static/images/mockup.jpg" alt="Beach House">
+            </div>
+
+            <div class="places-box">
+              <div class="price-container">
+                <span class="dollar-sign">$</span>
+                <span id="place-price">0</span>
+                <span class="per-night">Per night</span>
+              </div>
+
+              <div class="rating">
+                <span class="average-rating">4</span>
+                <span class="rating-title">Rating</span>
+              </div>
+            </div>
+            <button class="view-details-btn">View Details</button>
+          </div>
+
+          <div class="place-item">
+            <h2 class="property-name"> Modern Apartment</h2>
+            <div class="listing-image-container">
+              <img class="hero-img" src="../../static/images/mockup.jpg" alt="Beach House">
+            </div>
+
+            <div class="places-box">
+              <div class="price-container">
+                <span class="dollar-sign">$</span>
+                <span id="place-price">0</span>
+                <span class="per-night">Per night</span>
+              </div>
+
+              <div class="rating">
+                <span class="average-rating">4</span>
+                <span class="rating-title">Rating</span>
+              </div>
+            </div>
+            <button class="view-details-btn">View Details</button>
+          </div>
+
+        </div>
+      </section>
+
+
+
     </main>
-    {% include "includes/footer.html" %}
+    <!-- FOOTER -->
+    <!-- {% include 'includes/footer.html' %} -->
+    <footer>
+      <p>© 2025 HBnB Evolution. All rights reserved</p>
+    </footer>
     <script src="{{ url_for('static', filename='javascript/index.js') }}"></script>
 </body>
 </html>
