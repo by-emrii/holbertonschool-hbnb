@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, make_response
 from flask_restx import Api
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
@@ -34,6 +34,12 @@ def create_app(config_class="config.DevelopmentConfig"):
     @app.route("/login")
     def login():
         return render_template("login/login.html")
+    
+    @app.route("/logout")
+    def logout():
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
     
     @app.route("/place_details")
     def place_details():

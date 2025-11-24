@@ -1,12 +1,19 @@
 // Display/hide loginLink depending on Auth
 function checkAuthentication() {
   const token = getCookie("token");
-  const loginLink = document.getElementsByClassName("login-button");
+  const loginLink = document.getElementsByClassName("login-button")[0];
+  const logoutLink = document.getElementsByClassName("logout-button")[0];
+
 
   if (!token) {
-    loginLink[0].style.display = "block";
+    // User NOT logged in
+    loginLink.style.display = "block";
+    logoutLink.style.display = "none";
   } else {
-    loginLink[0].style.display = "none";
+    // User IS logged in
+    loginLink.style.display = "none";
+    logoutLink.style.display = "block";
+    
     // Fetch places data if the user is authenticated
     fetchPlaces(token);
   }
