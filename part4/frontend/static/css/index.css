@@ -78,7 +78,7 @@ main {
   font-size: 1rem;
 }
 
-#details-button {
+.details-button {
   color: white;
   background-color: orange;
   border: none;
@@ -86,7 +86,7 @@ main {
   padding: 10px;
 }
 
-#details-button:hover {
+.details-button:hover {
   cursor: pointer;
   background-color: #ff7a00;
 }

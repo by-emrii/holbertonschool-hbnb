@@ -66,8 +66,15 @@ function displayPlaces(places) {
                   <h2 class="card-title">${place.title}</h2>
               </div>
               <div class="price">Price per night: $${place.price}</div>
-              <button id="details-button">View Details</button>`;
+              <button class="details-button">View Details</button>`;
+
     placeCard.appendChild(placeDiv);
+
+    const detailsButton = placeDiv.querySelector(".details-button");
+
+    detailsButton.addEventListener("click", () => {
+      window.location.href = `http://127.0.0.1:5000/place_details?place_id=${place.id}`;
+    });
   }
 }
 
@@ -76,12 +83,8 @@ document.getElementById("price-filter").addEventListener("change", (event) => {
   const myFilters = document.getElementById("price-filter");
   const filteredPrice = myFilters.value; // this refers to the selected price
   const places = document.getElementById("places-list");
-  //   console.log(places);
 
   for (const place of places.children) {
-    // console.log(places.children);
-    // console.log(place);
-    // break;
     const placePrice = place.getAttribute("data-price");
     // console.log(placePrice);
     if (filteredPrice === "All" || placePrice <= parseFloat(filteredPrice)) {
