@@ -15,7 +15,26 @@ function getCookie(name) {
   return null;
 }
 
-// ============== 3. Check User Authentication ==============
+// ============== 3. Toggle Login/Logout Buttons ==============
+function checkAuthUI() {
+  const token = getCookie("token");
+  const loginLink = document.querySelector(".login-button");
+  const logoutLink = document.querySelector(".logout-button");
+
+  if (!loginLink || !logoutLink) return;
+
+  if (token) {
+    loginLink.style.display = "none";
+    logoutLink.style.display = "block";
+  } else {
+    loginLink.style.display = "block";
+    logoutLink.style.display = "none";
+  }
+
+  return token;
+}
+
+// ============== 4. Check User Authentication ==============
 function checkAuthentication() {
   // Function to check for the JWT token in cookies and store it in a variable.
   const token = getCookie("token");
@@ -36,7 +55,7 @@ function checkAuthentication() {
   return token;
 }
 
-// ============== 4. Fetch Place Details ==============
+// ============== 5. Fetch Place Details ==============
 async function fetchPlaceDetails(placeId, token) {
   try {
     const headers = {
@@ -69,7 +88,7 @@ async function fetchPlaceDetails(placeId, token) {
   }
 }
 
-// ============== 5. Fetch Reviews for Place ==============
+// ============== 6. Fetch Reviews for Place ==============
 async function fetchPlaceReviews(placeId) {
   try {
     const response = await fetch(
@@ -98,7 +117,7 @@ async function fetchPlaceReviews(placeId) {
   }
 }
 
-// ============== 6. Display Place Details ==============
+// ============== 7. Display Place Details ==============
 function displayPlaceDetails(place) {
   // Update place title
   const titleElement = document.getElementById("place-title");
@@ -139,7 +158,7 @@ function displayPlaceDetails(place) {
   }
 }
 
-// ============== 7. Display Reviews ==============
+// ============== 8. Display Reviews ==============
 function displayReviews(reviews) {
   const reviewsSection = document.getElementById("reviews");
   if (!reviewsSection) return;
@@ -195,7 +214,7 @@ function displayReviews(reviews) {
   });
 }
 
-// ============== 8. Initialize Page ==============
+// ============== 9. Initialize Page ==============
 async function initializePage() {
   // Get place ID from URL
   const placeId = getPlaceIdFromURL();
@@ -207,8 +226,11 @@ async function initializePage() {
     return;
   }
 
-  // Check authentication
-  const token = checkAuthentication();
+  // Toggle header login/logout buttons
+  const token = checkAuthUI();
+
+  // Check authentication for add review section
+  checkAuthentication();
 
   // Fetch and display place details
   const place = await fetchPlaceDetails(placeId, token);
@@ -229,5 +251,5 @@ async function initializePage() {
   }
 }
 
-// ============== 9. Run on Page Load ==============
+// ============== 10. Run on Page Load ==============
 document.addEventListener("DOMContentLoaded", initializePage);

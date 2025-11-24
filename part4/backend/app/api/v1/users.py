@@ -34,18 +34,6 @@ class UserList(Resource):
     @api.response(400, 'Invalid phone number')
     @api.response(400, 'Invalid password')
 
-    # def post(self):
-    #     """Register a new user"""
-    #     try:
-    #         user_data = api.payload
-    #         new_user = facade.create_user(user_data)
-    #         return {
-    #             'id': new_user.id,
-    #             'message': "User registered sucessfully"
-    #             }, 201
-    #     except (TypeError,ValueError) as e:
-    #         return {"error": str(e)}, 400
-
     # Get all users
     def get(self):
         users = facade.get_all_users()
@@ -82,36 +70,3 @@ class UserResource(Resource):
             }, 200
         except (TypeError, ValueError) as e:
             return {"error": str(e)}, 404
-
-    # @jwt_required() 
-    # @api.expect(user_model, validate=True)
-    # @api.response(200, 'User details updated successfully!')
-    # @api.response(404, 'User not found')
-    # @api.response(404, 'Email already in use')
-    # @api.response(404, 'Invalid input')
-
-    # def put(self, user_id):
-    #     """ Update user details """
-    #     user_data = api.payload
-    #     current_user = get_jwt_identity()
-    
-        # user = facade.get_user(user_id)
-        # if not user:
-        #     return {'error': 'User not found'}, 404
-        
-        # # Ownership check
-        # if str(user.id) != str(current_user):
-        #     return {'error': 'Unauthorized action.'}, 403
-        
-        # # Prevent the user from modifying their email and password
-        # if 'email' in user_data or 'password' in user_data:
-        #     return {"error": "You cannot modify email or password."}, 400
-    
-    #     try:
-    #         updated_user = facade.update_user(user_id, user_data)
-    #         return {'id': updated_user.id, 'first_name': updated_user.first_name, 'last_name': updated_user.last_name, 'email': updated_user.email, 'phone_number': updated_user.phone_number}, 200
-    #     except (TypeError, ValueError) as e:
-    #         msg = str(e)
-    #         if 'not found' in msg.lower():
-    #             return {'error': msg}, 404
-    #         return {"error": msg}, 400

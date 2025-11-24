@@ -17,22 +17,6 @@ amenity_model = api.model('Amenity', {
 # create root endpoint using Resource
 @api.route('/')
 class AmenityList(Resource):
-    """ Collection level operations """
-    # @api.expect(amenity_model, validate=True)
-    # @api.response(201, 'Amenity successfully created')
-    # @api.response(400, 'Invalid input data')
-    # def post(self):
-    #     """ Register a new amenity """
-    #     # retrieve input data
-    #     try:
-    #         amenity_data = api.payload
-    #         new_amenity = facade.create_amenity(amenity_data)
-    #         return {'id': new_amenity.id, 'name': new_amenity.name, 'description': new_amenity.description}, 201
-    #     # if not new_amenity:
-    #     except (TypeError, ValueError) as e:
-    #         return {'error': str(e)}, 400
-        
-
     @api.response(200, 'List of amenities retrieved successfully')
     @api.response(404, 'Amenities not found')
     def get(self):
@@ -58,26 +42,3 @@ class AmenityResource(Resource):
                     'description': amenity.description}, 200
         except (TypeError,ValueError) as e:
             return {'error': str(e)}, 404
-            
-
-    # @api.expect(amenity_model, validate=True)
-    # @api.response(200, 'Amenity updated successfully')
-    # @api.response(404, 'Amenity not found')
-    # @api.response(400, 'Invalid input data')
-    # def put(self, amenity_id):
-    #     """ Update an amenity's information """
-    #     try:
-    #         amenity_data = api.payload
-    #         updated_amenity = facade.update_amenity(amenity_id, amenity_data)
-    #         return {
-    #             'id': updated_amenity.id,
-    #             'name': updated_amenity.name,
-    #             'description': updated_amenity.description}, 200
-    #     except (TypeError, ValueError) as e:
-    #         error_message = str(e)
-    #         if error_message.startswith('400'):
-    #             return {'error':error_message}, 400
-    #         elif error_message.startswith('404'):
-    #             return {'error':error_message}, 404
-    #         else:
-    #             return {'error': 'An unexpected error occurred'}, 500
