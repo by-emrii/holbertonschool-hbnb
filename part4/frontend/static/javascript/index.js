@@ -1,5 +1,5 @@
 // Display/hide loginLink depending on Auth
-function checkAuthentication() {
+window.addEventListener("load", function checkAuthentication() {
   const token = getCookie("token");
   const loginLink = document.getElementsByClassName("login-button")[0];
   const logoutLink = document.getElementsByClassName("logout-button")[0];
@@ -13,11 +13,8 @@ function checkAuthentication() {
     loginLink.style.display = "none";
     logoutLink.style.display = "block";
   }
-  // Fetch places data if the user is authenticated
   fetchPlaces(token);
-}
-
-checkAuthentication();
+});
 
 // Get value of cookie by name
 function getCookie(name) {
@@ -73,7 +70,7 @@ function displayPlaces(places) {
     const detailsButton = placeDiv.querySelector(".details-button");
 
     detailsButton.addEventListener("click", () => {
-      token = getCookie("token");
+      const token = getCookie("token");
       if (!token) {
         alert("You must be logged in to view property details.");
       } else {
@@ -91,7 +88,6 @@ document.getElementById("price-filter").addEventListener("change", (event) => {
 
   for (const place of places.children) {
     const placePrice = place.getAttribute("data-price");
-    // console.log(placePrice);
     if (filteredPrice === "All" || placePrice <= parseFloat(filteredPrice)) {
       place.style.display = "block";
     } else {
