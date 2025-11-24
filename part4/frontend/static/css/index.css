@@ -35,8 +35,13 @@ main {
   justify-content: center;
   align-items: center;
   text-align: center;
-  /* width: 500px; */
-  /* min-height: 100vh; */
+}
+
+#places-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .card-wrapper {

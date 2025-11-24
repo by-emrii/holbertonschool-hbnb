@@ -73,7 +73,12 @@ function displayPlaces(places) {
     const detailsButton = placeDiv.querySelector(".details-button");
 
     detailsButton.addEventListener("click", () => {
-      window.location.href = `http://127.0.0.1:5000/place_details?place_id=${place.id}`;
+      token = getCookie("token");
+      if (!token) {
+        alert("You must be logged in to view property details.");
+      } else {
+        window.location.href = `http://127.0.0.1:5000/place_details?place_id=${place.id}`;
+      }
     });
   }
 }
