@@ -10,65 +10,78 @@
     <link rel="stylesheet" href="../../static/css/footer.css" />
 </head>
 <body>
-  <!-- HEADER -->
-  <header>
-      <div class="header-container">
-        <a href="../index/index.html">
-          <img
-            src="../../static/images/logo.png"
-            alt="HBnB logo"
-            class="logo"
-          />
-        </a>
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+          <a href="../index/index.html">
+            <img
+              src="../../static/images/logo.png"
+              alt="HBnB logo"
+              class="logo"
+            />
+          </a>
 
-        <nav>
-          <ul>
-            <li>
-              <a href="../login/login.html" class="login-button">Login</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+          <nav>
+            <ul>
+              <li>
+                <a href="../login/login.html" class="login-button">Login</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
     </header>
 
-
     <main class="review_page">
+
+        <!-- HERO IMAGE + TITLE -->
+      <section id="place-details" class="place-details">
+        <div class="listing-image-container">
+          <img class="hero-img" src="../../static/images/mockup.jpg" alt="Beach House">
+        </div>
+      </section>
+
         <!-- Add something to idfentify the place you're reviewing -->
     
-        <h1>Reviewing: Beautiful Beach House</h1>
+        <h1 class="hero-heading">Beautiful Beach House</h1>
+
         <form id="review-form" class="review-form">
 
-            <h2>Add a Review</h2>
+            <!-- <h2>Add a Review</h2> -->
+            <div class="rating-wrapper">
+              <div class="rating-label">4</div>
+              <div class="star-rating">
+                <input type="radio" name="rating" id="star5" value="5" />
+                <label for="star5" class="star">★</label>
 
-            <label for="review">Your Review:</label>
-            <textarea id="review" name="review" 
-            required></textarea>
+                <input type="radio" name="rating" id="star4" value="4" />
+                <label for="star4" class="star">★</label>
 
-            <label for="rating">Rating:</label>
-                <div class="star-rating">
-                  <input type="radio" name="rating" id="star5" value="5" />
-                  <label for="star5" class="star">★</label>
+                <input type="radio" name="rating" id="star3" value="3" />
+                <label for="star3" class="star">★</label>
 
-                  <input type="radio" name="rating" id="star4" value="4" />
-                  <label for="star4" class="star">★</label>
+                <input type="radio" name="rating" id="star2" value="2" />
+                <label for="star2" class="star">★</label>
 
-                  <input type="radio" name="rating" id="star3" value="3" />
-                  <label for="star3" class="star">★</label>
+                <input type="radio" name="rating" id="star1" value="1" />
+                <label for="star1" class="star">★</label>
+              </div>
+            </div>
 
-                  <input type="radio" name="rating" id="star2" value="2" />
-                  <label for="star2" class="star">★</label>
+            <label for="review">Write a review:</label>
+            <textarea id="review" name="review" placeholder="Spill the tea -- how was your stay?" required></textarea>
 
-                  <input type="radio" name="rating" id="star1" value="1" />
-                  <label for="star1" class="star">★</label>
-                </div>
+            
                 <!-- Options for rating -->
-              <select id="rating" name="rating" required>
-                <option value="1">1 - Poor</option>
-                <option value="2">2 - Fair</option>
-                <option value="3">3 - Good</option>
-                <option value="4">4 - Very Good</option>
-                <option value="5">5 - Excellent</option>          
-              </select>
+              
+                <!--
+                <select id="rating" name="rating" required>
+                  <option value="1">1 - Poor</option>
+                  <option value="2">2 - Fair</option>
+                  <option value="3">3 - Good</option>
+                  <option value="4">4 - Very Good</option>
+                  <option value="5">5 - Excellent</option>          
+                </select>
+              -->
 
             <button type="submit" class="submit-btn">Submit Review</button>
         </form>
