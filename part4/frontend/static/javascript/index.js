@@ -4,7 +4,6 @@ function checkAuthentication() {
   const loginLink = document.getElementsByClassName("login-button")[0];
   const logoutLink = document.getElementsByClassName("logout-button")[0];
 
-
   if (!token) {
     // User NOT logged in
     loginLink.style.display = "block";
@@ -13,10 +12,9 @@ function checkAuthentication() {
     // User IS logged in
     loginLink.style.display = "none";
     logoutLink.style.display = "block";
-    
-    // Fetch places data if the user is authenticated
-    fetchPlaces(token);
   }
+  // Fetch places data if the user is authenticated
+  fetchPlaces(token);
 }
 
 checkAuthentication();
