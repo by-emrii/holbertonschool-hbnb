@@ -22,8 +22,7 @@ class ReviewService():
             user_id=user.id,
             place_id=place.id,
             rating=review_data["rating"],
-            text=review_data["text"],
-            #upload_image=review_data.get("upload_image", [])
+            text=review_data["text"]
         )
 
         # Save to repository
@@ -80,10 +79,10 @@ class ReviewService():
         return True
 
     #GETTING THE AVERAGE RATING AND RECENT REVIEWS
-    #def get_average_rating(self, place_id):
-        #"""Calculate average rating for a place."""
+    #def get_average_rating_for_place(self, place_id):
+        #"""Calculate the average rating for a place"""
         #avg = self.review_repo.get_average_rating_for_place(place_id)
-        #return round(avg, 2) if avg else 0
+        #return int(avg) if avg is not None else 0
 
     #def get_recent_reviews(self, place_id, limit=5):
         #"""Return the most recent reviews for a place."""

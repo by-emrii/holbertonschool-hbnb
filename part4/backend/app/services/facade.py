@@ -120,6 +120,14 @@ class HBnBFacade:
     def delete_review(self, review_id, current_user, is_admin=False):
         """User deletes a review."""
         return self.review_service.delete_review(review_id, current_user, is_admin)
+    
+    #def get_average_rating(self, place_id):
+        #return self.review_repo.get_average_rating_for_place(place_id)
+
+    #def get_recent_reviews(self, place_id, limit=5):
+        #"""Fetch the most recent reviews for a place."""
+        #return self.review_service.get_recent_reviews(place_id, limit)
+
 
     # Place add_amenity entry point
     def add_amenity_to_place(self, place_id, amenity_id):
