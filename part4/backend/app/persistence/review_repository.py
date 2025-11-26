@@ -24,9 +24,13 @@ class ReviewRepository(SQLAlchemyRepository):
     #def get_average_rating_for_place(self, place_id):
         #"""Calculate the average rating for a place"""
         #average_rating = (
-            #db.session.query(func.avg(self.model.rating))
-            #.filter(self.model.place_id == place_id)
-            #.scalar()
+        #    db.session.query(func.avg(self.model.rating))
+        #    .filter(self.model.place_id == place_id)
+        #    .scalar()
         #)
-        #return float(average_rating) if average_rating is not None else None
-    
+
+        #if average_rating is None:
+        #    return None
+
+        # round to one decimal
+        #return round(float(average_rating), 1)
