@@ -1,69 +1,118 @@
-//Create a function to check for the JWT token in cookies and redirect unauthenticated users.
+/*-------- Check User Authentication --------*/
 function checkAuthentication() {
     const token = getCookie('token');
     if (!token) {
-          window.location.href = 'index.html';
+        window.location.href = '../index/index.html';
     }
     return token;
-  }
+}
 
+/*-------- Get Cookie --------*/
 function getCookie(name) {
-    // Function to get a cookie value by its name
-    // Your code here
     return document.cookie
         .split("; ")
         .find(row => row.startsWith(name + "="))
         ?.split("=")[1] || null;
-
 }
 
-//Create a function to extract the place ID from the query parameters.f
+/*-------- Login/logout --------*/
+function checkAuthUI() {
+    const token = getCookie("token");
+    const loginLink = document.querySelector(".login-button");
+    const logoutLink = document.querySelector(".logout-button");
+
+    if (!loginLink || !logoutLink) return;
+
+    if (token) {
+        loginLink.style.display = "none";
+        logoutLink.style.display = "block";
+    } else {
+        loginLink.style.display = "block";
+        logoutLink.style.display = "none";
+    }
+}
+
+/*-------- Get place ID from URL --------*/
 function getPlaceIdFromURL() {
-    // Extract the place ID from window.location.search
-    // Your code here
     const params = new URLSearchParams(window.location.search);
     return params.get("place_id");
 }
 
-//Add an event listener for the form submission to handle the review data.
-document.addEventListener('DOMContentLoaded', () => {
-    const reviewForm = document.getElementById('review-form');
+/*-------- Setup event listener for review form --------*/
+document.addEventListener("DOMContentLoaded", async () => {
     const token = checkAuthentication();
+    checkAuthUI();
     const placeId = getPlaceIdFromURL();
 
-    if (!placeId) {
-        alert("No place ID found in URL.");
-        return;
-    }
+    // Fetch and display the place title (no alert if fails)
+    const placeTitle = await fetchPlaceName(placeId, token);
+    displayPlaceTitle(placeTitle);
 
-    if (reviewForm) {
-        reviewForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            // Get review text from form
-            // Make AJAX request to submit review
-            // Handle the response
-            const reviewText = document.getElementById("review").value;
-            const rating = document.querySelector('input[name="rating"]:checked')?.value;
+    /* Star rating setup */
+    const ratingInputs = document.querySelectorAll('input[name="rating"]');
+    const numericalRating = document.getElementById("numerical-rating");
 
-            if (!rating) {
-                alert("Please select a star rating.");
-                return;
-            }
-
-            const response = await submitReview(token, placeId, reviewText, rating);
-            if (response) handleResponse(response);
+    ratingInputs.forEach(input => {
+        input.addEventListener("change", () => {
+            numericalRating.textContent = Number(input.value);
         });
-    }
+    });
+
+    /* Review form submit */
+    const reviewForm = document.getElementById("review-form");
+    reviewForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const reviewText = document.getElementById("review").value.trim();
+        const rating = Number(document.querySelector('input[name="rating"]:checked')?.value);
+
+        if (!reviewText) {
+            alert("Please write a review.");
+            return;
+        }
+
+        if (!rating) {
+            alert("Please select a rating.");
+            return;
+        }
+
+        const response = await submitReview(token, placeId, reviewText, rating);
+        await handleResponse(response, placeId);
+    });
 });
 
-//Use the Fetch API to send a POST request with the review data.
-async function submitReview(token, placeId, reviewText, rating) {
-    // Make a POST request to submit review data
-    // Include the token in the Authorization header
-    // Send placeId and reviewText in the request body
-    
+/*-------- Fetch Place Name Only (No alerts on failure) --------*/
+async function fetchPlaceName(placeId, token) {
     try {
-        const response = await fetch("http://127.0.0.1:5000/api/reviews", {
+        const headers = { "Content-Type": "application/json" };
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+
+        const response = await fetch(`http://127.0.0.1:5000/api/v1/places/${placeId}`, {
+            method: "GET",
+            headers
+        });
+
+        if (!response.ok) return "Untitled Place";
+
+        const data = await response.json();
+        return data.result?.title || "Untitled Place"; 
+    } catch {
+        return "Untitled Place"; 
+    }
+}
+
+// Place title
+function displayPlaceTitle(title) {
+    const titleElement = document.getElementById("place-title");
+    if (titleElement) {
+        titleElement.textContent = title;
+    }
+}
+
+/*-------- Make AJAX request to submit review --------*/
+async function submitReview(token, placeId, reviewText, rating) {
+    try {
+        const response = await fetch("http://127.0.0.1:5000/api/v1/reviews", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -71,25 +120,35 @@ async function submitReview(token, placeId, reviewText, rating) {
             },
             body: JSON.stringify({
                 place_id: placeId,
-                review_text: reviewText,
+                text: reviewText,
                 rating: rating
-            }),
+            })
         });
-
         return response;
-    } catch (error) {
-        console.error("Error submitting review:", error);
-        alert("Network error — please try again.");
+    } catch (err) {
+        console.error("Network error:", err);
+        alert("Network error — try again.");
     }
 }
 
-//Display a success message if the submission is successful and clear the form.
-//Display an error message if the submission fails.
-function handleResponse(response) {
+/*-------- Handle API response --------*/
+async function handleResponse(response, placeId) {
+    if (!response) return;
+
     if (response.ok) {
         alert("Review submitted successfully!");
-        document.getElementById("review-form").reset();
+        window.location.href = `../place_details?place_id=${placeId}`;
     } else {
-        alert("Failed to submit review.");
+        try {
+            // Handle backend error messages
+            const data = await response.json(); 
+            if (data.error) {
+                alert(data.error);  // shows backend messages like "You cannot review your own place" or "You have already reviewed this place"
+            } else {
+                alert("Failed to submit review."); 
+            }
+        } catch {
+            alert("Failed to submit review."); 
+        }
     }
 }
