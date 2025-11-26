@@ -1,9 +1,9 @@
 -- ==========================
 -- HBnB: Schema Creation
 -- ==========================
---DROP DATABASE IF EXISTS task10_sql;
---CREATE DATABASE IF NOT EXISTS task10_sql;
---USE task10_sql;
+DROP DATABASE IF EXISTS task10_sql;
+CREATE DATABASE IF NOT EXISTS task10_sql;
+USE task10_sql;
 
 -- ==========================
 -- User Table:
