@@ -201,3 +201,10 @@ class PlaceResource(Resource):
         except ValueError as e:
             return {'error': str(e)}, 404
 
+"""get average rating"""
+@api.route('/average/<string:place_id>')
+class AverageRating(Resource):
+    def get(self, place_id):
+        avg_rating = facade.get_average_rating(place_id)
+
+        return {"average_rating": avg_rating}, 200

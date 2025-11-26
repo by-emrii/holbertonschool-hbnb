@@ -159,3 +159,10 @@ class PlaceService():
             self.place_repo.delete(place_id)
         else:
             raise ValueError(f"Place with id {place_id} does not exist")
+
+
+     # ---------- GETTING THE AVERAGE RATING AND RECENT REVIEWS ----------
+    def get_average_rating_for_place(self, place_id):
+        """Calculate the average rating for a place"""
+        avg = self.review_repo.get_average_rating_for_place(place_id)
+        return int(avg) if avg is not None else 0
