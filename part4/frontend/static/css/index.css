@@ -5,22 +5,6 @@
   font-family: Arial, sans-serif;
 }
 
-/* body {
-    background-color: #f4f4f4;
-    color: #333;
-    display: flex;
-    justify-content: center;   
-    align-items: center;       
-    min-height: 100vh;  
-} */
-
-nav a {
-  color: #fff;
-  text-decoration: none;
-  margin-left: 1rem;
-  float: right;
-}
-
 main {
   padding: 2rem;
   display: flex;
@@ -83,6 +67,11 @@ main {
   font-size: 1rem;
 }
 
+.rating {
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
 .details-button {
   color: white;
   background-color: orange;
@@ -101,4 +90,118 @@ main {
   font-weight: bold;
   margin-bottom: 25px;
   font-size: 1.25rem;
+}
+
+.image-wrapper {
+  width: 100%;
+  height: 200px; /* control the image display height */
+  overflow: hidden; /* crop overflow */
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+
+/* ---------- GRACE: PLACES SECTION ---------- */
+#places {
+  min-height: 0px;
+  padding: 40px;
+  margin: 0 auto;
+}
+
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px;
+  margin-top: 20px;
+}
+
+.place-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.listing-image-container {
+  width: 100%;
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+
+.places-box {
+  width: 100%;
+  background-color: #e0241a;
+  margin-top: -40px;
+  z-index: 1;
+  padding: 20px;
+  border-radius: 20px;
+  font-size: 18px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.12);
+
+  /*align price left, rating right */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* PRICE AND HOST */
+.price-container p {
+  margin: 0;
+}
+
+.dollar-sign,
+#place-price {
+  font-weight: bold;
+  font-size: 40px; /* match #listing-info-card */
+  color: white;
+}
+
+.per-night {
+  font-size: 15px;
+  color: white;
+}
+
+/* AVERAGE RATING */
+.rating p {
+  margin: 0;
+}
+
+.average-rating {
+  font-weight: bold;
+  font-size: 40px;
+  color: white;
+}
+
+.rating-title {
+  font-size: 15px;
+  color: white;
+}
+
+.view-details-btn {
+  color: #4d4d4d;
+  font-size: 20px;
+  border: none;
+  background-color: none;
+  margin-top: 30px;
+  text-decoration: underline;
+  background-color: transparent;
+}
+
+.view-details-btn:hover {
+  color: #e0241a;
+  text-decoration: underline;
+  background-color: transparent;
 }
