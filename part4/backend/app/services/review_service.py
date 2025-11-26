@@ -78,16 +78,4 @@ class ReviewService():
         self.review_repo.delete(review_id)
         return True
 
-    #GETTING THE AVERAGE RATING AND RECENT REVIEWS
-    #def get_average_rating_for_place(self, place_id):
-        #"""Calculate the average rating for a place"""
-        #avg = self.review_repo.get_average_rating_for_place(place_id)
-        #return int(avg) if avg is not None else 0
-
-    #def get_recent_reviews(self, place_id, limit=5):
-        #"""Return the most recent reviews for a place."""
-        #reviews = self.review_repo.get_reviews_for_place(place_id)
-        #return sorted(reviews, key=lambda r: r.created_at, reverse=True)[:limit]
-    
-    
     

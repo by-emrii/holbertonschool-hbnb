@@ -20,17 +20,3 @@ class ReviewRepository(SQLAlchemyRepository):
         """user cannot comment more than once"""
         return self.model.query.filter_by(place_id=place_id, user_id=user_id).first() is not None
 
-
-    #def get_average_rating_for_place(self, place_id):
-        #"""Calculate the average rating for a place"""
-        #average_rating = (
-        #    db.session.query(func.avg(self.model.rating))
-        #    .filter(self.model.place_id == place_id)
-        #    .scalar()
-        #)
-
-        #if average_rating is None:
-        #    return None
-
-        # round to one decimal
-        #return round(float(average_rating), 1)
