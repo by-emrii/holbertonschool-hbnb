@@ -93,7 +93,7 @@ async function displayPlaces(places) {
         </div>
 
         <div class="rating">
-          <span class="rating-value"> ${rating.average_rating}/5</span>
+          <span class="rating-value"> ${rating.average_rating}</span>
           <span class="rating-label">Rating</span>
         </div>
       </div>

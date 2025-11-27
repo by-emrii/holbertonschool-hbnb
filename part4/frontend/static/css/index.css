@@ -63,8 +63,8 @@ main {
 .price-box {
   display: flex; /* flex container */
   justify-content: space-between; /* place price and rating at opposite ends */
-  align-items: center; /* vertically align price and rating */
-  background-color: #e0241a;
+  align-items: center;         /* vertically align price and rating */
+  background-color: #ca243f;
   width: 100%;
   padding: 15px 15px;
   border-radius: 10px;
@@ -106,16 +106,35 @@ main {
 }
 
 .details-button:hover {
-  color: #e0241a;
+  color: #ca243f;
   cursor: pointer;
   text-decoration: underline;
 }
 
+.filter-container {
+  display: flex;
+  justify-content: flex-end; /* pushes child to the right */
+  margin-bottom: 1rem; /* optional spacing */
+}
+
 #filter {
-  text-align: center;
+  display: flex;              
+  justify-content: flex-end;  
+  margin-bottom: 25px;       
+  width: 100%;           
+}
+
+#filter label {
+  padding-right: 10px;
   font-weight: bold;
-  margin-bottom: 25px;
   font-size: 1.25rem;
+}
+
+#price-filter {
+  float: right;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #ca243f;
 }
 
 .image-wrapper {
