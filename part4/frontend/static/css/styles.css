@@ -15,7 +15,10 @@ body {
 }
 
 header {
-  background-color: #ff7a00;
+  position: relative;
+  z-index: 2; 
+
+  background-color: ##ca243f;
   padding: 6px 16px;
 }
 
@@ -62,7 +65,10 @@ main {
 
 /* Footer bar */
 footer {
-  background-color: #ff7a00;
+  position: relative;
+  z-index: 2;
+
+  background-color: #ca243f;
   color: white;
   text-align: center;
   padding: 16px 0;
