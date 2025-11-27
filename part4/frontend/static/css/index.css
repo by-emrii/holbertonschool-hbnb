@@ -36,18 +36,15 @@ main {
 }
 
 .place-card {
-  background-color: white;
   margin: 20px;
   padding: 10px;
   border: 1px;
-  border-style: solid;
-  border-color: #ddd;
   border-radius: 15px;
   width: 280px;
   height: auto;
-  padding: 30px;
+  /*padding: 30px;*/
   text-align: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .container-title {
@@ -62,27 +59,53 @@ main {
   margin-bottom: 20px;
 }
 
-.price {
-  margin-bottom: 20px;
+/* Price and rating */
+.price-box {
+  display: flex;               /* flex container */
+  justify-content: space-between; /* place price and rating at opposite ends */
+  align-items: center;         /* vertically align price and rating */
+  background-color: #e0241a;
+  width: 100%;
+  padding: 15px 15px;
+  border-radius: 10px;
+  color: white;
+  margin: -20px auto 0 auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  position: relative;
+  z-index: 5;
+  gap: 1rem;
+}
+
+.price, .rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.price-label, .rating-value  {
   font-size: 1rem;
 }
 
-.rating {
-  margin-bottom: 20px;
-  font-size: 1rem;
+.price-value, .rating-value {
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .details-button {
-  color: white;
-  background-color: orange;
+  margin-top: 25px;
+  color: #4d4d4d;
+  font-size: 15px;
+  background: none;
   border: none;
   border-radius: 5px;
   padding: 10px;
+  text-decoration: underline;
 }
 
 .details-button:hover {
+  color: #e0241a;
   cursor: pointer;
-  background-color: #ff7a00;
+  text-decoration: underline;
 }
 
 #filter {
@@ -97,7 +120,8 @@ main {
   height: 200px; /* control the image display height */
   overflow: hidden; /* crop overflow */
   border-radius: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
+  position: relative; /* allows overlapping */
 }
 
 .img {
@@ -108,100 +132,3 @@ main {
   display: block;
 }
 
-/* ---------- GRACE: PLACES SECTION ---------- */
-#places {
-  min-height: 0px;
-  padding: 40px;
-  margin: 0 auto;
-}
-
-.places-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 60px;
-  margin-top: 20px;
-}
-
-.place-item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.listing-image-container {
-  width: 100%;
-}
-
-.hero-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-  display: block;
-}
-
-.places-box {
-  width: 100%;
-  background-color: #e0241a;
-  margin-top: -40px;
-  z-index: 1;
-  padding: 20px;
-  border-radius: 20px;
-  font-size: 18px;
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.12);
-
-  /*align price left, rating right */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* PRICE AND HOST */
-.price-container p {
-  margin: 0;
-}
-
-.dollar-sign,
-#place-price {
-  font-weight: bold;
-  font-size: 40px; /* match #listing-info-card */
-  color: white;
-}
-
-.per-night {
-  font-size: 15px;
-  color: white;
-}
-
-/* AVERAGE RATING */
-.rating p {
-  margin: 0;
-}
-
-.average-rating {
-  font-weight: bold;
-  font-size: 40px;
-  color: white;
-}
-
-.rating-title {
-  font-size: 15px;
-  color: white;
-}
-
-.view-details-btn {
-  color: #4d4d4d;
-  font-size: 20px;
-  border: none;
-  background-color: none;
-  margin-top: 30px;
-  text-decoration: underline;
-  background-color: transparent;
-}
-
-.view-details-btn:hover {
-  color: #e0241a;
-  text-decoration: underline;
-  background-color: transparent;
-}
