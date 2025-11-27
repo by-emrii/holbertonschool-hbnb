@@ -61,9 +61,9 @@ main {
 
 /* Price and rating */
 .price-box {
-  display: flex;               /* flex container */
+  display: flex; /* flex container */
   justify-content: space-between; /* place price and rating at opposite ends */
-  align-items: center;         /* vertically align price and rating */
+  align-items: center; /* vertically align price and rating */
   background-color: #e0241a;
   width: 100%;
   padding: 15px 15px;
@@ -76,17 +76,20 @@ main {
   gap: 1rem;
 }
 
-.price, .rating {
+.price,
+.rating {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.price-label, .rating-value  {
+.price-label,
+.rating-value {
   font-size: 1rem;
 }
 
-.price-value, .rating-value {
+.price-value,
+.rating-value {
   font-size: 2rem;
   font-weight: bold;
 }
@@ -132,3 +135,348 @@ main {
   display: block;
 }
 
+/* ============================================
+   Responsive Design - Media Queries
+   ============================================ */
+/* Desktop (Extra-large) - ≥ 1200px
+   Target: 1920×1080 (Full HD), 2560×1440 (QHD)
+*/
+
+@media (min-width: 1200px) {
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2.5rem;
+  }
+
+  #places-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .container-title {
+    font-size: 3rem;
+    margin-bottom: 35px;
+  }
+
+  .card-title {
+    font-size: 1.8rem;
+  }
+
+  #filter {
+    font-size: 1.25rem;
+  }
+
+  .place-card {
+    width: 300px;
+    margin: 22px;
+  }
+
+  .image-wrapper {
+    height: 220px;
+  }
+
+  #places-list {
+    gap: 15px;
+  }
+}
+
+/* Extra Large Desktop (≥ 1920px) - Full HD and above */
+@media (min-width: 1920px) {
+  main {
+    max-width: 1600px;
+    padding: 3rem;
+  }
+
+  #places-container {
+    max-width: 1600px;
+  }
+
+  .container-title {
+    font-size: 3.5rem;
+    margin-bottom: 40px;
+  }
+
+  .card-title {
+    font-size: 2rem;
+  }
+
+  #filter {
+    font-size: 1.4rem;
+  }
+
+  .place-card {
+    width: 320px;
+    margin: 25px;
+  }
+
+  .image-wrapper {
+    height: 240px;
+  }
+
+  .price-value,
+  .rating-value {
+    font-size: 2.2rem;
+  }
+}
+
+/* ====================================
+   Laptop (Large) - 992px to 1199px
+   Target: 1280×720, 1440×900, 1280×800
+   ==================================== */
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  main {
+    padding: 2rem;
+  }
+
+  .container-title {
+    font-size: 2.8rem;
+    margin-bottom: 30px;
+  }
+
+  .card-title {
+    font-size: 1.7rem;
+  }
+
+  #filter {
+    font-size: 1.2rem;
+  }
+
+  .place-card {
+    width: 280px;
+    margin: 18px;
+  }
+
+  .image-wrapper {
+    height: 200px;
+  }
+
+  #places-list {
+    gap: 12px;
+  }
+}
+
+/* ====================================
+   Tablet (Medium) - 576px to 991px
+   Target: 768×1024, 1280×800
+   ==================================== */
+
+@media (min-width: 576px) and (max-width: 991px) {
+  main {
+    padding: 1.5rem;
+  }
+
+  .container-title {
+    font-size: 2.5rem;
+    margin-bottom: 25px;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+  }
+
+  #filter {
+    font-size: 1.1rem;
+  }
+
+  .place-card {
+    width: 250px;
+    margin: 15px;
+  }
+
+  .image-wrapper {
+    height: 200px;
+  }
+
+  #places-list {
+    gap: 10px;
+  }
+}
+
+/* ====================================
+   Mobile (Extra-small) - < 576px
+   Target: 360×640 to 414×896
+   ==================================== */
+
+@media (max-width: 575px) {
+  main {
+    padding: 1rem;
+  }
+
+  .container-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+  }
+
+  #filter {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  #filter label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  #filter select {
+    width: 100%;
+    max-width: 200px;
+    padding: 8px;
+    font-size: 1rem;
+  }
+
+  /* Vertical place cards */
+  #places-list {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .place-card {
+    width: 100%;
+    max-width: 400px;
+    margin: 15px 0;
+  }
+
+  .image-wrapper {
+    height: 200px;
+  }
+
+  .price-box {
+    padding: 12px 10px;
+    gap: 0.5rem;
+  }
+
+  .price-value,
+  .rating-value {
+    font-size: 1.6rem;
+  }
+
+  .price-label,
+  .rating-label {
+    font-size: 0.9rem;
+  }
+
+  .details-button {
+    font-size: 15px;
+    padding: 10px;
+    margin-top: 20px;
+  }
+}
+
+/* ====================================
+   Sub-breakpoints for Mobile
+   ==================================== */
+
+/* Standard Smartphone (414×896) */
+@media (max-width: 414px) {
+  .container-title {
+    font-size: 1.8rem;
+  }
+
+  .card-title {
+    font-size: 1.3rem;
+  }
+
+  .place-card {
+    max-width: 360px;
+  }
+
+  .image-wrapper {
+    height: 190px;
+  }
+}
+
+/* Compact Mobile (360×640) */
+@media (max-width: 360px) {
+  .container-title {
+    font-size: 1.6rem;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+  }
+
+  .place-card {
+    max-width: 320px;
+    margin: 12px 0;
+  }
+
+  .image-wrapper {
+    height: 180px;
+  }
+
+  .price-value,
+  .rating-value {
+    font-size: 1.4rem;
+  }
+
+  .details-button {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* ====================================
+   Landscape Orientation
+   ==================================== */
+
+/* Tablet Landscape (≥ 576px) */
+@media (min-width: 576px) and (orientation: landscape) {
+  .container-title {
+    font-size: 2.3rem;
+    margin-bottom: 20px;
+  }
+
+  main {
+    padding: 1.5rem 2rem;
+  }
+
+  .place-card {
+    width: 280px;
+    margin: 15px;
+  }
+
+  #places-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .image-wrapper {
+    height: 180px;
+  }
+}
+
+/* Mobile Landscape (< 576px) */
+@media (max-width: 575px) and (orientation: landscape) {
+  .container-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+
+  main {
+    padding: 1rem 1.5rem;
+  }
+
+  #places-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .place-card {
+    width: 48%;
+    max-width: 320px;
+    margin: 10px 1%;
+  }
+
+  .image-wrapper {
+    height: 160px;
+  }
+}
