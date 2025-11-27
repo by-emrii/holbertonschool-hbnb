@@ -205,7 +205,7 @@ footer {
   .home-button,
   .login-button,
   .logout-button {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   header nav li {
@@ -281,12 +281,13 @@ footer {
   }
 }
 
+
 /* ====================================
    Tablet (Medium) - 576px to 991px
    Target: 768×1024, 1280×800
    ==================================== */
 
-@media (min-width: 576px) and (max-width: 991px) {
+/*@media (min-width: 576px) and (max-width: 991px) {
   .header-container {
     padding: 1.5rem 1.5rem;
   }
@@ -310,14 +311,14 @@ footer {
     padding: 14px 0;
     height: 46px;
   }
-}
+}*/
 
 /* ====================================
    Mobile (Extra-small) - < 576px
    Target: 360×640 to 414×896
    ==================================== */
 
-@media (max-width: 575px) {
+/*@media (max-width: 575px) {
   header {
     padding: 4px 8px;
   }
@@ -325,10 +326,10 @@ footer {
   .header-container {
     height: 50px;
     padding: 0.5rem 0.5rem;
-    /* 保持单行布局 */
-  }
+    /* 保持单行布局 */ */
+/*  }*/
 
-  .logo {
+/*  .logo {
     height: 35px;
   }
 
@@ -358,14 +359,14 @@ footer {
     min-height: 44px;
     margin-top: 30px;
   }
-}
+}*/
 
 /* ====================================
    Sub-breakpoints for Mobile
    ==================================== */
 
 /* Standard Smartphone (414×896) */
-@media (max-width: 414px) {
+/*@media (max-width: 414px) {
   .logo {
     height: 33px;
   }
@@ -383,10 +384,10 @@ footer {
   footer {
     font-size: 15px;
   }
-}
+} */
 
 /* Compact Mobile (360×640) */
-@media (max-width: 360px) {
+/*@media (max-width: 360px) {
   .header-container {
     padding: 0.5rem 0.3rem;
   }
@@ -409,14 +410,14 @@ footer {
     font-size: 14px;
     padding: 10px 0;
   }
-}
+}*/
 
 /* ====================================
    Landscape Orientation
    ==================================== */
 
 /* Mobile Landscape (< 576px) */
-@media (max-width: 575px) and (orientation: landscape) {
+/*@media (max-width: 575px) and (orientation: landscape) {
   .header-container {
     padding: 0.5rem 1rem;
     height: 45px;
@@ -449,3 +450,4 @@ footer {
     padding: 10px 0;
   }
 }
+*/
