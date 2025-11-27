@@ -212,7 +212,7 @@ GET /api/v1/places
 - Card-based display of places
 - Clean separation of HTML + CSS + JS
 
-## 📍 3. Place Details Page
+### 📍 3. Place Details Page
 **Data:**
 
 Fetched from:
@@ -234,7 +234,7 @@ GET /api/v1/places/<id>
 
 - “Add Review” button shows only if a user is logged in
 
-## 📝 4. Add Review Page
+### 📝 4. Add Review Page
 **Function:**
 
 Allows authenticated users to create a review for a place.
@@ -366,5 +366,6 @@ Submit a review:
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
 
 
