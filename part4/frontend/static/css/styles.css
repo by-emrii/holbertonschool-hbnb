@@ -41,6 +41,18 @@ header nav ul {
 
 header nav li {
   display: inline-block;
+  padding: 10px 15px;
+}
+
+.home-button {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.home-button:hover {
+  text-decoration: underline;
 }
 
 .login-button {
@@ -51,6 +63,17 @@ header nav li {
 }
 
 .login-button:hover {
+  text-decoration: underline;
+}
+
+.logout-button {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.logout-button:hover {
   text-decoration: underline;
 }
 
