@@ -101,7 +101,7 @@
 .listing-image-container img {
   display: block;
   width: 100%;
-  height: 450px !important;
+  height: 450px;
   object-fit: cover;
   border-radius: 14px 14px 0 0;
 }
