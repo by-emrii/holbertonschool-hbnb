@@ -183,6 +183,11 @@
   border-bottom: none;
 }
 
+.stars {
+  color: #f5c518;
+  font-size: 1.2rem;
+}
+
 /* ====== Add Review Button Section ====== */
 #add-review-btn-section {
   width: 100%;
@@ -232,11 +237,6 @@ main {
   text-align: center;
 }
 
-.stars {
-  color: #f5c518;
-  font-size: 1.2rem;
-}
-
 
 /* ============================================
    Responsive Design - Standard Breakpoints
@@ -248,7 +248,7 @@ main {
    Target: 1920×1080 (Full HD), 2560×1440 (QHD)
    ==================================== */
 
-@media (min-width: 1200px) {
+/*@media (min-width: 1200px) {
   main {
     max-width: 1200px;
     padding: 2.5rem 2rem;
@@ -286,17 +286,18 @@ main {
     font-size: 20px;
     padding: 10px 20px;
   }
-} 
+}*/ 
 
 /* ====================================
    4K and Ultra-wide - ≥ 1920px
    ==================================== */
 
-@media (min-width: 1920px) {
+/*@media (min-width: 1920px) {
   main {
     max-width: 1400px;
     padding: 3rem;
   }
+
 
   .listing-image-container img {
     height: 500px;
@@ -324,14 +325,14 @@ main {
     font-size: 22px;
     padding: 12px 24px;
   }
-}
+}*/
 
 /* ====================================
    Laptop (Large) - 992px to 1199px
    Target: 1280×720, 1440×900
    ==================================== */
 
-@media (min-width: 992px) and (max-width: 1199px) {
+/*@media (min-width: 992px) and (max-width: 1199px) {
   main {
     padding: 2rem 1.5rem;
   }
@@ -385,14 +386,14 @@ main {
     font-size: 18px;
     padding: 9px 18px;
   }
-}
+}*/
 
 /* ====================================
    Tablet (Medium) - 576px to 991px
    Target: 768×1024, 1280×800
    ==================================== */
 
-@media (min-width: 576px) and (max-width: 991px) {
+/*@media (min-width: 576px) and (max-width: 991px) {
   main {
     padding: 1.5rem 1rem;
   }
@@ -469,152 +470,153 @@ main {
     padding: 9px 18px;
     margin-left: 10px;
   }
-}
+}*/
 
 /* ====================================
    Mobile (Extra-small) - < 576px
    Target: 360×640 to 414×896
    ==================================== */
+/*
+    @media (max-width: 575px) {
+      main {
+        padding: 1rem 0.5rem;
+      }
 
-@media (max-width: 575px) {
-  main {
-    padding: 1rem 0.5rem;
-  }
+      .place-info {
+        padding: 15px 10px;
+        margin: 20px 10px;
+      }
 
-  .place-info {
-    padding: 15px 10px;
-    margin: 20px 10px;
-  }
+      .place-info p {
+        font-size: 0.95rem;
+        margin: 8px 0;
+      } 
 
-  .place-info p {
-    font-size: 0.95rem;
-    margin: 8px 0;
-  }
+      /* Image */
+      /*.listing-image-container {
+        border-radius: 10px;
+        margin: 0 10px;
+      }
 
-  /* Image */
-  .listing-image-container {
-    border-radius: 10px;
-    margin: 0 10px;
-  }
+      .listing-image-container img {
+        height: 250px;
+        border-radius: 10px 10px 0 0;
+      }*/
 
-  .listing-image-container img {
-    height: 250px;
-    border-radius: 10px 10px 0 0;
-  }
+      /* Price/Rating Card - Stack Vertically */
+     /* #listing-info-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px 16px;
+        gap: 1rem;
+        margin: -20px 10px 20px 10px;
+      }
 
-  /* Price/Rating Card - Stack Vertically */
-  #listing-info-card {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 14px 16px;
-    gap: 1rem;
-    margin: -20px 10px 20px 10px;
-  }
+      #listing-info-card .price-container,
+      #listing-info-card .rating {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-  #listing-info-card .price-container,
-  #listing-info-card .rating {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
+      #listing-info-card .price-container p:first-child,
+      #listing-info-card .rating p:first-child {
+        font-size: 1.8rem;
+      }
 
-  #listing-info-card .price-container p:first-child,
-  #listing-info-card .rating p:first-child {
-    font-size: 1.8rem;
-  }
+      #listing-info-card .price-container p:nth-child(2),
+      #listing-info-card .rating p:nth-child(2) {
+        font-size: 0.85rem;
+      }
 
-  #listing-info-card .price-container p:nth-child(2),
-  #listing-info-card .rating p:nth-child(2) {
-    font-size: 0.85rem;
-  }
+      #listing-info-card .star-rating {
+        width: 100%;
+        text-align: center;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+      }
 
-  #listing-info-card .star-rating {
-    width: 100%;
-    text-align: center;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-  }
+      #listing-info-card .star-rating p {
+        font-size: 1.5rem;
+      }*/
 
-  #listing-info-card .star-rating p {
-    font-size: 1.5rem;
-  }
+      /* Amenities - 2 Columns */
+     /* #amenities {
+        padding: 15px 10px;
+        margin: 20px 10px;
+      }
 
-  /* Amenities - 2 Columns */
-  #amenities {
-    padding: 15px 10px;
-    margin: 20px 10px;
-  }
+      .amenities-title {
+        font-size: 1.3rem;
+        margin-bottom: 14px;
+      }
 
-  .amenities-title {
-    font-size: 1.3rem;
-    margin-bottom: 14px;
-  }
+      .amenities-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
 
-  .amenities-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
+      .amenity-box {
+        padding: 12px 8px;
+      }
 
-  .amenity-box {
-    padding: 12px 8px;
-  }
+      .amenity-icon {
+        width: 35px;
+        height: 35px;
+      }
 
-  .amenity-icon {
-    width: 35px;
-    height: 35px;
-  }
+      .amenity-box p {
+        font-size: 0.85rem;
+        margin-top: 5px;
+      }*/
 
-  .amenity-box p {
-    font-size: 0.85rem;
-    margin-top: 5px;
-  }
+      /* Reviews */
+      /*#reviews {
+        padding: 15px 10px;
+        margin: 20px 10px;
+      }
 
-  /* Reviews */
-  #reviews {
-    padding: 15px 10px;
-    margin: 20px 10px;
-  }
+      #reviews h2 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        padding: 5px;
+      }
 
-  #reviews h2 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
-    padding: 5px;
-  }
+      .review-card {
+        padding: 8px 5px;
+        margin: 10px 0;
+        font-size: 0.9rem;
+      }*/
 
-  .review-card {
-    padding: 8px 5px;
-    margin: 10px 0;
-    font-size: 0.9rem;
-  }
+      /* Add Review Button */
+      /*#add-review-btn-section {
+        padding: 10px;
+        margin: 20px 10px;
+      }
 
-  /* Add Review Button */
-  #add-review-btn-section {
-    padding: 10px;
-    margin: 20px 10px;
-  }
+      .action-button {
+        width: 100%;
+        font-size: 16px;
+        padding: 10px 16px;
+        margin-left: 0;
+      }
+    }*/
 
-  .action-button {
-    width: 100%;
-    font-size: 16px;
-    padding: 10px 16px;
-    margin-left: 0;
-  }
-}
-
+    
 /* ====================================
    Sub-breakpoints for Mobile
    ==================================== */
 
 /* Standard Smartphone (414×896) */
-@media (max-width: 414px) {
+/*@media (max-width: 414px) {
   .listing-image-container img {
     height: 240px;
   }
-}
+}*/
 
 /* Compact Mobile (360×640) */
-@media (max-width: 360px) {
+/*@media (max-width: 360px) {
   .listing-image-container img {
     height: 450px;
   }
@@ -632,14 +634,14 @@ main {
   .amenity-box p {
     font-size: 0.8rem;
   }
-}
+}*/
 
 /* ====================================
    Landscape Orientation
    ==================================== */
 
 /* Tablet Landscape (≥ 576px) */
-@media (min-width: 576px) and (orientation: landscape) {
+/*@media (min-width: 576px) and (orientation: landscape) {
   .listing-image-container img {
     height: 320px;
   }
@@ -647,10 +649,10 @@ main {
   .amenities-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-}
+}*/
 
 /* Mobile Landscape (< 576px) */
-@media (max-width: 575px) and (orientation: landscape) {
+/*@media (max-width: 575px) and (orientation: landscape) {
   .listing-image-container img {
     height: 200px;
   }
@@ -679,6 +681,4 @@ main {
   .amenity-box {
     padding: 10px 6px;
   }
-}
-
-
+}*/

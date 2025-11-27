@@ -99,7 +99,7 @@ main {
    Target: 1920×1080 (Full HD), 2560×1440 (QHD)
    ==================================== */
 
-@media (min-width: 1200px) {
+/*@media (min-width: 1200px) {
   main {
     max-width: 1200px;
     padding: 2.5rem 2rem;
@@ -129,13 +129,13 @@ main {
     font-size: 20px;
     padding: 10px 20px;
   }
-}
+}*/
 
 /* ====================================
    4K and Ultra-wide - ≥ 1920px
    ==================================== */
 
-@media (min-width: 1920px) {
+/*@media (min-width: 1920px) {
   main {
     max-width: 1400px;
     padding: 3rem;
@@ -165,14 +165,14 @@ main {
     font-size: 22px;
     padding: 12px 24px;
   }
-}
+}*/
 
 /* ====================================
    Laptop (Large) - 992px to 1199px
    Target: 1280×720, 1440×900
    ==================================== */
 
-@media (min-width: 992px) and (max-width: 1199px) {
+/*@media (min-width: 992px) and (max-width: 1199px) {
   main {
     padding: 2rem 1.5rem;
   }
@@ -201,14 +201,14 @@ main {
     font-size: 18px;
     padding: 9px 18px;
   }
-}
+}*/
 
 /* ====================================
    Tablet (Medium) - 576px to 991px
    Target: 768×1024, 1280×800
    ==================================== */
 
-@media (min-width: 576px) and (max-width: 991px) {
+/*@media (min-width: 576px) and (max-width: 991px) {
   main {
     padding: 1.5rem 1rem;
   }
@@ -242,14 +242,14 @@ main {
     font-size: 18px;
     padding: 9px 18px;
   }
-}
+}*/
 
 /* ====================================
    Mobile (Extra-small) - < 576px
    Target: 360×640 to 414×896
    ==================================== */
 
-@media (max-width: 575px) {
+/*@media (max-width: 575px) {
   main {
     padding: 1rem 0.5rem;
   }
@@ -292,14 +292,14 @@ main {
   .review-submit-button {
     width: 100%;
   }
-}
+}*/
 
 /* ====================================
    Sub-breakpoints for Mobile
    ==================================== */
 
 /* Standard Smartphone (414×896) */
-@media (max-width: 414px) {
+/*@media (max-width: 414px) {
   .numerical-rating {
     font-size: 1.7rem;
   }
@@ -311,10 +311,10 @@ main {
   .review-form textarea {
     min-height: 90px;
   }
-}
+}*/
 
 /* Compact Mobile (360×640) */
-@media (max-width: 360px) {
+/*@media (max-width: 360px) {
   .review-form {
     padding: 12px 8px;
     margin: 12px 8px;
@@ -339,14 +339,14 @@ main {
     font-size: 15px;
     padding: 9px 14px;
   }
-}
+}*/
 
 /* ====================================
    Landscape Orientation
    ==================================== */
 
 /* Tablet Landscape (≥ 576px) */
-@media (min-width: 576px) and (orientation: landscape) {
+/*@media (min-width: 576px) and (orientation: landscape) {
   main {
     padding: 1.5rem 2rem;
   }
@@ -366,10 +366,10 @@ main {
   .review-form textarea {
     min-height: 90px;
   }
-}
+}*/
 
 /* Mobile Landscape (< 576px) */
-@media (max-width: 575px) and (orientation: landscape) {
+/*@media (max-width: 575px) and (orientation: landscape) {
   main {
     padding: 1rem;
   }
@@ -395,4 +395,4 @@ main {
   .submit-btn {
     padding: 8px 14px;
   }
-}
+}*/
