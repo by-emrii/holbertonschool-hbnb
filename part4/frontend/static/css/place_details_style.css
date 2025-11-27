@@ -242,6 +242,7 @@ main {
   font-size: 1.2rem;
 }
 
+
 /* ============================================
    Responsive Design - Standard Breakpoints
    Following Bootstrap convention
@@ -294,7 +295,7 @@ main {
     font-size: 20px;
     padding: 10px 20px;
   }
-}
+} 
 
 /* ====================================
    4K and Ultra-wide - ≥ 1920px
@@ -721,3 +722,5 @@ main {
     padding: 10px 6px;
   }
 }
+
+
