@@ -54,7 +54,7 @@ main {
 }
 
 .card-title {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   word-wrap: break-word;
   margin-bottom: 20px;
 }
@@ -87,14 +87,14 @@ main {
 }
 
 .price-value, .rating-value {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
 }
 
 .details-button {
   margin-top: 25px;
   color: #4d4d4d;
-  font-size: 15px;
+  font-size: 1rem;
   background: none;
   border: none;
   border-radius: 5px;
@@ -124,7 +124,7 @@ main {
 #filter label {
   padding-right: 10px;
   font-weight: bold;
-  font-size: 1.25rem;
+  font-size: 1rem;
 }
 
 #price-filter {

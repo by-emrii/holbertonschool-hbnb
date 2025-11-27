@@ -8,14 +8,15 @@
 }
 
 #place-details h1 {
-  font-size: 26px;
+  font-size: 3rem;
   font-weight: 600;
-  margin-bottom: 1.3rem;
+  margin-bottom: 35px;
+  
 }
 
 .place-info p {
   margin: 10px 0;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 /* ====== PRICE + RATING BAR ====== */
@@ -100,7 +101,7 @@
 }
 
 .amenities-title {
-  font-size: 20px;
+  font-size: 1.6rem;
   margin-bottom: 18px;
   font-weight: bold;
   text-align: left; /* added to align the title to the left */
@@ -123,7 +124,7 @@
 
 .amenity-box p {
   margin-top: 8px;
-  font-size: 14px;
+  font-size: 1rem;
 }
 
 /* icons */
@@ -149,7 +150,7 @@
 }
 
 #reviews h2 {
-  font-size: 22px;
+  font-size: 1.6rem;
   font-weight: bold;
   padding: 10px;
   margin-bottom: 15px;
@@ -162,6 +163,7 @@
   margin: 15px 0;
   line-height: 1.5;
   text-align: left;
+  font-size: 1rem;
   border-bottom: 2px solid #eaa7b2;
 }
 /* remove the bottom line on the last review */
@@ -170,18 +172,31 @@
 }
 
 /* ====== Add Review Button Section ====== */
+#add-review-btn-section {
+  width: 100%;
+  max-width: 900px;
+  padding: 10px;
+  margin: 25px auto; 
+  border-radius: 10px;
+  text-align: left; 
+}
+
 .action-button {
   background-color: #ca243f;
   color: white;
-  font-size: 18px;
-  font-weight: bold;
-  margin-left: 0; 
+  font-size: 20px;
+
+  display: inline-block;
   margin-top: 20px;
+
   padding: 10px 20px;
-  border-radius: 10px;
+  margin-left: calc((100% - 900px) / 2 + 10px); /* EXACT alignment with h2 */
+
+  border-radius: 15px;
   border: 1px solid #ddd;
   text-align: center;
 }
+
 .action-button:hover {
   background-color: #404040;
 }
