@@ -1,22 +1,9 @@
-body {
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
-    color: #333;
-}
-
-main {
-    padding: 40px;
-}
 
 h1 {
-    text-align: center;
-    font-size: 32px;
-    margin-bottom: 30px;
-}
-
-h2 {
-    font-size: 22px;
+    font-size: 3rem;
     margin-bottom: 15px;
+    width: 100%;
+    margin-bottom: 35px;
 }
 
 /*Review Form*/
@@ -26,6 +13,7 @@ h2 {
     margin: 20px auto;
     padding: 30px;
     border-radius: 10px;
+    text-align: left;
 }
 
 .review-form label {
@@ -34,21 +22,26 @@ h2 {
     margin-bottom: 8px;
 }
 
+.numerical-rating {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
 .review-form textarea {
     width: 100%;
+    font-size: 1rem;
     min-height: 120px;
-    border: 1px solid #ccc;
+    border: 1px solid #ca243f;
     border-radius: 6px;
     padding: 10px;
     margin-bottom: 20px;
+    transition: border-color 0.2s ease; /* smooth animation */
 }
 
-.review-form select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin-bottom: 20px;
+.review-form textarea:focus {
+    border-color: #ca243f; /* pink border on click */
+    outline: none; /* remove default blue outline */
 }
 
 
@@ -58,7 +51,7 @@ h2 {
     direction: rtl;   /* makes clicking behavior intuitive */
     display: flex;
     gap: 5px;
-    font-size: 32px;
+    font-size: 40px;
     cursor: pointer;
     margin-bottom: 20px;
 }
@@ -82,18 +75,26 @@ h2 {
 }
 
 
-/*Submit button*/
 .submit-btn {
-    width: 100%;
-    background: orange;
+    background: #ca243f;
     color: white;
-    padding: 15px;
-    border: none;
-    font-size: 16px;
-    border-radius: 6px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 15px;
+    border: 1px solid #ddd;
     cursor: pointer;
 }
 
 .submit-btn:hover {
-  background-color: gray;
+  background-color: #404040;
 } 
+
+
+main {
+  width: 100%;
+  max-width: 1200px; /* Wider for full look */
+  margin: 0 auto;
+  padding-top: 2rem;
+  text-align: center;
+}

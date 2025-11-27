@@ -17,17 +17,11 @@
 
         <form id="review-form" class="review-form">
 
-            <h2>Add a Review</h2>
-
-            <label for="review">Your Review:</label>
-            <textarea id="review" name="review" required></textarea>
-
             <!-- Average rating display -->
             <div class="numerical-rating">
                 <span id="numerical-rating"></span>
             </div>
 
-            <label for="rating" required>Rating:</label>
             <div class="star-rating" name="rating" required>
                 <input type="radio" name="rating" id="star5" value="5" />
                 <label for="star5" class="star">★</label>
@@ -45,7 +39,12 @@
                 <label for="star1" class="star">★</label>
             </div>
 
-            <button type="submit" class="submit-btn">Submit Review</button>
+            <label for="review">Your Review:</label>
+            <textarea id="review" name="review" required placeholder="Spill the tea -- how was your stay?"></textarea>
+
+            <div class="review-submit-button">
+                <button type="submit" class="submit-btn">Submit Review</button>
+            </div>
         </form>
     </main>
 
