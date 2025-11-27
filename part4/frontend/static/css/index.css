@@ -63,7 +63,7 @@ main {
 .price-box {
   display: flex; /* flex container */
   justify-content: space-between; /* place price and rating at opposite ends */
-  align-items: center;         /* vertically align price and rating */
+  align-items: center; /* vertically align price and rating */
   background-color: #ca243f;
   width: 100%;
   padding: 15px 15px;
@@ -88,14 +88,9 @@ main {
   font-size: 1rem;
 }
 
-<<<<<<< HEAD
-.price-value, .rating-value {
-  font-size: 2.5rem;
-=======
 .price-value,
 .rating-value {
   font-size: 2rem;
->>>>>>> cf29f5f9bd364b4a5e69bfbed638536e04eaef55
   font-weight: bold;
 }
 
@@ -123,10 +118,10 @@ main {
 }
 
 #filter {
-  display: flex;              
-  justify-content: flex-end;  
-  margin-bottom: 25px;       
-  width: 100%;           
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 25px;
+  width: 100%;
 }
 
 #filter label {
