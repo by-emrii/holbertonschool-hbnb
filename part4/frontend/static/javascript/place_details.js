@@ -117,12 +117,118 @@ async function fetchPlaceReviews(placeId) {
   }
 }
 
-// ============== 7. Display Place Details ==============
-function displayPlaceDetails(place) {
+// ============== 7. Amenity Icon Mapping ==============
+function getAmenityIcon(amenityName) {
+  // Base path for amenity icons
+  const iconBasePath = "../../static/images/";
+
+  // Map amenity names to icon filenames
+  const amenityIconFiles = {
+    wifi: "icon_wifi.png",
+    pool: "icon_bath.png",
+    bath: "icon_bath.png",
+    // "air conditioning": "icon_ac.png",
+    // parking: "icon_parking.png",
+    // kitchen: "icon_kitchen.png",
+    // tv: "icon_tv.png"
+  };
+
+  const normalizedName = amenityName.toLowerCase().trim();
+  const iconFile = amenityIconFiles[normalizedName] || "icon.png"; // default icon
+
+  // return img tag for amenity icon
+  return `<img src="${iconBasePath}${iconFile}" alt="${amenityName}" class="amenity-icon" width="50" height="50">`;
+}
+
+// ============== 8. Calculate Average Rating ==============
+function calculateAverageRating(reviews) {
+  if (!reviews || reviews.length === 0) return 0;
+  const totalRating = reviews.reduce(
+    (sum, review) => sum + (review.rating || 0),
+    0
+  );
+  return (totalRating / reviews.length).toFixed(1);
+}
+
+// ============== 9. Generate Star Rating HTML ==============
+function generateStarRating(rating) {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+  let starsHTML = "★".repeat(fullStars);
+  if (hasHalfStar) starsHTML += "⯨";
+  starsHTML += "☆".repeat(emptyStars);
+
+  return starsHTML;
+}
+
+// ============== 10. Display Place Details ==============
+function displayPlaceDetails(place, reviews) {
+  const placeDetailsSection = document.getElementById("place-details");
+  if (!placeDetailsSection) return;
+
   // Update place title
   const titleElement = document.getElementById("place-title");
   if (titleElement) {
     titleElement.textContent = place.title || "Untitled Place";
+  }
+
+  // Create and insert image container (after title, before place-info)
+  const existingImage = placeDetailsSection.querySelector(
+    ".listing-image-container"
+  );
+  if (!existingImage && place.image_url) {
+    const imageContainer = document.createElement("div");
+    imageContainer.className = "listing-image-container";
+    imageContainer.innerHTML = `
+      <img class="hero-img" src="${place.image_url}" alt="${
+      place.title || "Place Image"
+    }">
+    `;
+    // Insert after title
+    const placeInfo = placeDetailsSection.querySelector(".place-info");
+    if (placeInfo) {
+      placeDetailsSection.insertBefore(imageContainer, placeInfo);
+    } else {
+      placeDetailsSection.appendChild(imageContainer);
+    }
+  }
+
+  // Create and insert price/rating card (after image, before place-info)
+  const existingCard = document.getElementById("listing-info-card");
+  if (!existingCard) {
+    const averageRating = calculateAverageRating(reviews);
+    const stars = generateStarRating(parseFloat(averageRating));
+
+    const priceRatingCard = document.createElement("section");
+    priceRatingCard.id = "listing-info-card";
+    priceRatingCard.innerHTML = `
+      <div class="price-container">
+        <p><strong><span class="dollar-sign">$</span>${
+          place.price ? place.price.toFixed(2) : "0"
+        }</strong></p>
+        <p class="per-night-text">Per night</p>
+      </div>
+      <div class="star-rating">
+        <p>${stars}</p>
+      </div>
+      <div class="rating">
+        <p class="average-rating">${averageRating}</p>
+        <p class="rating-title"><strong>Rating</strong></p>
+      </div>
+    `;
+
+    // Insert after image container
+    const imageContainer = placeDetailsSection.querySelector(
+      ".listing-image-container"
+    );
+    const placeInfo = placeDetailsSection.querySelector(".place-info");
+    if (imageContainer && placeInfo) {
+      placeDetailsSection.insertBefore(priceRatingCard, placeInfo);
+    } else if (placeInfo) {
+      placeDetailsSection.insertBefore(priceRatingCard, placeInfo);
+    }
   }
 
   // Update host name
@@ -131,7 +237,7 @@ function displayPlaceDetails(place) {
     hostElement.textContent = `${place.owner.first_name} ${place.owner.last_name}`;
   }
 
-  // Update price
+  // Update price (in the existing text info)
   const priceElement = document.getElementById("place-price");
   if (priceElement) {
     priceElement.textContent = place.price ? place.price.toFixed(2) : "0.00";
@@ -144,21 +250,55 @@ function displayPlaceDetails(place) {
       place.description || "No description available.";
   }
 
-  // Update amenities
+  // ✨ Create Amenities section with icons (replace the text)
   const amenitiesElement = document.getElementById("place-amenities");
-  if (amenitiesElement) {
-    if (place.amenities && place.amenities.length > 0) {
-      const amenityNames = place.amenities
-        .map((amenity) => amenity.name)
-        .join(", ");
-      amenitiesElement.textContent = amenityNames;
-    } else {
-      amenitiesElement.textContent = "No amenities listed.";
+  if (amenitiesElement && place.amenities) {
+    // Check if we already created the grid
+    const existingGrid = document.querySelector(".amenities-grid");
+    if (!existingGrid) {
+      // Create amenities section after place-info
+      const amenitiesSection = document.createElement("section");
+      amenitiesSection.id = "amenities";
+      amenitiesSection.innerHTML = `
+        <h2 class="amenities-title">Amenities</h2>
+        <div class="amenities-grid"></div>
+      `;
+
+      // Insert after place-details section
+      const reviewsSection = document.getElementById("reviews");
+      if (reviewsSection && reviewsSection.parentNode) {
+        reviewsSection.parentNode.insertBefore(
+          amenitiesSection,
+          reviewsSection
+        );
+      }
+
+      // Now populate the grid
+      const amenitiesGrid = amenitiesSection.querySelector(".amenities-grid");
+      if (place.amenities.length > 0) {
+        place.amenities.forEach((amenity) => {
+          const amenityBox = document.createElement("div");
+          amenityBox.className = "amenity-box";
+          amenityBox.innerHTML = getAmenityIcon(amenity.name);
+
+          const amenityName = document.createElement("p");
+          amenityName.innerHTML = `<span>${amenity.name}</span>`;
+          amenityBox.appendChild(amenityName);
+
+          amenitiesGrid.appendChild(amenityBox);
+        });
+      } else {
+        amenitiesGrid.innerHTML =
+          '<p style="color: #666; font-style: italic">No amenities listed.</p>';
+      }
     }
+
+    // Hide the original text amenities
+    amenitiesElement.parentElement.style.display = "none";
   }
 }
 
-// ============== 8. Display Reviews ==============
+// ============== 11. Display Reviews ==============
 function displayReviews(reviews) {
   const reviewsSection = document.getElementById("reviews");
   if (!reviewsSection) return;
@@ -214,7 +354,7 @@ function displayReviews(reviews) {
   });
 }
 
-// ============== 9. Initialize Page ==============
+// ============== 12. Initialize Page ==============
 async function initializePage() {
   // Get place ID from URL
   const placeId = getPlaceIdFromURL();
@@ -232,14 +372,16 @@ async function initializePage() {
   // Check authentication for add review section
   checkAuthentication();
 
-  // Fetch and display place details
+  // Fetch place details and reviews
   const place = await fetchPlaceDetails(placeId, token);
+  const reviews = await fetchPlaceReviews(placeId);
+
+  // Display place details with reviews (for calculating rating)
   if (place) {
-    displayPlaceDetails(place);
+    displayPlaceDetails(place, reviews);
   }
 
-  // Fetch and display reviews
-  const reviews = await fetchPlaceReviews(placeId);
+  // Display reviews
   displayReviews(reviews);
 
   // Update the add review button link to include place_id
@@ -251,5 +393,5 @@ async function initializePage() {
   }
 }
 
-// ============== 10. Run on Page Load ==============
+// ============== 13. Run on Page Load ==============
 document.addEventListener("DOMContentLoaded", initializePage);
