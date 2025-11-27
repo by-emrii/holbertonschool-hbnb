@@ -165,4 +165,4 @@ class PlaceService():
     def get_average_rating_for_place(self, place_id):
         """Calculate the average rating for a place"""
         avg = self.place_repo.get_average_rating_for_place(place_id)
-        return int(avg) if avg is not None else 0
+        return float(avg) if avg is not None else 0

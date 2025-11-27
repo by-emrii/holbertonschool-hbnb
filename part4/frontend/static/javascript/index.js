@@ -64,7 +64,7 @@ async function fetchRating(place_id) {
       throw new Error("Failed to fetch average rating");
     } else {
       const ratingData = await response.json();
-      const ratingResult = ratingData.result;
+      return ratingData;
     }
   } catch (error) {
     console.error("Error:", error);
@@ -76,13 +76,10 @@ async function displayPlaces(places) {
   const placeCard = document.querySelector("#places-list");
   placeCard.innerHTML = "";
   for (const place of places) {
-    console.log(place);
-    // const reviewData = await fetchPlaceReviews(place.id);
-    // // console.log("Place_id:", place.id);
-    // console.log("place review data:", reviewData);
     const placeDiv = document.createElement("div");
     placeDiv.setAttribute("class", "place-card");
     placeDiv.setAttribute("data-price", place.price);
+    const rating = await fetchRating(place.id);
     placeDiv.innerHTML = `<div>
           <h2 class="card-title">${place.title}</h2>
       </div>
@@ -91,7 +88,7 @@ async function displayPlaces(places) {
       </div>
       <div class="price-box">
         <div class="price">Price per night: $${place.price}</div>
-        <div class="rating">Average Rating: ${place.avg_rating}/5</div>
+        <div class="rating">Average Rating: ${rating.average_rating}/5</div>
       </div>
       <button class="details-button">View Details</button>`;
 
