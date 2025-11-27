@@ -31,7 +31,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   position: relative;
   z-index: 5;
 }
@@ -42,7 +42,6 @@
   flex-direction: column;
   align-items: center;
 }
-
 
 /* Numeric values: price & average rating */
 #listing-info-card .price-container p:first-child,
@@ -75,7 +74,6 @@
   position: relative;
   overflow: hidden;
   border-radius: 14px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   background: transparent;
   padding: 0;
 }
@@ -128,7 +126,7 @@
 
 /* icons */
 .amenity-icon {
-  color: #ca243f; 
+  color: #ca243f;
   display: inline-block; /* proper layout */
   width: 50px;
   height: 50px;
@@ -143,9 +141,9 @@
   width: 100%;
   max-width: 900px;
   padding: 10px;
-  margin: 25px auto; 
+  margin: 25px auto;
   border-radius: 10px;
-  text-align: left; 
+  text-align: left;
 }
 
 #reviews h2 {
@@ -153,7 +151,7 @@
   font-weight: bold;
   padding: 10px;
   margin-bottom: 15px;
-  text-align: left; 
+  text-align: left;
 }
 
 .review-card {
@@ -175,7 +173,7 @@
   color: white;
   font-size: 18px;
   font-weight: bold;
-  margin-left: 0; 
+  margin-left: 0;
   margin-top: 20px;
   padding: 10px 20px;
   border-radius: 10px;
@@ -196,11 +194,15 @@ section nav li {
   display: inline-block;
 }
 
-
 main {
   width: 100%;
   max-width: 1200px; /* Wider for full look */
   margin: 0 auto;
   padding-top: 2rem;
   text-align: center;
+}
+
+.stars {
+  color: #f5c518;
+  font-size: 1.2rem;
 }
