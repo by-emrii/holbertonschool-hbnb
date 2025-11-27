@@ -6,7 +6,7 @@
 }
 
 main {
-  padding: 2rem;
+  /*padding: 2rem;*/
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -49,6 +49,7 @@ main {
 
 .container-title {
   font-size: 3rem;
+  margin-top: 20px;
   margin-bottom: 35px;
   text-align: center;
 }
@@ -84,13 +85,12 @@ main {
 }
 
 .price-label,
-.rating-value {
+.rating-label {
   font-size: 1rem;
 }
 
-.price-value,
-.rating-value {
-  font-size: 2rem;
+.price-value, .rating-value {
+  font-size: 2.5rem;
   font-weight: bold;
 }
 
