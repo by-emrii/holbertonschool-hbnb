@@ -1,6 +1,8 @@
 from app import db
 from app.models.base_model import BaseModel
+from app.models.review import Review
 from sqlalchemy.orm import relationship, validates
+from sqlalchemy import func
 
 # association table for Place <-> Amenity (many-to-many)
 # one Place can have many Amenitys + one Amenity can belong to many Places
@@ -142,6 +144,21 @@ class Place(BaseModel):
         if not (value.startswith("http://") or value.startswith("https://")):
             raise ValueError("image_url must start with http(s)://")
         return value
+    
+    @property
+    def average_rating(self):
+        """Calculate the average rating for a place"""
+        average_rating = (
+            db.session.query(func.avg(Review.rating))
+            .filter(Review.place_id == self.id)
+            .scalar()
+        )
+
+        if average_rating is None:
+            return None
+
+        # round to one decimal
+        return round(float(average_rating), 1)
 
     # =====================
     # HELPER METHODS

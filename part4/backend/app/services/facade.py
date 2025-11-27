@@ -71,7 +71,7 @@ class HBnBFacade:
     
     #GET AVERAGE RATING OF PLACE
     def get_average_rating(self, place_id):
-        return self.place_repo.get_average_rating_for_place(place_id)
+        return self.place_service.get_average_rating_for_place(place_id)
 
     """ Amenity CRU """
     # create amenity

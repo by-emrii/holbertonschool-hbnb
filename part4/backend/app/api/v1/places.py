@@ -40,6 +40,7 @@ place_response = api.model('Place', {
     'longitude':   fields.Float,
     'image_url':   fields.String,
     'amenity_ids': fields.List(fields.String),
+    "average_rating": fields.Float
 })
 
 # ============== Response enrichment helper function（using SQLAlchemy relationships） ==============
@@ -202,9 +203,8 @@ class PlaceResource(Resource):
             return {'error': str(e)}, 404
 
 """get average rating"""
-@api.route('/average/<string:place_id>')
+@api.route('/average/<place_id>')
 class AverageRating(Resource):
     def get(self, place_id):
         avg_rating = facade.get_average_rating(place_id)
-
         return {"average_rating": avg_rating}, 200

@@ -29,15 +29,8 @@ class PlaceRepository(SQLAlchemyRepository):
 
 
     def get_average_rating_for_place(self, place_id):
-        """Calculate the average rating for a place"""
-        average_rating = (
-            db.session.query(func.avg(self.model.rating))
-            .filter(self.model.place_id == place_id)
-            .scalar()
-        )
-
-        if average_rating is None:
+        """Return the average rating using the Place model's property."""
+        place = self.model.query.get(place_id)
+        if not place:
             return None
-
-        # round to one decimal
-        return round(float(average_rating), 1)
+        return place.average_rating
