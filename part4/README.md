@@ -268,7 +268,7 @@ Each page has its own JS module:
 - Standardized API calls via Fetch API
 - DOM creation using template literals
 
-🎨 UI & Styling
+## 🎨 UI & Styling
 
 The UI was designed to follow clean, modern principles:
 
@@ -366,4 +366,5 @@ Submit a review:
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
 
