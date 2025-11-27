@@ -188,7 +188,7 @@ function generateStarRating(rating) {
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   let starsHTML = "★".repeat(fullStars);
-  if (hasHalfStar) starsHTML += "⯨";
+  if (hasHalfStar) starsHTML += '<span class="half-star">★</span>';
   starsHTML += "☆".repeat(emptyStars);
 
   return starsHTML;

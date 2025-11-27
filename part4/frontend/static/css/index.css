@@ -64,7 +64,7 @@ main {
 .price-box {
   display: flex; /* flex container */
   justify-content: space-between; /* place price and rating at opposite ends */
-  align-items: center;         /* vertically align price and rating */
+  align-items: center; /* vertically align price and rating */
   background-color: #ca243f;
   width: 100%;
   padding: 15px 15px;
@@ -118,10 +118,10 @@ main {
 }
 
 #filter {
-  display: flex;              
-  justify-content: flex-end;  
-  margin-bottom: 25px;       
-  width: 100%;           
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 25px;
+  width: 100%;
 }
 
 #filter label {
