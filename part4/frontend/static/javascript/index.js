@@ -87,8 +87,15 @@ async function displayPlaces(places) {
         <img class="img" src="${place.image_url}">
       </div>
       <div class="price-box">
-        <div class="price">Price per night: $${place.price}</div>
-        <div class="rating">Average Rating: ${rating.average_rating}/5</div>
+        <div class="price">
+          <span class="price-value">$${place.price}</span>
+          <span class="price-label">per night</span>
+        </div>
+
+        <div class="rating">
+          <span class="rating-value"> ${rating.average_rating}/5</span>
+          <span class="rating-label">Rating</span>
+        </div>
       </div>
       <button class="details-button">View Details</button>`;
 
