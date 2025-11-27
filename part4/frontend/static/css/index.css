@@ -49,6 +49,7 @@ main {
 
 .container-title {
   font-size: 3rem;
+  margin-top: 20px;
   margin-bottom: 35px;
   text-align: center;
 }
