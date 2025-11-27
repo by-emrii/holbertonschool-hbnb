@@ -1,133 +1,83 @@
-# 🏠 Holberton School - HBnB Project Part 3
+# 🏠 Holberton School HBnB Project Part 4 - Simple Web Client
 
-This phase of the Holberton HBnB Project delivers a secure and database-driven backend built with Flask, SQLAlchemy, and JWT authentication.
+This project implements the frontend interface for the HBNB accommodation platform, completing Part 4 of the Holberton School full-stack series.
 
-The application now supports persistent data storage, user authentication, and role-based authorization using a scalable architecture designed for production deployment.
+It connects a custom Flask API (from Part 3) with a fully functional web client built using HTML5, CSS3, and JavaScript ES6.
 
-## Overview
+The frontend allows users to:
 
-Part 3 enhances the HBnB backend by integrating:
+- Log in and obtain a JWT token
+- View a list of places
+- Filter places by price
+- View detailed information about a place
+- Add reviews (authenticated users only)
 
-- Persistent database storage via SQLAlchemy
-- JWT-based authentication and role-based access control (RBAC)
-- Full CRUD operations for all entities
-- Data validation and schema visualization
-- Production-ready configuration supporting both SQLite (development) and MySQL (production)
-  This update transforms the prototype backend from an in-memory system into a robust RESTful API.
+The frontend is designed for simplicity, responsiveness, and clean API communication.
 
-## Table of Contents
-
-1. [Key Features](#key-features)
-2. [Project Structure](#project-structure)
-3. [Requirements](#requirements)
-4. [Installation](#installation)
-5. [Architecture Overview](#hbnb-architecture-overview)
-6. [API Endpoints](#-api-endpoints)
-7. [Admin User Endpoints Example](#-admin-endpoints-example-)
-8. [Entity Relationship Diagram](#entity-relationship-er-database-diagrams)
-9. [License](#-license)
-
-## Key Features
-
-### 🔐 Authentication and Authorization
-
-- Secure login using JWT tokens (flask-jwt-extended)
-- Password hashing with Flask-Bcrypt
-- Role-based access control via the is_admin attribute
-- Token-protected endpoints for all authenticated routes
-
-### 🗄️ Database Integration
-
-- Data persistence using SQLAlchemy ORM
-- SQLite configured for local development
-- MySQL ready for production deployment
-- Database schema designed and visualized with mermaid.js
-
-### ⚙️ CRUD Operations
-
-Full CRUD functionality for:
-
-- Users
-- Places
-- Reviews
-- Amenities
-
-Centralized repository and service layers for clean separation of concerns
-
-### 🧩 Clean Architecture
-
-- Repository layer manages database operations
-- Service layer encapsulates business logic
-- API layer exposes RESTful endpoints using Flask-RESTX namespaces
-- Application factory pattern for modular configuration and environment handling
 
 ## Project Structure
 
 ```
-holbertonschool-hbnb/part3
-├── app/                                # Main application package
-│   │
-│   ├── api/                            # API layer – handles HTTP routes and endpoints
-│   │   └── v1/                         # Version 1 of the API
-│   │       ├── __init__.py             # Initializes the API and namespaces
-│   │       ├── amenities.py            # Endpoints for Amenity operations
-│   │       ├── base_model.py           # Shared structure or base for API models
-│   │       ├── places.py               # Endpoints for Place operations
-│   │       ├── reviews.py              # Endpoints for Review operations
-│   │       ├── users.py                # Endpoints for User operations
-|   |       ├── admin.py                # Endpoints for Admin only operations
-|   |       └── auth.py                 # Endpoints for Login functionality using JWT
-│   │
-│   ├── models/                         # Data models that represent entities
-│   │   ├── __init__.py                 # Initializes the models package
-│   │   ├── amenity.py                  # Amenity model definition
-│   │   ├── base_model.py               # Base class with shared attributes/methods
-│   │   ├── place.py                    # Place model definition
-│   │   ├── review.py                   # Review model definition
-│   │   └── user.py                     # User model definition
-│   │
-│   ├── persistence/                    # Handles database logic
-│   │   ├── __init__.py
-│   │   ├── repository.py               # Repository layer for CRUD operations and data storage
-│   │   ├── user_repository.py          # Repository layer for User specific operations
-│   │   ├── amenity_repository.py       # Repository layer for Amenity specific operations
-│   │   ├── place_repository.py         # Repository layer for Place specific operations
-│   │   └── review_repository.py        # Repository layer for Review specific operations
-│   │
-│   ├── services/                       # Business logic layer
-│   │   ├── __init__.py
-│   │   ├── amenity_service.py          # Logic for managing amenities
-│   │   ├── facade.py                   # Facade pattern – simplifies API-to-service interaction
-│   │   ├── place_service.py            # Logic for managing places
-│   │   ├── review_service.py           # Logic for managing reviews
-│   │   └── user_service.py             # Logic for managing users
-│   │
-│   ├── tests/                          # Unit and integration tests
-│   |   ├── __init__.py
-│   |   ├── test_amenity_endpoints.py
-│   |   ├── test_models.py              # Testing for each models
-│   |   ├── test_place_endpoints.py
-│   |   └── test_user_endpoints.py
-│   │
-│   └── __init__.py                    # Initialises Flask app, extensions, and API namespaces
+holbertonschool-hbnb/
 │
-│
-│
-├── docs/                               # Project documentation and testing reports
-│   ├── user_tests.pdf                  # Documented test log for User endpoints
-│   ├── place_tests.pdf                 # Documented test log for Place endpoints
-│   ├── amenity_tests.pdf               # Documented test log for Amenity endpoints
-│   ├── review_tests.pdf                # Documented test log for Review endpoints
-│
-├── SQLScript/                          # SQL Scripts
-│   └── data.sql                        # Script for table generation and initial data
-|
-├── .gitignore                          # Specifies which files/folders Git should ignore
-├── config.py                           # Configuration settings (DB, environment, etc.)
-├── requirements.txt                    # Lists all Python dependencies
-├── run.py                              # Entry point to start the Flask application
-├── README.md                           # Project documentation
-└── LICENSE                             # License information for project usage
+└── part4/
+    ├── backend/                         # Flask backend (API + server-side rendering) - unchanged from Part 3
+    │   ├── app/
+    │   │   ├── __pycache__/
+    │   │   ├── api/                     # API routes
+    │   │   ├── models/                  # Models
+    │   │   ├── services/                # Business logic
+    │   │   ├── persistence/             # Database / repository layer
+    │   │   └── __init__.py              # App factory + API registration
+    │   │
+    │   ├── docs/                        # Backend-related documentation
+    │   ├── instance/
+    │   │   └── development.db           # SQLite DB
+    │   │
+    │   ├── SQLScript/                   # SQL setup scripts
+    │   │   ├── create_database.sql
+    │   │   └── run_operations.sql
+    │   │
+    │   ├── config.py                    # Backend configuration
+    │   ├── run.py                       # Backend entry point
+    │   ├── seed_data.sql                # Initial data to seed
+    │   └── .gitignore
+    │
+    ├── frontend/
+    │   ├── static/                      # Public-facing web assets
+    │   │   ├── css/
+    │   │   │   ├── index.css
+    │   │   │   ├── login.css
+    │   │   │   ├── place_details_style.css
+    │   │   │   ├── review_style.css
+    │   │   │   └── styles.css
+    │   │   ├── fonts/
+    │   │   ├── images/                  # Images to render on the website
+    │   │   └── javascript/              # Frontend logic, fetch API calls, UI handlers
+    │   │       ├── add_review.js
+    │   │       ├── index.js
+    │   │       ├── place_details.js
+    │   │       └── scripts.js
+    │   │
+    │   ├── templates/                   # Jinja2 HTML templates
+    │   │   ├── add_review/
+    │   │   │   └── add_review.html
+    │   │   ├── includes/
+    │   │   │   ├── footer.html
+    │   │   │   └── header.html          # Navbar, login/logout button, etc.
+    │   │   ├── index/
+    │   │   │   └── index.html           # Homepage – shows places
+    │   │   ├── login/
+    │   │   │   └── login.html           # Login page
+    │   │   └── place_details/
+    │   │       └── place_details.html   # Single place details + reviews
+    │   │
+    │   ├── readme.md                    # Frontend-specific README
+    │   └── ER_Diagram.png               # Visual DB reference for documentation
+    │
+    ├── README.md                        # Main project-level README (backend + frontend)
+    └── requirements.txt                 # Python dependencies
+
 ```
 
 ## Requirements
@@ -139,6 +89,8 @@ holbertonschool-hbnb/part3
 - Flask-Bcrypt
 - SQLAlchemy
 - SQLite (for development) / MySQL (for production)
+- Flask-cors
+
 
 ## Installation
 
@@ -157,7 +109,7 @@ holbertonschool-hbnb/part3
 
    ```bash
    python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate
    ```
 
    **Windows**
@@ -170,13 +122,14 @@ holbertonschool-hbnb/part3
 3. **Install dependencies**
 
    ```bash
-   cd part3
+   cd part4
    pip install -r requirements.txt
    ```
 
 4. **Create Tables**
 
    ```bash
+   cd backend
    flask shell
    ```
 
@@ -190,7 +143,7 @@ holbertonschool-hbnb/part3
 
 5. **Populate tables with initial data**
 
-   > To perform the tests in Tasks 1–9, you must be logged in as an admin user. This step seeds the admin_user data to enable testing for these tasks.
+   > This seeds initial data such as Admin users and Regular users, Places, Amenities, and Reviews
 
    ```bash
    sqlite3 instance/development.db < seed_data.sql
@@ -202,69 +155,86 @@ holbertonschool-hbnb/part3
    ```
    The API will start at:
    ```bash
-   http://127.0.0.1:5000/api/v1/
+   http://127.0.0.1:5000/
    ```
 
-## Running SQL scripts to generate tables & queries
 
-> These instructions are specific to testing of Task 10 of HBnB part3.
+## How to Test the Login and Add Review Functionality
 
-1. **Install MySQL**
-   **macOS (with Homebrew):**
+The login feature is implemented on the /login page.
+This page communicates with the backend authentication endpoint:
 
-   ```bash
-   brew install mysql
-   ```
+```bash
+POST /api/v1/auth/login
+```
 
-   **Ubuntu:**
+### Steps to Test Login
 
-   ```bash
-   sudo apt update
-   sudo apt install mysql-server
-   ```
+After following the step of the installation process and starting the server
 
-   Windows: Download and install from the MySQL website
+1. Navigate to the login page
+```bash
+http://localhost:5000/login
+```
 
-2. **Check that you have successfully installed MySQL**
+2. Use any of the seeded users from the database.
+   - Enter email and password
 
-   ```bash
-   mysql --version
-   ```
+3. You will automatically be redirected to the Home/Index Page. Happy browsing!
 
-3. **Navigate to SQLScript file**
+### Steps to Test Adding a Review
 
-   ```bash
-   cd SQLScript
-   ```
+The Add Review feature is only available to authenticated users.
+It communicates with the backend endpoint:
+```bash
+POST /api/v1/reviews
+```
 
-4. **Start MySQL server**
+User MUST follow the step above and be **logged in** to ensure the JWT cookie is set.
 
-   **macOS:**
+4. Navigate to any place details page, for example:
+```bash
+http://127.0.0.1:5000/place_details?place_id=a35837b8-25a2-49be-855d-84c1d0e8fe7a
+```
 
-   ```bash
-   brew services start mysql
-   ```
+5. Check for the “Add Review” button.
+**Expected:**
 
-   **Ubuntu:**
+- If logged in → The Add Review button appears below the place information.
+- If not logged in → The button is hidden and you cannot access /add_review.
 
-   ```bash
-   sudo service mysql start
-   ```
+6. Click “Add Review”
+This takes you to the form page
+Submit a review:
 
-5. **Run SQL scripts**
+- Enter a rating (e.g., 5)
+- Enter a comment
+- Click “Submit”
 
-   ```bash
-   cat create_database.sql | mysql -uroot -p
-   cat run_operations.sql | mysql -uroot -p
-   ```
+6. Expected Result
+**A sucessful result:**
+- An alert to notify "Review submitted successfully!"
+- Once the user clicks "OK", they would be redirected to the place details page
+- The new review appears under the Reviews section
 
-6. **Connect to the MySQL server to query the database**
 
-   ```bash
-   mysql -u root
-   Welcome to the MySQL monitor...
-   mysql> show databases;
-   ```
+## Technologies Used
+### Frontend
+
+- HTML5
+- CSS3
+- JavaScript ES6
+- Fetch API
+- Cookies for JWT storage
+- Flask CORS
+
+### Backend (existing from Part 3)
+
+- Flask
+- SQLAlchemy
+- JWT Authentication
+- Flask Bcrypt
+- Flask Restx
 
 ## HBnB Architecture Overview
 
