@@ -51,34 +51,25 @@ async function fetchPlaces(token) {
   }
 }
 
-// // fetch review data for place
-// async function fetchPlaceReviews(placeId) {
-//   try {
-//     const response = await fetch(
-//       `http://127.0.0.1:5000/api/v1/reviews/place/${placeId}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-
-//     if (!response.ok) {
-//       // If no reviews found, return empty array
-//       if (response.status === 404) {
-//         return [];
-//       }
-//       throw new Error(`Failed to fetch reviews: ${response.statusText}`);
-//     }
-
-//     const reviews = await response.json();
-//     return reviews; // API returns array of reviews
-//   } catch (error) {
-//     console.error("Error fetching reviews:", error);
-//     return [];
-//   }
-// }
+// Fetch average rating
+async function fetchRating(place_id) {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:5000/api/v1/places/average/${place_id}`,
+      {
+        method: "GET",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch average rating");
+    } else {
+      const ratingData = await response.json();
+      const ratingResult = ratingData.result;
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
 
 // Populate places list dynamically
 async function displayPlaces(places) {
@@ -98,7 +89,10 @@ async function displayPlaces(places) {
       <div class="image-wrapper">
         <img class="img" src="${place.image_url}">
       </div>
-      <div class="price">Price per night: $${place.price}</div>
+      <div class="price-box">
+        <div class="price">Price per night: $${place.price}</div>
+        <div class="rating">Average Rating: ${place.avg_rating}/5</div>
+      </div>
       <button class="details-button">View Details</button>`;
 
     placeCard.appendChild(placeDiv);
