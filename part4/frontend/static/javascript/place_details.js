@@ -151,7 +151,7 @@ function getAmenityIcon(amenityName) {
   <path d="M2.5 13.5A.5.5 0 0 1 3 13h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5M13.991 3l.024.001a1.5 1.5 0 0 1 .538.143.76.76 0 0 1 .302.254c.067.1.145.277.145.602v5.991l-.001.024a1.5 1.5 0 0 1-.143.538.76.76 0 0 1-.254.302c-.1.067-.277.145-.602.145H2.009l-.024-.001a1.5 1.5 0 0 1-.538-.143.76.76 0 0 1-.302-.254C1.078 10.502 1 10.325 1 10V4.009l.001-.024a1.5 1.5 0 0 1 .143-.538.76.76 0 0 1 .254-.302C1.498 3.078 1.675 3 2 3zM14 2H2C0 2 0 4 0 4v6c0 2 2 2 2 2h12c2 0 2-2 2-2V4c0-2-2-2-2-2"/>
 </svg>`,
 
-    'air conditioning': `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-fan" viewBox="0 0 16 16">
+    "air conditioning": `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-fan" viewBox="0 0 16 16">
   <path d="M10 3c0 1.313-.304 2.508-.8 3.4a2 2 0 0 0-1.484-.38c-.28-.982-.91-2.04-1.838-2.969a8 8 0 0 0-.491-.454A6 6 0 0 1 8 2c.691 0 1.355.117 1.973.332Q10 2.661 10 3m0 5q0 .11-.012.217c1.018-.019 2.2-.353 3.331-1.006a8 8 0 0 0 .57-.361 6 6 0 0 0-2.53-3.823 9 9 0 0 1-.145.64c-.34 1.269-.944 2.346-1.656 3.079.277.343.442.78.442 1.254m-.137.728a2 2 0 0 1-1.07 1.109c.525.87 1.405 1.725 2.535 2.377q.3.174.605.317a6 6 0 0 0 2.053-4.111q-.311.11-.641.199c-1.264.339-2.493.356-3.482.11ZM8 10c-.45 0-.866-.149-1.2-.4-.494.89-.796 2.082-.796 3.391q0 .346.027.678A6 6 0 0 0 8 14c.94 0 1.83-.216 2.623-.602a8 8 0 0 1-.497-.458c-.925-.926-1.555-1.981-1.836-2.96Q8.149 10 8 10M6 8q0-.12.014-.239c-1.02.017-2.205.351-3.34 1.007a8 8 0 0 0-.568.359 6 6 0 0 0 2.525 3.839 8 8 0 0 1 .148-.653c.34-1.267.94-2.342 1.65-3.075A2 2 0 0 1 6 8m-3.347-.632c1.267-.34 2.498-.355 3.488-.107.196-.494.583-.89 1.07-1.1-.524-.874-1.406-1.733-2.541-2.388a8 8 0 0 0-.594-.312 6 6 0 0 0-2.06 4.106q.309-.11.637-.199M8 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
 </svg>`,
@@ -159,11 +159,13 @@ function getAmenityIcon(amenityName) {
     heating: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fire" viewBox="0 0 16 16">
   <path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/>
 </svg>`,
-  }
+  };
 
   // return img tag for amenity icon
   const normalizedName = amenityName.toLowerCase().trim();
-  const svg = amenityIconFiles[normalizedName] || `<svg fill="currentColor" viewBox="0 0 16 16"><rect width="50" height="50"/></svg>`;
+  const svg =
+    amenityIconFiles[normalizedName] ||
+    `<svg fill="currentColor" viewBox="0 0 16 16"><rect width="50" height="50"/></svg>`;
 
   // wrap the SVG in a div with the CSS class
   return `<div class="amenity-icon">${svg}</div>`;
@@ -374,9 +376,17 @@ function displayReviews(reviews) {
 
     // Create rating with stars
     const rating = document.createElement("p");
-    const stars =
-      "★".repeat(review.rating || 0) + "☆".repeat(5 - (review.rating || 0));
-    rating.textContent = `Rating: ${stars}`;
+
+    // label text node
+    rating.appendChild(document.createTextNode("Rating: "));
+
+    const starsSpan = document.createElement("span");
+    starsSpan.className = "stars";
+    starsSpan.textContent =
+      (review.rating ? "★".repeat(review.rating) : "") +
+      "☆".repeat(5 - (review.rating || 0));
+
+    rating.appendChild(starsSpan);
     reviewCard.appendChild(rating);
 
     reviewsSection.appendChild(reviewCard);
