@@ -37,7 +37,19 @@ async function loginUser(email, password) {
       // redirect to home/index page
       window.location.href = 'http://127.0.0.1:5000/';
     } else {
-        alert('Login failed: ' + response.statusText);
+      // Try to read error JSON safely
+      let errorMessage = 'Login failed';
+
+      try {
+        const errorData = await response.json();
+
+        errorMessage = errorData.error;
+      } catch {
+        // If parsing fails, fallback to status text
+        errorMessage = response.statusText || errorMessage;
+      }
+
+      alert(errorMessage);
     }
   } catch (error) {
     alert('Login failed: Could not connect to server')

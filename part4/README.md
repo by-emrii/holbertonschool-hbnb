@@ -1,133 +1,98 @@
-# 🏠 Holberton School - HBnB Project Part 3
+# 🏠 Holberton School HBnB Project Part 4 - Simple Web Client
 
-This phase of the Holberton HBnB Project delivers a secure and database-driven backend built with Flask, SQLAlchemy, and JWT authentication.
+This project implements the frontend interface for the HBNB accommodation platform, completing Part 4 of the Holberton School full-stack series.
 
-The application now supports persistent data storage, user authentication, and role-based authorization using a scalable architecture designed for production deployment.
+It connects a custom Flask API (from Part 3) with a fully functional web client built using **HTML5, CSS3, and JavaScript ES6**.
 
-## Overview
+The result is a lightweight, interactive application where users can:
 
-Part 3 enhances the HBnB backend by integrating:
+- Authenticate using JWT
+- Browse and filter places
+- View detailed place information
+- Submit reviews (authenticated users only)
 
-- Persistent database storage via SQLAlchemy
-- JWT-based authentication and role-based access control (RBAC)
-- Full CRUD operations for all entities
-- Data validation and schema visualization
-- Production-ready configuration supporting both SQLite (development) and MySQL (production)
-  This update transforms the prototype backend from an in-memory system into a robust RESTful API.
+The frontend is designed for simplicity, responsiveness, and clean API communication.
 
-## Table of Contents
+# 📚 Table of Contents
 
-1. [Key Features](#key-features)
-2. [Project Structure](#project-structure)
-3. [Requirements](#requirements)
-4. [Installation](#installation)
-5. [Architecture Overview](#hbnb-architecture-overview)
-6. [API Endpoints](#-api-endpoints)
-7. [Admin User Endpoints Example](#-admin-endpoints-example-)
-8. [Entity Relationship Diagram](#entity-relationship-er-database-diagrams)
-9. [License](#-license)
-
-## Key Features
-
-### 🔐 Authentication and Authorization
-
-- Secure login using JWT tokens (flask-jwt-extended)
-- Password hashing with Flask-Bcrypt
-- Role-based access control via the is_admin attribute
-- Token-protected endpoints for all authenticated routes
-
-### 🗄️ Database Integration
-
-- Data persistence using SQLAlchemy ORM
-- SQLite configured for local development
-- MySQL ready for production deployment
-- Database schema designed and visualized with mermaid.js
-
-### ⚙️ CRUD Operations
-
-Full CRUD functionality for:
-
-- Users
-- Places
-- Reviews
-- Amenities
-
-Centralized repository and service layers for clean separation of concerns
-
-### 🧩 Clean Architecture
-
-- Repository layer manages database operations
-- Service layer encapsulates business logic
-- API layer exposes RESTful endpoints using Flask-RESTX namespaces
-- Application factory pattern for modular configuration and environment handling
+1. [Project Overview](#-holberton-school-hbnb-project-part-4---simple-web-client)  
+2. [Project Structure](#project-structure)  
+3. [Requirements](#requirements)  
+4. [Installation](#installation)  
+5. [Features Delivered](#features-delivered)  
+   - [1. Authentication (JWT Login)](#-1-authentication-jwt-login)  
+   - [2. Places List (Home Page)](#-2-places-list-home-page)  
+   - [3. Place Details Page](#-3-place-details-page)  
+   - [4. Add Review Page](#-4-add-review-page)  
+6. [JavaScript Implementation Overview](#️-javascript-implementation-overview)  
+7. [UI & Styling](#-ui--styling)  
+8. [How to Test the Login and Add Review Functionality](#how-to-test-the-login-and-add-review-functionality)  
+9. [Technologies Used](#technologies-used)  
+10. [License](#-license)
 
 ## Project Structure
 
 ```
-holbertonschool-hbnb/part3
-├── app/                                # Main application package
-│   │
-│   ├── api/                            # API layer – handles HTTP routes and endpoints
-│   │   └── v1/                         # Version 1 of the API
-│   │       ├── __init__.py             # Initializes the API and namespaces
-│   │       ├── amenities.py            # Endpoints for Amenity operations
-│   │       ├── base_model.py           # Shared structure or base for API models
-│   │       ├── places.py               # Endpoints for Place operations
-│   │       ├── reviews.py              # Endpoints for Review operations
-│   │       ├── users.py                # Endpoints for User operations
-|   |       ├── admin.py                # Endpoints for Admin only operations
-|   |       └── auth.py                 # Endpoints for Login functionality using JWT
-│   │
-│   ├── models/                         # Data models that represent entities
-│   │   ├── __init__.py                 # Initializes the models package
-│   │   ├── amenity.py                  # Amenity model definition
-│   │   ├── base_model.py               # Base class with shared attributes/methods
-│   │   ├── place.py                    # Place model definition
-│   │   ├── review.py                   # Review model definition
-│   │   └── user.py                     # User model definition
-│   │
-│   ├── persistence/                    # Handles database logic
-│   │   ├── __init__.py
-│   │   ├── repository.py               # Repository layer for CRUD operations and data storage
-│   │   ├── user_repository.py          # Repository layer for User specific operations
-│   │   ├── amenity_repository.py       # Repository layer for Amenity specific operations
-│   │   ├── place_repository.py         # Repository layer for Place specific operations
-│   │   └── review_repository.py        # Repository layer for Review specific operations
-│   │
-│   ├── services/                       # Business logic layer
-│   │   ├── __init__.py
-│   │   ├── amenity_service.py          # Logic for managing amenities
-│   │   ├── facade.py                   # Facade pattern – simplifies API-to-service interaction
-│   │   ├── place_service.py            # Logic for managing places
-│   │   ├── review_service.py           # Logic for managing reviews
-│   │   └── user_service.py             # Logic for managing users
-│   │
-│   ├── tests/                          # Unit and integration tests
-│   |   ├── __init__.py
-│   |   ├── test_amenity_endpoints.py
-│   |   ├── test_models.py              # Testing for each models
-│   |   ├── test_place_endpoints.py
-│   |   └── test_user_endpoints.py
-│   │
-│   └── __init__.py                    # Initialises Flask app, extensions, and API namespaces
+holbertonschool-hbnb/
 │
-│
-│
-├── docs/                               # Project documentation and testing reports
-│   ├── user_tests.pdf                  # Documented test log for User endpoints
-│   ├── place_tests.pdf                 # Documented test log for Place endpoints
-│   ├── amenity_tests.pdf               # Documented test log for Amenity endpoints
-│   ├── review_tests.pdf                # Documented test log for Review endpoints
-│
-├── SQLScript/                          # SQL Scripts
-│   └── data.sql                        # Script for table generation and initial data
-|
-├── .gitignore                          # Specifies which files/folders Git should ignore
-├── config.py                           # Configuration settings (DB, environment, etc.)
-├── requirements.txt                    # Lists all Python dependencies
-├── run.py                              # Entry point to start the Flask application
-├── README.md                           # Project documentation
-└── LICENSE                             # License information for project usage
+└── part4/
+    ├── backend/                         # Flask backend (API + server-side rendering) - unchanged from Part 3
+    │   ├── app/
+    │   │   ├── __pycache__/
+    │   │   ├── api/                     # API routes
+    │   │   ├── models/                  # Models
+    │   │   ├── services/                # Business logic
+    │   │   ├── persistence/             # Database / repository layer
+    │   │   └── __init__.py              # App factory + API registration
+    │   │
+    │   ├── docs/                        # Backend-related documentation
+    │   ├── instance/
+    │   │   └── development.db           # SQLite DB
+    │   │
+    │   ├── SQLScript/                   # SQL setup scripts
+    │   │   ├── create_database.sql
+    │   │   └── run_operations.sql
+    │   │
+    │   ├── config.py                    # Backend configuration
+    │   ├── run.py                       # Backend entry point
+    │   ├── seed_data.sql                # Initial data to seed
+    │   └── .gitignore
+    │
+    ├── frontend/
+    │   ├── static/                      # Public-facing web assets
+    │   │   ├── css/
+    │   │   │   ├── index.css
+    │   │   │   ├── login.css
+    │   │   │   ├── place_details_style.css
+    │   │   │   ├── review_style.css
+    │   │   │   └── styles.css
+    │   │   ├── fonts/
+    │   │   ├── images/                  # Images to render on the website
+    │   │   └── javascript/              # Frontend logic, fetch API calls, UI handlers
+    │   │       ├── add_review.js
+    │   │       ├── index.js
+    │   │       ├── place_details.js
+    │   │       └── scripts.js
+    │   │
+    │   ├── templates/                   # Jinja2 HTML templates
+    │   │   ├── add_review/
+    │   │   │   └── add_review.html
+    │   │   ├── includes/
+    │   │   │   ├── footer.html
+    │   │   │   └── header.html          # Navbar, login/logout button, etc.
+    │   │   ├── index/
+    │   │   │   └── index.html           # Homepage – shows places
+    │   │   ├── login/
+    │   │   │   └── login.html           # Login page
+    │   │   └── place_details/
+    │   │       └── place_details.html   # Single place details + reviews
+    │   │
+    │   ├── readme.md                    # Frontend-specific README
+    │   └── ER_Diagram.png               # Visual DB reference for documentation
+    │
+    ├── README.md                        # Main project-level README (backend + frontend)
+    └── requirements.txt                 # Python dependencies
+
 ```
 
 ## Requirements
@@ -139,6 +104,8 @@ holbertonschool-hbnb/part3
 - Flask-Bcrypt
 - SQLAlchemy
 - SQLite (for development) / MySQL (for production)
+- Flask-cors
+
 
 ## Installation
 
@@ -157,7 +124,7 @@ holbertonschool-hbnb/part3
 
    ```bash
    python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate
    ```
 
    **Windows**
@@ -170,13 +137,14 @@ holbertonschool-hbnb/part3
 3. **Install dependencies**
 
    ```bash
-   cd part3
+   cd part4
    pip install -r requirements.txt
    ```
 
 4. **Create Tables**
 
    ```bash
+   cd backend
    flask shell
    ```
 
@@ -190,7 +158,7 @@ holbertonschool-hbnb/part3
 
 5. **Populate tables with initial data**
 
-   > To perform the tests in Tasks 1–9, you must be logged in as an admin user. This step seeds the admin_user data to enable testing for these tasks.
+   > This seeds initial data such as Admin users and Regular users, Places, Amenities, and Reviews
 
    ```bash
    sqlite3 instance/development.db < seed_data.sql
@@ -202,414 +170,202 @@ holbertonschool-hbnb/part3
    ```
    The API will start at:
    ```bash
-   http://127.0.0.1:5000/api/v1/
+   http://127.0.0.1:5000/
    ```
 
-## Running SQL scripts to generate tables & queries
+## Features Delivered
+### 🔐 1. Authentication (JWT Login)
 
-> These instructions are specific to testing of Task 10 of HBnB part3.
+- Users log in via `/api/v1/auth/login`
+- On success, a JWT token is stored in cookies
+- All protected pages verify authentication before rendering
+- If no token → redirect to the Login page
 
-1. **Install MySQL**
-   **macOS (with Homebrew):**
+Frontend implemented:
 
-   ```bash
-   brew install mysql
-   ```
+- Login form UI
+- Error handling for invalid credentials
+- Cookie storage
+- UI state updates based on authentication
 
-   **Ubuntu:**
+### 🏠 2. Places List (Home Page)
+**Data:**
 
-   ```bash
-   sudo apt update
-   sudo apt install mysql-server
-   ```
-
-   Windows: Download and install from the MySQL website
-
-2. **Check that you have successfully installed MySQL**
-
-   ```bash
-   mysql --version
-   ```
-
-3. **Navigate to SQLScript file**
-
-   ```bash
-   cd SQLScript
-   ```
-
-4. **Start MySQL server**
-
-   **macOS:**
-
-   ```bash
-   brew services start mysql
-   ```
-
-   **Ubuntu:**
-
-   ```bash
-   sudo service mysql start
-   ```
-
-5. **Run SQL scripts**
-
-   ```bash
-   cat create_database.sql | mysql -uroot -p
-   cat run_operations.sql | mysql -uroot -p
-   ```
-
-6. **Connect to the MySQL server to query the database**
-
-   ```bash
-   mysql -u root
-   Welcome to the MySQL monitor...
-   mysql> show databases;
-   ```
-
-## HBnB Architecture Overview
-
-### Architecture Overview
-
-1. API Layer - Presentation Layer
-2. Facade - Business Logic Layer
-3. Services - Business Logic Layer
-4. Models - Business Logic Layer
-5. Repository - Persistence Layer
-
-### Presentation Layer
-
-The Presentation Layer manages all HTTP interactions.
-It is implemented using Flask-RESTX, which provides a structured way to define endpoints, request/response models, and automatic API documentation.
-Key Responsibilities:
-
-- Define API namespaces for entities such as Users, Places, Amenities, Reviews.
-- Handle request validation, serialization, and response formatting
-- Manage authentication and authorization via JWTs
-- Delegate business operations to the Facade Layer
-
-Example:
-When a client sends a request to /api/v1/users, the Presentation Layer:
-
-- Validates the input using a Flask-RESTX model
-- Calls the corresponding method in the Facade
-- Returns a JSON response
-
-It does not contain business logic; instead, it calls Facade methods to perform operations.
-**Example usage:**
-
-```
-from flask_restx import Namespace, Resource, fields
-from flask_jwt_extended import jwt_required, get_jwt
-from flask import request
-from app.services import facade
-
-api = Namespace('admin', description='Admin operations')
-
-@api.route('/users/')
-class AdminUserCreate(Resource):
-   @api.expect(user_create_model, validate=True)
-   @api.response(201, 'Admin successfully created')
-   @api.response(400, 'Email already registered')
-   @api.response(400, 'Invalid input data')
-   @api.response(400, 'Invalid phone number')
-   @api.response(400, 'Invalid password')
-   @jwt_required()
-   def post(self):
-      # current_user = get_jwt()
-      claims = get_jwt()
-      if not claims.get('is_admin'):
-            return {'error': 'Admin privileges required'}, 403
-
-      user_data = api.payload
-      email = user_data.get('email')
-
-      # Check if email is already in use
-      if facade.get_user_by_email(email):
-            return {'error': 'Email already registered'}, 400
-
-      # Logic to create a new user
-      try:
-            # user_data = api.payload
-            new_user = facade.create_user(user_data)
-            return {
-               'id': new_user.id,
-               'message': "User registered sucessfully"
-               }, 201
-      except (TypeError,ValueError) as e:
-            return {"error": str(e)}, 400
+Fetched from:
+```bash
+GET /api/v1/places
 ```
 
-### Business Logic Layer
+**Features:**
 
-The Business Logic Layer (BLL) contains the application’s core rules and workflows.
-It is composed of three main parts: the Facade, Services, and Domain Models.
+- Display all places with:
+   - Name
+   - Image
+   - Price
+   - Average Rating
+- Dropdown filter by price (client-side filtering)
+- Clicking a place opens its details page
 
-#### 1. Facade Layer
+**UI:**
 
-The Facade acts as the bridge between the Presentation Layer and Services.
-It exposes high-level operations (e.g., create_user, update_place) that internally call one or more services.
+- Fully responsive layout
+- Card-based display of places
+- Clean separation of HTML + CSS + JS
 
-This simplifies controller code and keeps the API layer clean and uniform.
+### 📍 3. Place Details Page
+**Data:**
 
-Example Flow:
-
-```
-/api/v1/users  →  Facade  →  UserService  →  UserRepository
-```
-
-#### 2. Service Layer
-
-Each Service model encapsulates the business rules and logic for a specific entity (User, Place, Review, Amenity, Reservation).
-
-| Service            | Responsibility                                                        |
-| ------------------ | --------------------------------------------------------------------- |
-| UserService        | Manages user creation, authentication, updates, and admin privileges. |
-| PlaceService       | Handle creation and management of property listings.                  |
-| AmenityService     | Manage amenities associated with places.                              |
-| ReviewService      | Process user reviews and ratings for places.                          |
-
-**Example usage:**
-
-```
-from app.models.user import User
-
-class UserService:
-   def __init__(self, user_repo):
-      self.user_repo = user_repo
-
-   # Create user
-   def create_user(self, user_data):
-      existing = self.user_repo.get_by_attribute('email', user_data['email'])
-      if existing:
-            raise ValueError('Email already used - choose another email')
-      user = User(**user_data)
-      user.hash_password(user_data['password']) # hash pwd before saving
-      self.user_repo.add(user)
-      return user
+Fetched from:
+```bash
+GET /api/v1/places/<id>
 ```
 
-#### 3. Domain Models
+**Display:**
 
-The Models represent core entities and their relationships, implemented using SQLAlchemy ORM.
-Each model inherits from a shared BaseModel, which includes fields like id, created_at, and updated_at.
+- Place name
+- Price
+- Description
+- Image
+- Average rating
+- Amenities
+- List of existing reviews
 
-Relationships are explicitly defined between models:
+**Additional Features:**
 
-- A User can own multiple Places
-- A Place can have multiple Reviews
-- A Place can have many Amenities (many-to-many)
+- “Add Review” button shows only if a user is logged in
 
-  | Model   | Description                               | Key Attributes                                                                     |
-  | ------- | ----------------------------------------- | ---------------------------------------------------------------------------------- |
-  | Base    | Foundation for all entities.              | id, created_at, updated_at                                                         |
-  | User    | Represents a HBnB platform user.          | id, first_name, last_name, email, password, phone number                           |
-  | Place   | Property listed for rent.                 | id, owner_id, title, description, price, address, latitude, longitude, amenity_ids |
-  | Amenity | Feature or facility available at a place. | id, name, description                                                              |
-  | Review  | User feedback for a place.                | id, user_id, place_id, rating, comment, upload_image                               |
+### 📝 4. Add Review Page
+**Function:**
 
-  **Example usage:**
+Allows authenticated users to create a review for a place.
 
-  ```
-  from app import db
-  from app.models.base_model import BaseModel
-  from sqlalchemy.orm import validates
+**Implementation:**
 
-  class User(BaseModel):
-     __tablename__ = 'users'
-
-     first_name = db.Column(db.String(50), nullable=False)
-     last_name = db.Column(db.String(50), nullable=False)
-     email = db.Column(db.String(120), nullable=False, unique=True)
-     password = db.Column(db.String(128), nullable=False)
-     is_admin = db.Column(db.Boolean, default=False)
-     phone_number = db.Column(db.String, nullable=True)
-     profile_img = db.Column(db.String, nullable=True)
-
-     places = relationship('Place', backref='owner', lazy=True)
-     reviews = relationship('Review', backref='user', lazy=True)
-
-     @validates('first_name', 'last_name')
-     def validate_name(self, key, value):
-        """ First and last name validations """
-        if not isinstance(value, str):
-              raise TypeError(f"{key.replace('_',' ').title()} must be a string")
-        value = value.strip()
-        if len(value) > 50:
-              raise ValueError(f"{key.replace('_', ' ').title()} cannot exceed 50 characters")
-        return value
-  ```
-
-### Persistence Layer
-
-The Persistence Layer handles all interactions with the database, abstracting SQLAlchemy queries from the rest of the application.
-It consists of a generic repository for standard CRUD operations, and entity-specific repositories for additional domain-specific behaviors.
-
-**Repository**
-The SQLAlchemyRepository class provides a reusable base for all entities:
-
-- Add objects to the database
-- Retrieve single objects or all objects
-- Update objects with new data
-- Delete objects
-- Query by attribute
-
-**Entity-Specific Repositories**
-Entity repositories inherit from SQLAlchemyRepository and add custom methods specific to that entity.
-
-Example of User Repository:
-
-```
-   from app.models.user import User
-   from app.persistence.repository import SQLAlchemyRepository
-
-   class UserRepository(SQLAlchemyRepository):
-      def __init__(self):
-         super().__init__(User)
-
-      def get_user_by_email(self, email):
-         """Retrieve a user by their email address."""
-         return self.model.query.filter_by(email=email).first()
-
+```bash
+POST /api/v1/places
 ```
 
-## 🌐 API Endpoints
+**Features:**
 
-### 👥 Users
-
-      1. GET /api/v1/users/  - Get all existing users
-      2. GET /api/v1/users/{user_id}  - Get user details
-
-### 🔰 Admin
-
-      1. POST /api/v1/users/  - Admin can register new users
-      2. PUT /api/v1/users/{user_id}  - Admin can update user information
-      3. POST /api/v1/amenities/ - Admin can create amenities
-      4. PUT /api/v1/amenities/{amenity_id} - Admin can update amenity
-
-### 🛠️ Login
-
-      1. POST /api/v1/auth/login - Any user can login with email and password
-      2. GET /api/v1/auth/protected - A protected endpoint that requires JWT token
-
-### 🏠 Places
-
-      1. POST /api/v1/places/  - Create a new place
-      2. GET /api/v1/places/   - Get all places
-      3. GET /api/v1/places/{place_id} - Get place details
-      4. PUT /api/v1/places/{place_id}  - Update place information
-      5. DELETE /api/v1/places/{place_id} - Delete a place
-
-### 📌 Amenities
-
-      1. GET /api/v1/amenities/ - Get all amenities
-      2. GET /api/v1/amenities/{amenity_id} - Get amenity details
-      3. DELETE /api/v1/amenities/{amenity_id} - Admin can delete any amenity
-
-### 📝 Reviews
-
-      1. POST /api/v1/reviews/ - Create review
-      2. GET /api/v1/reviews/ - Get all reviews
-      3. GET /api/v1/reviews/{review_id} - Get review details
-      4. PUT /api/v1/reviews/{review_id} - Update review
-      5. DELETE /api/v1/reviews/{review_id} - Delete review
+- Form validation
+- Redirect on success back to the place details
+- Error messaging for invalid submissions
 
 
-## 🌐 Admin Endpoints Example 🌐
+## 🛠️ JavaScript Implementation Overview
+Each page has its own JS module:
 
-### 1. Register a New User
+  | File              | Purpose                                         |
+  | ----------------- | ----------------------------------------------- |
+  | login.js          | Handles user login, token storage, redirects    |
+  | index.js          | Fetches places, renders list, handles filtering |
+  | place_details.js  | Fetches place details + reviews                 |
+  | add_review.js     | Submits new reviews                             |
 
-**Endpoint** -- _POST /api/v1/users/_
+- Shared Logic
+- Cookie-based token checking
+- Redirect helpers
+- Standardized API calls via Fetch API
+- DOM creation using template literals
 
-**Request Body**
+## 🎨 UI & Styling
 
-```json
-{
-  "first_name": "Alice",
-  "last_name": "Smith",
-  "email": "alice@example.com",
-  "password": "password123"
-}
+The UI was designed to follow clean, modern principles:
+
+- Responsive layout
+- Modular CSS per page
+- Consistent colors and spacing
+- Shared header and footer templates
+- Simple, intuitive navigation
+
+
+## How to Test the Login and Add Review Functionality
+
+The login feature is implemented on the `/login` page.
+
+This page communicates with the backend authentication endpoint:
+
+```bash
+POST /api/v1/auth/login
 ```
 
-**Response**
+### Steps to Test Login
 
-```json
-{
-  "id": "as235bjkfas882",
-  "first_name": "Alice",
-  "last_name": "Smith",
-  "email": "alice@example.com",
-}
+After following the step of the installation process and starting the server:
+
+**1. Navigate to the login page**
+```bash
+http://localhost:5000/login
 ```
 
-### 2. Get User Details
+**2. Use any of the seeded users from the database**
+   - Enter `email` and `password`
 
-**Endpoint** -- _GET /api/v1/users/{user_id}_
+**3. You will automatically be redirected to the Home/Index Page. Happy browsing!**
 
-**Example Request**
+### Steps to Test Adding a Review
 
-```
-GET /api/v1/users/as235bjkfas882
-```
+The Add Review feature is only available to authenticated users.
 
-**Response**
-
-```json
-{
-  "id": "as235bjkfas882",
-  "first_name": "Alice",
-  "last_name": "Smith",
-  "email": "alice@example.com",
-}
+It communicates with the backend endpoint:
+```bash
+POST /api/v1/reviews
 ```
 
-### 3. Update User Information
+> User MUST follow the step above and be **logged in** to ensure the JWT cookie is set.
 
-**Endpoint** -- _PUT /api/v1/users/{user_id}_
-
-**Request Body**
-
-```json
-{
-  "first_name": "Alice",
-  "last_name": "Johnson",
-  "phone_number": "+61498765432"
-}
+**4. Navigate to any place details page, for example:**
+```bash
+http://127.0.0.1:5000/place_details?place_id=a35837b8-25a2-49be-855d-84c1d0e8fe7a
 ```
 
-**Response**
+**5. Check for the “Add Review” button**
 
-```json
-{
-  "id": "as235bjkfas882",
-  "first_name": "Alice",
-  "last_name": "Johnson",
-  "email": "alice@example.com",
-}
-```
+**Expected:**
 
-## Entity-Relationship (ER) Database diagrams
+- If logged in → The Add Review button appears below the place information.
+- If not logged in → The button is hidden and you cannot access `/add_review`.
 
+**6. Click “Add Review”**
+This takes you to the form page
+Submit a review:
 
-The diagram below illustrates the database schema for the HBnB project, showing the main entities and their relationships. It defines how data is structured and interconnected across the application.
+- Enter a rating (e.g., 5)
+- Enter a comment
+- Click “Submit”
 
-- User – Represents individuals using the platform. Each user can create multiple places and write multiple reviews.
+**7. Expected Result**
 
-- Place – Stores property information such as title, description, location, and price. Each place is owned by a user and can have many reviews and be linked to multiple amenities.
-
-- Amenity – Represents features or services available at a place (e.g., Wi-Fi, pool). A place can have many amenities, and each amenity can belong to multiple places, forming a many-to-many relationship through the Place_Amenity table.
-
-- Review – Contains user feedback for a place, linked to both the user who wrote it and the place being reviewed.
-
-- Place_Amenity – A junction table that manages the many-to-many relationship between places and amenities.
+**A sucessful result:**
+- An alert to notify "Review submitted successfully!"
+- Once the user clicks "OK", they would be redirected to the place details page
+- The new review appears under the Reviews section
 
 
-This ERD ensures that the data model aligns with the project’s ORM (SQLAlchemy) implementation and supports clear relationships between users, places, amenities, and reviews.
 
-![ER Diagram](ER_Diagram.png)
+## Technologies Used
+### Frontend
+
+- HTML5
+- CSS3
+- JavaScript ES6
+- Fetch API
+- Cookies for JWT storage
+- Flask CORS
+
+### Backend (existing from Part 3)
+
+- Flask
+- SQLAlchemy
+- JWT Authentication
+- Flask Bcrypt
+- Flask Restx
+
 
 ## 📄 License
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
+
 
