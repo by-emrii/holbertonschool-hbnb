@@ -174,7 +174,7 @@ main {
   }
 
   .container-title {
-    font-size: 3rem;
+    font-size: 3rem !important;
     margin-bottom: 35px;
   }
 
