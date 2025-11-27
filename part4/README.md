@@ -2,18 +2,33 @@
 
 This project implements the frontend interface for the HBNB accommodation platform, completing Part 4 of the Holberton School full-stack series.
 
-It connects a custom Flask API (from Part 3) with a fully functional web client built using HTML5, CSS3, and JavaScript ES6.
+It connects a custom Flask API (from Part 3) with a fully functional web client built using **HTML5, CSS3, and JavaScript ES6**.
 
-The frontend allows users to:
+The result is a lightweight, interactive application where users can:
 
-- Log in and obtain a JWT token
-- View a list of places
-- Filter places by price
-- View detailed information about a place
-- Add reviews (authenticated users only)
+- Authenticate using JWT
+- Browse and filter places
+- View detailed place information
+- Submit reviews (authenticated users only)
 
 The frontend is designed for simplicity, responsiveness, and clean API communication.
 
+# 📚 Table of Contents
+
+1. [Project Overview](#-holberton-school-hbnb-project-part-4---simple-web-client)  
+2. [Project Structure](#project-structure)  
+3. [Requirements](#requirements)  
+4. [Installation](#installation)  
+5. [Features Delivered](#features-delivered)  
+   - [1. Authentication (JWT Login)](#-1-authentication-jwt-login)  
+   - [2. Places List (Home Page)](#-2-places-list-home-page)  
+   - [3. Place Details Page](#-3-place-details-page)  
+   - [4. Add Review Page](#-4-add-review-page)  
+6. [JavaScript Implementation Overview](#️-javascript-implementation-overview)  
+7. [UI & Styling](#-ui--styling)  
+8. [How to Test the Login and Add Review Functionality](#how-to-test-the-login-and-add-review-functionality)  
+9. [Technologies Used](#technologies-used)  
+10. [License](#-license)
 
 ## Project Structure
 
@@ -158,6 +173,111 @@ holbertonschool-hbnb/
    http://127.0.0.1:5000/
    ```
 
+## Features Delivered
+### 🔐 1. Authentication (JWT Login)
+
+- Users log in via `/api/v1/auth/login`
+- On success, a JWT token is stored in cookies
+- All protected pages verify authentication before rendering
+- If no token → redirect to the Login page
+
+Frontend implemented:
+
+- Login form UI
+- Error handling for invalid credentials
+- Cookie storage
+- UI state updates based on authentication
+
+### 🏠 2. Places List (Home Page)
+**Data:**
+
+Fetched from:
+```bash
+GET /api/v1/places
+```
+
+**Features:**
+
+- Display all places with:
+   - Name
+   - Image
+   - Price
+   - Average Rating
+- Dropdown filter by price (client-side filtering)
+- Clicking a place opens its details page
+
+**UI:**
+
+- Fully responsive layout
+- Card-based display of places
+- Clean separation of HTML + CSS + JS
+
+## 📍 3. Place Details Page
+**Data:**
+
+Fetched from:
+```bash
+GET /api/v1/places/<id>
+```
+
+**Display:**
+
+- Place name
+- Price
+- Description
+- Image
+- Average rating
+- Amenities
+- List of existing reviews
+
+**Additional Features:**
+
+- “Add Review” button shows only if a user is logged in
+
+## 📝 4. Add Review Page
+**Function:**
+
+Allows authenticated users to create a review for a place.
+
+**Implementation:**
+
+```bash
+POST /api/v1/places
+```
+
+**Features:**
+
+- Form validation
+- Redirect on success back to the place details
+- Error messaging for invalid submissions
+
+
+## 🛠️ JavaScript Implementation Overview
+Each page has its own JS module:
+
+  | File              | Purpose                                         |
+  | ----------------- | ----------------------------------------------- |
+  | login.js          | Handles user login, token storage, redirects    |
+  | index.js          | Fetches places, renders list, handles filtering |
+  | place_details.js  | Fetches place details + reviews                 |
+  | add_review.js     | Submits new reviews                             |
+
+- Shared Logic
+- Cookie-based token checking
+- Redirect helpers
+- Standardized API calls via Fetch API
+- DOM creation using template literals
+
+🎨 UI & Styling
+
+The UI was designed to follow clean, modern principles:
+
+- Responsive layout
+- Modular CSS per page
+- Consistent colors and spacing
+- Shared header and footer templates
+- Simple, intuitive navigation
+
 
 ## How to Test the Login and Add Review Functionality
 
@@ -204,7 +324,7 @@ http://127.0.0.1:5000/place_details?place_id=a35837b8-25a2-49be-855d-84c1d0e8fe7
 **Expected:**
 
 - If logged in → The Add Review button appears below the place information.
-- If not logged in → The button is hidden and you cannot access /add_review.
+- If not logged in → The button is hidden and you cannot access `/add_review`.
 
 **6. Click “Add Review”**
 This takes you to the form page
@@ -214,12 +334,13 @@ Submit a review:
 - Enter a comment
 - Click “Submit”
 
-**6. Expected Result**
+**7. Expected Result**
 
 **A sucessful result:**
 - An alert to notify "Review submitted successfully!"
 - Once the user clicks "OK", they would be redirected to the place details page
 - The new review appears under the Reviews section
+
 
 
 ## Technologies Used
