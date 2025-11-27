@@ -374,19 +374,12 @@ function displayReviews(reviews) {
     reviewText.textContent = review.text || "";
     reviewCard.appendChild(reviewText);
 
-    // // Create rating with stars
-    // const rating = document.createElement("p");
-    // const stars =
-    //   "★".repeat(review.rating || 0) + "☆".repeat(5 - (review.rating || 0));
-    // rating.textContent = `Rating: <div class="stars">${stars}</div>`;
-    // reviewCard.appendChild(rating);
-
+    // Create rating with stars
     const rating = document.createElement("p");
 
     // label text node
     rating.appendChild(document.createTextNode("Rating: "));
 
-    // span for the stars (so you can style it with CSS)
     const starsSpan = document.createElement("span");
     starsSpan.className = "stars";
     starsSpan.textContent =
