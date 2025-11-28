@@ -335,7 +335,10 @@ Submit a review:
 - Click “Submit”
 
 **7. Expected Result**
-
+- If user has already reviewed:
+Outcome: "You have already reviewed this place."
+- If owner tries to review place: 
+Outcome: "You cannot not review a place you own."
 **A sucessful result:**
 - An alert to notify "Review submitted successfully!"
 - Once the user clicks "OK", they would be redirected to the place details page
@@ -366,6 +369,7 @@ Submit a review:
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](./LICENSE) file for details.
+
 
 
 
