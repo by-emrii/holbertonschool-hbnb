@@ -44,11 +44,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     checkAuthUI();
     const placeId = getPlaceIdFromURL();
 
-    // Fetch and display the place title (no alert if fails)
+    
     const placeTitle = await fetchPlaceName(placeId, token);
     displayPlaceTitle(placeTitle);
 
-    /* Star rating setup */
+    
     const ratingInputs = document.querySelectorAll('input[name="rating"]');
     const numericalRating = document.getElementById("numerical-rating");
 
@@ -101,7 +101,7 @@ async function fetchPlaceName(placeId, token) {
     }
 }
 
-// Place title
+
 function displayPlaceTitle(title) {
     const titleElement = document.getElementById("place-title");
     if (titleElement) {
@@ -140,10 +140,10 @@ async function handleResponse(response, placeId) {
         window.location.href = `../place_details?place_id=${placeId}`;
     } else {
         try {
-            // Handle backend error messages
+            
             const data = await response.json(); 
             if (data.error) {
-                alert(data.error);  // shows backend messages like "You cannot review your own place" or "You have already reviewed this place"
+                alert(data.error); 
             } else {
                 alert("Failed to submit review."); 
             }

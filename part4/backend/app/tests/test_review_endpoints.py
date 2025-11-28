@@ -8,7 +8,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
-        # Create main user
         user_resp = self.client.post('/api/v1/users/', json={
             "first_name": "Test",
             "last_name": "User",
@@ -18,7 +17,6 @@ class TestReviewEndpoints(unittest.TestCase):
         })
         self.user_id = user_resp.get_json()["id"]
 
-        # Create another user for forbidden tests
         another_user_resp = self.client.post('/api/v1/users/', json={
             "first_name": "Another",
             "last_name": "User",
@@ -28,7 +26,6 @@ class TestReviewEndpoints(unittest.TestCase):
         })
         self.another_user_id = another_user_resp.get_json()["id"]
 
-        # Create a test place
         place_resp = self.client.post('/api/v1/places/', json={
             "user_id": self.user_id,
             "title": "Test Place",
@@ -41,7 +38,6 @@ class TestReviewEndpoints(unittest.TestCase):
         })
         self.place_id = place_resp.get_json()["id"]
 
-    # Helper method to create a sample review
     def create_sample_review(self, user_id=None):
         user_id = user_id or self.user_id
         response = self.client.post('/api/v1/reviews/', json={
@@ -55,7 +51,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         return data
 
-    # Create Tests
     def test_create_review_success(self):
         review = self.create_sample_review()
         self.assertEqual(review.get("rating"), 4)
@@ -82,7 +77,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn("error", data)
 
-    # Read Tests
     def test_get_review_by_id(self):
         review = self.create_sample_review()
         review_id = review.get("id")
@@ -98,7 +92,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertIn("error", data)
 
-    # Update Tests
     def test_update_review_success(self):
         review = self.create_sample_review()
         review_id = review.get("id")
@@ -134,7 +127,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertIn("error", data)
 
-    # Delete Tests
     def test_delete_review_success(self):
         review = self.create_sample_review()
         review_id = review.get("id")
@@ -164,7 +156,6 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertIn("error", data)
 
-    # List Tests
     def test_list_reviews_by_place(self):
         self.create_sample_review()
         response = self.client.get(f'/api/v1/reviews/place/{self.place_id}')

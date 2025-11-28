@@ -7,8 +7,7 @@ class ReviewService():
         self.user_repo = user_repo
         self.place_repo = place_repo
         self.review_repo = review_repo
-    
-    #CREATE
+
     def create_review(self, review_data):
         """Create a review"""
         user = review_data.get("user")
@@ -17,7 +16,6 @@ class ReviewService():
         if not user or not place:
             raise ValueError("User and Place objects are required")
         
-        # Create review instance
         review = Review(
             user_id=user.id,
             place_id=place.id,
@@ -25,7 +23,6 @@ class ReviewService():
             text=review_data["text"]
         )
 
-        # Save to repository
         self.review_repo.add(review)
         return review
     
@@ -40,7 +37,6 @@ class ReviewService():
         """
         return self.review_repo.user_already_reviewed(place_id, user_id)
 
-    #READ
     def get_review_by_id(self, review_id):
         """Fetch a single review by ID."""
         review = self.review_repo.get(review_id)
@@ -51,30 +47,26 @@ class ReviewService():
     def get_reviews_for_place(self, place_id):
         """Fetch all reviews for a specific place (by ID)."""
         return self.review_repo.get_reviews_for_place(place_id)
-    
-    #UPDATE
+  
     def update_review(self, review_id, review_data, current_user, is_admin=False):
         """
         Update a review if the current user is the author.
         """
         review = self.get_review_by_id(review_id)
-        # Ownership check
+
         if not is_admin and str(review.user_id) != str(current_user):
             raise PermissionError("Unauthorised action")
 
         self.review_repo.update(review_id, review_data)
         return review
 
-    #DELETE
     def delete_review(self, review_id, current_user, is_admin=False):
         """Delete a review by ID."""
         review = self.get_review_by_id(review_id)
 
-        # Ownership check
         if not is_admin and str(review.user_id) != str(current_user):
             raise PermissionError("Unauthorized action.")
 
-        # Delete the review
         self.review_repo.delete(review_id)
         return True
 

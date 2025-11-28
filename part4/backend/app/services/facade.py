@@ -95,7 +95,6 @@ class HBnBFacade:
         return self.amenity_service.delete_amenity(amenity_id)
 
     """Review CRU"""
-    #CREATE A REVIEW
     def create_review(self, review_data):
         """Create and save a review."""
         return self.review_service.create_review(review_data)
@@ -108,7 +107,6 @@ class HBnBFacade:
         """Check if a user has already reviewed a given place."""
         return self.review_repo.user_already_reviewed(place_id, user_id)
 
-    #READ REVIEWS
     def get_review_by_id(self, review_id):
         """Retrieve a single review by ID."""
         return self.review_service.get_review_by_id(review_id)
