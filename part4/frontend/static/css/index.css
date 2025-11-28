@@ -6,7 +6,6 @@
 }
 
 main {
-  /*padding: 2rem;*/
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -89,7 +88,8 @@ main {
   font-size: 1rem;
 }
 
-.price-value, .rating-value {
+.price-value,
+.rating-value {
   font-size: 2.5rem;
   font-weight: bold;
 }

@@ -1,5 +1,3 @@
-// import { fetchPlaceReviews } from "./place_details";
-
 // Display/hide loginLink depending on Auth
 window.addEventListener("load", function checkAuthentication() {
   const token = getCookie("token");
@@ -42,7 +40,7 @@ async function fetchPlaces(token) {
     if (!response.ok) {
       throw new Error(`Failed to load places from API`);
     } else {
-      const placesData = await response.json(); // parse JSON response body to JS object
+      const placesData = await response.json();
       const placesResult = placesData.result;
       displayPlaces(placesResult);
     }
@@ -112,7 +110,7 @@ async function displayPlaces(places) {
 // Implement Client side filtering
 document.getElementById("price-filter").addEventListener("change", (event) => {
   const myFilters = document.getElementById("price-filter");
-  const filteredPrice = myFilters.value; // this refers to the selected price
+  const filteredPrice = myFilters.value;
   const places = document.getElementById("places-list");
 
   for (const place of places.children) {
