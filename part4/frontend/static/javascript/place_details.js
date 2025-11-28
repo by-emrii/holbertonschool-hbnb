@@ -281,7 +281,7 @@ function displayPlaceDetails(place, reviews) {
       place.description || "No description available.";
   }
 
-  // ✨ Create Amenities section with icons (replace the text)
+  // Create Amenities section with icons (replace the text)
   const amenitiesElement = document.getElementById("place-amenities");
   if (amenitiesElement && place.amenities) {
     // Check if we already created the grid
@@ -400,8 +400,6 @@ async function initializePage() {
 
   if (!placeId) {
     alert("No place ID provided in URL.");
-    // Optionally redirect to home page
-    // window.location.href = '/';
     return;
   }
 
